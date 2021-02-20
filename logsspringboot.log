@@ -590,3 +590,4 @@ Identify and stop the process that's listening on port 8084 or configure this ap
 2021-02-20 23:03:16.056  INFO 3404 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
 2021-02-20 23:03:16.309  WARN 3404 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2021-02-20 23:03:16.550  INFO 3404 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 3.12 seconds (JVM running for 3.615)
+2021-02-20 23:03:22.232  INFO 3404 --- [http-nio-8084-exec-2] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
