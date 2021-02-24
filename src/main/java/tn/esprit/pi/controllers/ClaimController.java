@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Claim;
+import tn.esprit.pi.entities.ClaimCategory;
+
 import tn.esprit.pi.service.ClaimService;
 
 
@@ -54,12 +56,7 @@ public class ClaimController {
 			claimService.deleteClaim(idClaim);  
 		}  
 		
-		@GetMapping("/count-claims")
-		 @ResponseBody
-		 public int getnbclaims() {
-		
-		return claimService.CountClaim();
-		}
+
 		
 		@PutMapping("/claims/update-claim/{idClaim}")  
 		private Claim updateEvent(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim)   
@@ -67,6 +64,34 @@ public class ClaimController {
 		
 			claimService.updateClaim(claim,idClaim);  
 			return claim;  
-		}  
+		} 
+		
+		
+		
+		
+		@GetMapping("/count-claims")
+		 @ResponseBody
+		 public int getnbclaims() {
+		
+		return claimService.CountClaim();
+		}
+		@GetMapping("/claims/retrieve-claim-category/{claimcategory}")
+		public List<Claim> getClaimByCategory(@PathVariable ClaimCategory claimcategory) {
+			 List<Claim> claim = claimService.getClaimByCategory(claimcategory);
+			return claim;
+			}
 
+		
+		@GetMapping("/claims/retrieve-claim-kindergarden/{name}")
+		public List<Claim> getClaimByKindergarden(@PathVariable String name) {
+			 List<Claim> claim = claimService.getClaimByKindergarden(name);
+			return claim;
+			}
+		
+		@GetMapping("/claims/kindergarden-Claims-number/{name}")
+		 @ResponseBody
+		public int CountClaimByKindergarden(@PathVariable String name) {
+			 
+				return claimService.CountClaimByKindergarden(name);
+			}
 }
