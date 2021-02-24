@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name= "Role")
 public class Role implements Serializable{
@@ -62,16 +64,11 @@ public class Role implements Serializable{
 	}
 
 	public Set<User> getUser() {
-		return user;
+		return user;	
 	}
 
 	public void setUser(Set<User> user) {
 		this.user = user;
 	}
 
-	@Override
-	public String toString() {
-		return "Role [idRole=" + idRole + ", description=" + description + ", roleType=" + roleType + ", user=" + user
-				+ "]";
-	}
 }

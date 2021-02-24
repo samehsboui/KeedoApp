@@ -3,6 +3,7 @@ package tn.esprit.pi.entities;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -76,6 +77,10 @@ public class User implements Serializable{
 	private Set<Answer> answers;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
+	
+	//zidtha imen fibalhach biha
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private List<Participation> participation;
 	
 	public User() {
 		super();
@@ -265,14 +270,14 @@ public class User implements Serializable{
 		this.topics = topics;
 	}
 
-	@Override
-	public String toString() {
-		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
-				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
-				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
+	public List<Participation> getParticipation() {
+		return participation;
 	}
+
+	public void setParticipation(List<Participation> participation) {
+		this.participation = participation;
+	}
+
+
 	
 }

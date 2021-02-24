@@ -1,7 +1,15 @@
 package tn.esprit.pi.controllers;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import org.hibernate.search.query.dsl.QueryBuilder;
+
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Event;
+import tn.esprit.pi.entities.EventCategory;
+import tn.esprit.pi.repositories.IEventRepository;
 import tn.esprit.pi.services.EventServiceImpl;
 
 @RestController
 public class EventController {
-	
+
+
 	@Autowired  
-	EventServiceImpl eventServiceImpl;  
+	private EventServiceImpl eventServiceImpl;  
 	//creating a get mapping that retrieves all the event detail from the database   
 	@GetMapping("/event/get-all-events")  
 	private List<Event> getAllEvents()   
@@ -51,7 +62,22 @@ public class EventController {
 	
 		eventServiceImpl.updateEvent(events,eventid);  
 		return events;  
-	}  
+	}
+	//creating get mapping that getEventByName   
+
+	@GetMapping("/retrieve-Event-ByName/{name}")
+	public Event getEventByName(@PathVariable String name) {
+		 Event ev = eventServiceImpl.findEventByName(name);
+		return ev;
+		}
+	@GetMapping("/retrieve-Event-ByCategory/{category}")
+	public List<Event> getEventByCategory(@PathVariable EventCategory category) {
+		 List<Event> ev = eventServiceImpl.filterEvent(category);
+		return ev;
+		}
 	
-	
+	@GetMapping("/bestEventsByViews")
+	public Map<Integer, Integer> bestEventsByViews(){
+		return eventServiceImpl.getEventsByViews();
+		}
 }

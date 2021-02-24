@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -30,11 +34,9 @@ public class Event implements Serializable{
 	@Column(name= "title")
 	private String title;
 	@Temporal(TemporalType.DATE)
-	@Column(name= "startDate")
-	private Date startDate;
-	@Temporal(TemporalType.DATE)
-	@Column(name= "endDate")
-	private Date endDate;
+	private Date date;
+	@Temporal(TemporalType.TIME)
+	private Date hour;
 	@Column(name= "description")
 	private String description;
 	@Column(name= "status")
@@ -43,21 +45,96 @@ public class Event implements Serializable{
 	private String address;
 	@Column(name= "image")
 	private String image;
-	@ManyToMany(cascade= CascadeType.ALL, mappedBy="eventsParticpants", fetch= FetchType.EAGER)
-	private Set<Participant> participants;
 	
 	
-	@ManyToMany(cascade= CascadeType.ALL, mappedBy="events", fetch= FetchType.EAGER)
-	private Set<User> users;
-	
+	@Enumerated(EnumType.STRING)
+	private EventCategory category;
+	private int views;
+
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="event")
+	private Set<Participation> participants;	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy="event", fetch= FetchType.EAGER)
 	private Set<Notification> notifications;
+	public Event(int idEvenement, String title, Date date, Date hour, String description, int status, String address,
+			String image, int views, Set<Participation> participants, Set<Notification> notifications) {
+		super();
+		this.idEvenement = idEvenement;
+		this.title = title;
+		this.date = date;
+		this.hour = hour;
+		this.description = description;
+		this.status = status;
+		this.address = address;
+		this.image = image;
+		this.views = views;
+		this.participants = participants;
+		this.notifications = notifications;
+	}
+
+	
+	public Event(String title, Date date, Date hour, String description, int status, String address, String image,
+			int views, Set<Participation> participants, Set<Notification> notifications) {
+		super();
+		this.title = title;
+		this.date = date;
+		this.hour = hour;
+		this.description = description;
+		this.status = status;
+		this.address = address;
+		this.image = image;
+		this.views = views;
+		this.participants = participants;
+		this.notifications = notifications;
+	}
+
+
 	
 	
 	
 	public Event() {
 		super();
 	}
+	
+	
+
+	public Date getDate() {
+		return date;
+	}
+
+
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+
+
+	public Date getHour() {
+		return hour;
+	}
+
+
+
+	public void setHour(Date hour) {
+		this.hour = hour;
+	}
+
+
+
+
+
+
+	public int getViews() {
+		return views;
+	}
+
+
+	public void setViews(int views) {
+		this.views = views;
+	}
+
 
 	public int getIdEvenement() {
 		return idEvenement;
@@ -75,21 +152,8 @@ public class Event implements Serializable{
 		this.title = title;
 	}
 
-	public Date getStartDate() {
-		return startDate;
-	}
+	
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 
 	public String getDescription() {
 		return description;
@@ -115,14 +179,6 @@ public class Event implements Serializable{
 		this.address = address;
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
 	public Set<Notification> getNotifications() {
 		return notifications;
 	}
@@ -139,19 +195,13 @@ public class Event implements Serializable{
 		this.image = image;
 	}
 
-	public Set<Participant> getParticipants() {
+	public Set<Participation> getParticipants() {
 		return participants;
 	}
 
-	public void setParticipants(Set<Participant> participants) {
+	public void setParticipants(Set<Participation> participants) {
 		this.participants = participants;
 	}
 
-	@Override
-	public String toString() {
-		return "Event [idEvenement=" + idEvenement + ", title=" + title + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", description=" + description + ", status=" + status + ", address=" + address + ", users="
-				+ users + ", notifications=" + notifications + "]";
-	}
-	 
+
 }
