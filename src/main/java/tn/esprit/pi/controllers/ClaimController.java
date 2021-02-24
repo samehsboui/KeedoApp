@@ -51,7 +51,7 @@ public class ClaimController {
 		}
 		
 		@DeleteMapping("/claims/delete-claim/{idClaim}")  
-		private void deleteEvent(@PathVariable("idClaim") int idClaim)   
+		private void deleteClaim(@PathVariable("idClaim") int idClaim)   
 		{  
 			claimService.deleteClaim(idClaim);  
 		}  
@@ -59,7 +59,7 @@ public class ClaimController {
 
 		
 		@PutMapping("/claims/update-claim/{idClaim}")  
-		private Claim updateEvent(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim)   
+		private Claim updateClaim(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim)   
 		{  
 		
 			claimService.updateClaim(claim,idClaim);  
