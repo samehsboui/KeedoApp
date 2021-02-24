@@ -29,7 +29,7 @@ public class ClaimController {
 
 	
 	@PostMapping("/Claims/add-claim")  
-	private int addEvent(@RequestBody Claim claim)   
+	private int addClaim(@RequestBody Claim claim)   
 	{  
 		claimService.addClaim(claim);  
 		return claim.getIdClaim();  
