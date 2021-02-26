@@ -27,9 +27,9 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name= "id")
-	private int idUser;	
+	private Long idUser;	
 	@Column(name= "firstName")
 	private String firstName;
 	@Column(name= "lastName")
@@ -76,16 +76,17 @@ public class User implements Serializable{
 	private Set<Answer> answers;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
+	boolean valid;
 	
 	public User() {
 		super();
 	}
 
-	public int getIdUser() {
+	public Long getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(int idUser) {
+	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
 	}
 
@@ -263,6 +264,16 @@ public class User implements Serializable{
 
 	public void setTopics(Set<Topic> topics) {
 		this.topics = topics;
+	}
+	
+	
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 
 	@Override
