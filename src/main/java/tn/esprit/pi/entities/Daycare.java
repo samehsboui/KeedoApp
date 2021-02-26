@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
-@Table(name= "Daycare")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Daycare implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -26,10 +28,12 @@ public class Daycare implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idDaycare;
-	@Column(name= "price")
-	private int price;
+	@Column(name= "price_M")
+	private Double price_M;
+	@Column(name= "price_T")
+	private Double price_T;
 	@Column(name= "periode")
-	private String periode;
+	private long periode;
 	@Temporal(TemporalType.DATE)
 	@Column(name= "dateBegin")
 	private Date dateBegin;
@@ -38,6 +42,8 @@ public class Daycare implements Serializable{
 	private Date dateEnd;
 	@Column(name= "capacity")
 	private int capacity;
+	@Column(name= "nbInscrit")
+	private int nbInscrit;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "daycare", fetch= FetchType.EAGER)
 	private Set<Kid> kids;
 	
@@ -52,20 +58,28 @@ public class Daycare implements Serializable{
 	public void setIdDaycare(int idDaycare) {
 		this.idDaycare = idDaycare;
 	}
-
-	public int getPrice() {
-		return price;
+	
+	public Double getPrice_M() {
+		return price_M;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice_M(Double price_M) {
+		this.price_M = price_M;
 	}
 
-	public String getPeriode() {
+	public Double getPrice_T() {
+		return price_T;
+	}
+
+	public void setPrice_T(Double price_T) {
+		this.price_T = price_T;
+	}
+
+	public long getPeriode() {
 		return periode;
 	}
 
-	public void setPeriode(String periode) {
+	public void setPeriode(long periode) {
 		this.periode = periode;
 	}
 
@@ -101,10 +115,19 @@ public class Daycare implements Serializable{
 		this.kids = kids;
 	}
 
+	public int getNbInscrit() {
+		return nbInscrit;
+	}
+
+	public void setNbInscrit(int nbInscrit) {
+		this.nbInscrit = nbInscrit;
+	}
+
 	@Override
 	public String toString() {
-		return "Daycare [idDaycare=" + idDaycare + ", price=" + price + ", periode=" + periode + ", dateBegin="
-				+ dateBegin + ", dateEnd=" + dateEnd + ", capacity=" + capacity + ", kids=" + kids + "]";
+		return "Daycare [idDaycare=" + idDaycare + ", price_M=" + price_M + ", price_T=" + price_T + ", periode="
+				+ periode + ", dateBegin=" + dateBegin + ", dateEnd=" + dateEnd + ", capacity=" + capacity
+				+ ", nbInscrit=" + nbInscrit + ", kids=" + kids + "]";
 	}
-	
+
 }

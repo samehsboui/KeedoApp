@@ -2,20 +2,28 @@ package tn.esprit.pi.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="Kid")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Kid implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -23,7 +31,7 @@ public class Kid implements Serializable{
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int idKid;
-	@Column(name="fistName")
+	@Column(name="firstName")
 	private String firstName;
 	@Column(name="lastName")
 	private String lastName;
@@ -40,15 +48,24 @@ public class Kid implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_dacare")
 	private Daycare daycare;
-	@ManyToOne
-	@JoinColumn(name= "id_consultation")
-	private Consultation consultation;
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "kid", fetch= FetchType.EAGER)
+	private List<Consultation> consultations;
 	@ManyToOne
 	@JoinColumn(name= "id_bus")
 	private Bus bus;
 	
 	public Kid() {
 		super();
+	}
+
+	public Kid(int idKid, String firstName, String lastName, Date birthDate, String gender, String address) {
+		super();
+		this.idKid = idKid;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthDate = birthDate;
+		this.gender = gender;
+		this.address = address;
 	}
 
 	public int getIdKid() {
@@ -115,12 +132,12 @@ public class Kid implements Serializable{
 		this.daycare = daycare;
 	}
 
-	public Consultation getConsultation() {
-		return consultation;
+	public List<Consultation> getConsultations() {
+		return consultations;
 	}
 
-	public void setConsultation(Consultation consultation) {
-		this.consultation = consultation;
+	public void setConsultations(List<Consultation> consultations) {
+		this.consultations = consultations;
 	}
 
 	public Bus getBus() {
@@ -135,8 +152,7 @@ public class Kid implements Serializable{
 	public String toString() {
 		return "Kid [idKid=" + idKid + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
 				+ birthDate + ", gender=" + gender + ", address=" + address + ", user=" + user + ", daycare=" + daycare
-				+ ", consultation=" + consultation + ", bus=" + bus + "]";
+				+ ", consultations=" + consultations + ", bus=" + bus + "]";
 	}
-	
 	
 }
