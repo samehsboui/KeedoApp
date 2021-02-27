@@ -1,7 +1,7 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name= "Comment")
@@ -22,9 +25,14 @@ public class Comment implements Serializable{
 	private int idComment;
 	@Column(name="commentContent")
 	private String commentContent;
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name= "id_post")
 	private Post post;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name= "id_user")
+	private User user;
 	
 	public Comment() {
 		super();
@@ -54,9 +62,18 @@ public class Comment implements Serializable{
 		this.post = post;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
-		return "Comment [idComment=" + idComment + ", commentContent=" + commentContent + ", post=" + post + "]";
+		return "Comment [idComment=" + idComment + ", commentContent=" + commentContent + ", post=" + post + ", user="
+				+ user + "]";
 	}
-	
+
 }

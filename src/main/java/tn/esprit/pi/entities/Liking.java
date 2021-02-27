@@ -2,6 +2,7 @@ package tn.esprit.pi.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 @Entity
 @Table(name= "liking")
@@ -22,9 +27,16 @@ public class Liking implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idLiking;
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name= "id_post")
 	private Post post;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name= "id_user")
+	private User user;
+
+	
 	
 	public Liking() {
 		super();
