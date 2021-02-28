@@ -12,4 +12,6 @@ public interface IPostService {
 	public List<Post> getPostsByUserId(int id);
 	public int CountPostsByUser(int id);
     public List<Post> searchPosts(String text);
+	public List<Post> getPostsCommentedByUser(int id);
+
 }

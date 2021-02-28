@@ -91,4 +91,12 @@ public class PostController {
 		
 		}
 		
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-commented-by-user/{idU}
+		@GetMapping("/Post/posts-commented-by-user/{idU}")
+		private List<Post> getPostsCommentedByUser(@PathVariable("idU") int idU) {
+			return PostServiceImpl.getPostsCommentedByUser(idU);
+
+		}
+		
 	}

@@ -8,6 +8,7 @@ import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.IPostRepository;
 import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.repositories.ICommentRepository;
 
 
 @Service
@@ -19,6 +20,9 @@ public class PostServiceImpl implements IPostService{
 	
 	@Autowired 
 	private IUserRepository iUserRepository;
+	
+	@Autowired 
+	private ICommentRepository ICommentRepository;
 	
 	@Override
 	public Post addPost(Post p, int idU) {
@@ -86,5 +90,10 @@ public class PostServiceImpl implements IPostService{
     public List<Post> searchPosts(String pattern){
         return IPostRepository.findPostsByTextContaining(pattern);
     }
+	
+	@Override
+	public List<Post> getPostsCommentedByUser(int id) {
+		return IPostRepository.getPostsCommentedByUser(id);
+	}
 }
 
