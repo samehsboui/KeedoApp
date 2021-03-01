@@ -28,7 +28,7 @@ public class UserService implements IUserservice {
 	}
 
 	@Override
-	public User getUserById(Long id) throws Exception {
+	public User getUserById(int id) throws Exception {
 		return userRepository.findByidUser(id);
 	}
 
@@ -39,7 +39,7 @@ public class UserService implements IUserservice {
 	
 	@Override
 	public User updateUser(User entity) throws Exception {
-		User user = userRepository.findByidUser(new Long(entity.getIdUser()));
+		User user = userRepository.findByidUser(entity.getIdUser());
 		if (user!=null) {
 			return userRepository.save(entity);
 		} else {
