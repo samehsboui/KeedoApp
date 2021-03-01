@@ -28,8 +28,8 @@ public class RoleController {
 	}
 
 	@GetMapping("/Role/rolebyid/{idRole}")
-	public Role getUserById(@PathVariable("idrole") int idrole) throws Exception {
-		return iroleservice.findRoleById(idrole);
+	public Role getUserById(@PathVariable("idRole") int idRole) throws Exception {
+		return iroleservice.findRoleById(idRole);
 	}
 
 	@PostMapping("/Role/createRole")
