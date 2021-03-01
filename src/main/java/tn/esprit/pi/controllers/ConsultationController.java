@@ -1,6 +1,9 @@
 package tn.esprit.pi.controllers;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,21 +12,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.google.api.client.util.DateTime;
 
 import tn.esprit.pi.entities.Consultation;
 import tn.esprit.pi.entities.Kid;
 import tn.esprit.pi.services.ConsultationService;
+import tn.esprit.pi.services.GoogleCalService;
 
 @RestController
 public class ConsultationController {
-	
+
 	@Autowired
 	ConsultationService consultationService;
-	
-	@PostMapping("consult/add/{idK}")
-	public Kid affectConsultationToKid(@RequestBody Consultation consultation,@PathVariable("idK") int idK) {
-		return consultationService.affectConsultationToKid(consultation, idK);
+	@Autowired
+	GoogleCalService googleCalService;
+
+	@PostMapping("consult/add/{idK}/{idD}")
+	public Kid affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK, @PathVariable("idD") int idD) {
+		return consultationService.affectConsultationToKid(consultation, idK, idD);
 	}
 
 	@DeleteMapping("consult/del/{id}")
@@ -42,8 +54,20 @@ public class ConsultationController {
 	}
 
 	@GetMapping("consult/kid/getAll/{idK}")
-	public List<Consultation> displayConsultationsByKid(@PathVariable("idK")int idK) {
+	public List<Consultation> displayConsultationsByKid(@PathVariable("idK") int idK) {
 		return consultationService.displayConsultationsByKid(idK);
+	}
+
+	// To login
+	@RequestMapping(value = "/login/google", method = RequestMethod.GET)
+	public RedirectView googleConnectionStatus(HttpServletRequest request) throws Exception {
+		return new RedirectView(googleCalService.authorize());
+	}
+
+	// Calando
+	@RequestMapping(value = "/login/google", method = RequestMethod.GET, params ="code")
+	public String authenticateCal(@RequestParam(value = "code") String code) {
+		return googleCalService.addEvent(code);
 	}
 
 }

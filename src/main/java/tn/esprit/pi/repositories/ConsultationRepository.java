@@ -1,5 +1,6 @@
 package tn.esprit.pi.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,12 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import tn.esprit.pi.entities.Consultation;
 import tn.esprit.pi.entities.Kid;
+import tn.esprit.pi.entities.User;
 
 @Repository
 public interface ConsultationRepository extends CrudRepository<Consultation, Integer>{
 
-	@Query("select new Consultation(c.dateConsultation, c.time, c.doctorName) from Consultation c")
+	@Query("select new Consultation(c.dateConsultation, c.time) from Consultation c")
 	List<Consultation> displayAllConsultations();
+	
 	@Query(" select c from Consultation c where c.kid = :kid")
 	List<Consultation> findConsultationByKid(@Param("kid") Kid kid);
 	
@@ -25,4 +28,7 @@ public interface ConsultationRepository extends CrudRepository<Consultation, Int
 	@Modifying
 	@Query("DELETE from Consultation c where c.id= :id")
 	void deleteConsultById(@Param("id") int id);
+	
+	@Query(" select c from Consultation c where c.user = :user and c.dateConsultation= :dateConsultation and c.time= :time")
+	List<Consultation> findConsultationByDoctor(@Param("user") User user, @Param("dateConsultation") Date dateConsultation, @Param("time") Date  time);
 }

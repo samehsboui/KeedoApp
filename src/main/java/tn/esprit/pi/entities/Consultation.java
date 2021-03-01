@@ -34,8 +34,9 @@ public class Consultation implements Serializable {
 	@Temporal(TemporalType.TIME)
 	@Column(name="time")
 	private Date  time;
-	@Column(name="doctorName")
-	private String doctorName;
+	@ManyToOne
+	@JoinColumn(name="id_user")
+	private User user;
 	@ManyToOne
 	@JoinColumn(name= "id_kid")
 	private Kid kid;
@@ -44,11 +45,10 @@ public class Consultation implements Serializable {
 		super();
 	}
 
-	public Consultation(Date dateConsultation, Date time, String doctorName) {
+	public Consultation(Date dateConsultation, Date time) {
 		super();
 		this.dateConsultation = dateConsultation;
 		this.time = time;
-		this.doctorName = doctorName;
 	}
 
 	public int getIdConsultation() {
@@ -75,12 +75,14 @@ public class Consultation implements Serializable {
 		this.time = time;
 	}
 
-	public String getDoctorName() {
-		return doctorName;
+
+
+	public User getUser() {
+		return user;
 	}
 
-	public void setDoctorName(String doctorName) {
-		this.doctorName = doctorName;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Kid getKid() {
@@ -94,8 +96,7 @@ public class Consultation implements Serializable {
 	@Override
 	public String toString() {
 		return "Consultation [idConsultation=" + idConsultation + ", dateConsultation=" + dateConsultation + ", time="
-				+ time + ", doctorName=" + doctorName + ", kid=" + kid + "]";
+				+ time + ", user=" + user + ", kid=" + kid + "]";
 	}
 
-	
 }

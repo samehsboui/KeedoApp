@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -80,6 +81,8 @@ public class User implements Serializable{
 	private Set<Answer> answers;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Consultation> consultations;
 	
 	public User() {
 		super();
@@ -269,6 +272,15 @@ public class User implements Serializable{
 		this.topics = topics;
 	}
 
+
+	public Set<Consultation> getConsultations() {
+		return consultations;
+	}
+
+	public void setConsultations(Set<Consultation> consultations) {
+		this.consultations = consultations;
+	}
+
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
@@ -276,7 +288,8 @@ public class User implements Serializable{
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
 				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
+				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + ", consultations=" + consultations
+				+ "]";
 	}
-	
+
 }

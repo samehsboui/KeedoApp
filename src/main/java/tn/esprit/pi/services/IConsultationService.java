@@ -7,7 +7,7 @@ import tn.esprit.pi.entities.Kid;
 
 public interface IConsultationService {
 
-	Kid affectConsultationToKid(Consultation consultation, int idK);
+	Kid affectConsultationToKid(Consultation consultation, int idK, int idU);
 	void deleteConsultation(int id);
 	Consultation updateConsultation(int idC, Consultation consultation);
 	List<Consultation> displayAllConsultations();
