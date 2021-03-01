@@ -63,8 +63,7 @@ public class User implements Serializable{
 	private Set<Follow> follows;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Workshop> workshops;
-	@ManyToMany(cascade= CascadeType.ALL)
-	private Set<Event> events;
+
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Meeting> meetings; 
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
@@ -78,10 +77,12 @@ public class User implements Serializable{
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	
-	//zidtha imen fibalhach biha
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
-	private List<Participation> participation;
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	private Set<Participation> participations;
 	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private List<Donation> donations;
+
 	public User() {
 		super();
 	}
@@ -214,13 +215,6 @@ public class User implements Serializable{
 		this.workshops = workshops;
 	}
 
-	public Set<Event> getEvents() {
-		return events;
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
-	}
 
 	public Set<Meeting> getMeetings() {
 		return meetings;
@@ -270,14 +264,21 @@ public class User implements Serializable{
 		this.topics = topics;
 	}
 
-	public List<Participation> getParticipation() {
-		return participation;
+	public Set<Participation> getParticipations() {
+		return participations;
 	}
 
-	public void setParticipation(List<Participation> participation) {
-		this.participation = participation;
+	public void setParticipations(Set<Participation> participations) {
+		this.participations = participations;
+	}
+
+	public List<Donation> getDonations() {
+		return donations;
+	}
+
+	public void setDonations(List<Donation> donations) {
+		this.donations = donations;
 	}
 
 
-	
 }

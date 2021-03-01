@@ -11,7 +11,7 @@ import tn.esprit.pi.entities.EventCategory;
 public interface IEventService {
 
 	
-	public Event addEvent(Event e);
+	public void addEvent(Event e);
 	public void deleteEvent(int id);
 	public Event updateEvent(Event e , int id);
 	public List<Event> getAllEvents();
@@ -21,10 +21,13 @@ public interface IEventService {
 	
 	public List<Event> filterEvent(EventCategory category);
 	
-	public void affecterEventUser(int iduser,int idevent);
+	public String affecterEventUser(int iduser,int idevent);
 	
 	
 	public Map<Integer,Integer>getEventsByViews();
+	
+	public List<String> displayBestEventsByViews() ;
+	
 	
 
 

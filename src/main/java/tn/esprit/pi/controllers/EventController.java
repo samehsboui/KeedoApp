@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import javax.xml.ws.Response;
+
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -63,21 +65,36 @@ public class EventController {
 		eventServiceImpl.updateEvent(events,eventid);  
 		return events;  
 	}
+	
+	//creating put mapping that updates the event detail   
+		@PutMapping("/event/affecter-event/{iduser}/{idevent}")  
+		private String affecterEventUser(@PathVariable("iduser")int iduser,@PathVariable("idevent")int idevent)   
+		{  
+		
+			return eventServiceImpl.affecterEventUser(iduser, idevent);
+			
+		}
 	//creating get mapping that getEventByName   
 
-	@GetMapping("/retrieve-Event-ByName/{name}")
+	@GetMapping("/event/retrieve-Event-ByName/{name}")
 	public Event getEventByName(@PathVariable String name) {
 		 Event ev = eventServiceImpl.findEventByName(name);
 		return ev;
 		}
-	@GetMapping("/retrieve-Event-ByCategory/{category}")
+	@GetMapping("/event/retrieve-Event-ByCategory/{category}")
 	public List<Event> getEventByCategory(@PathVariable EventCategory category) {
 		 List<Event> ev = eventServiceImpl.filterEvent(category);
 		return ev;
 		}
 	
-	@GetMapping("/bestEventsByViews")
+	@GetMapping("/event/bestEventsByViews")
 	public Map<Integer, Integer> bestEventsByViews(){
 		return eventServiceImpl.getEventsByViews();
 		}
+	
+	@GetMapping("/event/displaybestEventsByViews")
+	public List<String> displaybestEventsByViews(){
+		return eventServiceImpl.displayBestEventsByViews();
+		}
+	
 }
