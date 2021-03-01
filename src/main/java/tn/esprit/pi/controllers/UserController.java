@@ -1,9 +1,6 @@
 package tn.esprit.pi.controllers;
 
 import java.util.List;
-
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +28,8 @@ public class UserController {
 	}
 
 	@GetMapping("/User/userbyid/{idUser}")
-	public User getUserById(@PathVariable("idUser") Long idUser) throws Exception {
-		return iuserservice.getUserById(idUser);
+	public User getUserById(@PathVariable("idUser") String idUser) throws Exception {
+		return iuserservice.getUserById(Integer.valueOf(idUser));
 	}
 
 	@PostMapping("/User/createUser")

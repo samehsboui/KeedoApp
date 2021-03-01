@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name= "Role")
 public class Role implements Serializable{
@@ -30,6 +32,7 @@ public class Role implements Serializable{
 	@Enumerated(EnumType.STRING)
 	@Column(name="roleType")
 	private RoleType roleType;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy="role", fetch= FetchType.EAGER)
 	private Set<User> user;
 	

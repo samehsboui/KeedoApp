@@ -1,13 +1,12 @@
 package tn.esprit.pi.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import tn.esprit.pi.entities.User;
 
 public interface IUserservice {
 	public List<User> getAllUsers();
-	public User getUserById(Long id) throws Exception;
+	public User getUserById(int id) throws Exception;
  	public User activateUser (User user) throws Exception;
 	public User desactivateUser (User user) throws Exception;
 	public User createUser(User entity) throws Exception;

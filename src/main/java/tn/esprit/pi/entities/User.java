@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name= "user")
 public class User implements Serializable{
@@ -29,7 +31,7 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name= "id")
-	private Long idUser;	
+	private int idUser;	
 	@Column(name= "firstName")
 	private String firstName;
 	@Column(name= "lastName")
@@ -54,26 +56,37 @@ public class User implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_role")
 	private Role role;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Kid> kids;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Post> posts;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Follow> follows;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Workshop> workshops;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Event> events;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Meeting> meetings; 
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Message> messages;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Bus> bus;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Answer> answers;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	boolean valid;
@@ -82,11 +95,11 @@ public class User implements Serializable{
 		super();
 	}
 
-	public Long getIdUser() {
+	public int getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(Long idUser) {
+	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
 
