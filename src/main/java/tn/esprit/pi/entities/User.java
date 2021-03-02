@@ -58,8 +58,7 @@ public class User implements Serializable{
 	private Set<Kid> kids;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Post> posts;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
-	private Set<Follow> follows;
+	
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Workshop> workshops;
 	@ManyToMany(cascade= CascadeType.ALL)
@@ -76,6 +75,18 @@ public class User implements Serializable{
 	private Set<Answer> answers;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
+	
+	
+	
+	 private boolean isPrivate;
+	
+	 public boolean isPrivate() {
+	        return isPrivate;
+	    }
+
+	    public void setPrivate(boolean aPrivate) {
+	        isPrivate = aPrivate;
+	    }
 	
 	public User() {
 		super();
@@ -270,7 +281,7 @@ public class User implements Serializable{
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
+				+ role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops
 				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
 				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
 	}
