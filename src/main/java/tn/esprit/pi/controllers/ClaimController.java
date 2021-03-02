@@ -1,4 +1,4 @@
-package tn.esprit.pi.controller;
+package tn.esprit.pi.controllers;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
-
-import tn.esprit.pi.service.ClaimService;
+import tn.esprit.pi.services.ClaimService;
 
 
 
@@ -37,6 +37,7 @@ public class ClaimController {
 	
 		@GetMapping("/retrieve-all-claims")
 		 @ResponseBody
+	
 		 public List<Claim> getclaims() {
 		 List<Claim> list = claimService.retrieveAllclaims();
 		return list;
@@ -44,6 +45,8 @@ public class ClaimController {
 		
 		@GetMapping("/claims/retrieve-claim-details/{idClaim}")
 		 @ResponseBody
+		 
+
 		 public Claim getclaim(@PathVariable("idClaim") int idClaim) {
 
 		
