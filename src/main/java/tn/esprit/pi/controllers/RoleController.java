@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import tn.esprit.pi.entities.Role;
+import tn.esprit.pi.entities.User;
 import tn.esprit.pi.services.IRoleservice;
+import tn.esprit.pi.services.IUserservice;
 
 @RestController
 public class RoleController {

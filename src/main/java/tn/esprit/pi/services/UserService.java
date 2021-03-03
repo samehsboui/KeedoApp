@@ -2,7 +2,6 @@ package tn.esprit.pi.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,4 +73,21 @@ public class UserService implements IUserservice {
 	public List<User> findUserLastName (String username) throws Exception {
 		return userRepository.findBylastName(username);
 	}
+	
+	public String getUserRoleDescription(int id) {
+		return userRepository.getUserRoleDescription(id);
+		
+	}
+	
+	@Override
+	public List<String> findUsersActivated() throws Exception {
+		return userRepository.getUsersFromActivated();
+		
+	}
+
+	@Override
+	public List<String> getUsersFromDisabled() {
+		return userRepository.getUsersFromDisabled();
+	}
+
 }

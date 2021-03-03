@@ -28,8 +28,8 @@ public class UserController {
 	}
 
 	@GetMapping("/User/userbyid/{idUser}")
-	public User getUserById(@PathVariable("idUser") String idUser) throws Exception {
-		return iuserservice.getUserById(Integer.valueOf(idUser));
+	public User getUserById(@PathVariable("idUser") int idUser) throws Exception {
+		return iuserservice.getUserById(idUser);
 	}
 
 	@PostMapping("/User/createUser")
@@ -67,5 +67,20 @@ public class UserController {
 	@GetMapping("/User/findUserBylogin/{username}")
 	public User findUserBylogin(@PathVariable("username") String username) throws Exception {
 		return iuserservice.findUserBylogin(username);
+	}
+	
+	@GetMapping("/User/findUserRole/{IdUser}")
+	public String findUserRole(@PathVariable("IdUser") int IdUser) throws Exception {
+		return iuserservice.getUserRoleDescription(IdUser);
+	}
+	
+	@GetMapping("/User/findActivatedUser/")
+	public List<String> findUserActivated() throws Exception {
+		return iuserservice.findUsersActivated();
+	}
+	
+	@GetMapping("/User/findDisabledUser/")
+	public List<String> findUserDisabled() throws Exception {
+		return iuserservice.getUsersFromDisabled();
 	}
 }
