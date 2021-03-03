@@ -51,7 +51,7 @@ public class CommentServiceImpl implements ICommentService{
 		comment.setCommentContent(c.getCommentContent());
 
 		ICommentRepository.save(comment);
-		return ICommentRepository.findById(id).get();		
+		return getCommentById(id);		
 	}
 
 

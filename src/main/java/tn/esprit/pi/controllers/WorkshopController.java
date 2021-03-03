@@ -56,8 +56,7 @@ public class WorkshopController {
 	@PutMapping("/Workshop/update-Workshop/{Workshopid}")  
 	private Workshop updateWorkshop(@RequestBody Workshop Workshops, @PathVariable("Workshopid")int Workshopid)   
 	{  
-			WorkshopServiceImpl.updateWorkshop(Workshops,Workshopid);  
-			return Workshops;  
+		return WorkshopServiceImpl.updateWorkshop(Workshops,Workshopid);  
 		}
 	
 	

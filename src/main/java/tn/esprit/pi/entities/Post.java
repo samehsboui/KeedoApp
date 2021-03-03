@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,10 +36,8 @@ public class Post implements Serializable{
 	private int idPost;
 	@Column(name= "postContent")
 	private String postContent;
-	@Column(name= "photo")
-	private String photo;
-	@Column(name= "video")
-    private String video;
+	@Enumerated(EnumType.STRING)              
+	private PostMediaType media;
 	@Column(name= "createDate")
 	private LocalDateTime createDate;
 	@Column(name= "modifyDate")
@@ -79,23 +79,30 @@ public class Post implements Serializable{
 		this.postContent = postContent;
 	}
 
+	public PostMediaType getMedia() {
+		return media;
+	}
+
+	public void setMedia(PostMediaType media) {
+		this.media = media;
+	}
+
 	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(LocalDateTime creationDate) {
-		this.createDate = creationDate;
+	public void setCreateDate(LocalDateTime createDate) {
+		this.createDate = createDate;
 	}
 
 	public LocalDateTime getModifyDate() {
 		return modifyDate;
 	}
 
-	public void setModifyDate(LocalDateTime modificationDate) {
-		this.modifyDate = modificationDate;
+	public void setModifyDate(LocalDateTime modifyDate) {
+		this.modifyDate = modifyDate;
 	}
 
-	
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -120,28 +127,11 @@ public class Post implements Serializable{
 		this.user = user;
 	}
 
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public String getVideo() {
-		return video;
-	}
-
-	public void setVideo(String video) {
-		this.video = video;
-	}
-
 	@Override
 	public String toString() {
-		return "Post [idPost=" + idPost + ", postContent=" + postContent + ", photo=" + photo + ", video=" + video
-				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", comments=" + comments + ", likes="
-				+ likes + ", user=" + user + "]";
+		return "Post [idPost=" + idPost + ", postContent=" + postContent + ", media=" + media + ", createDate="
+				+ createDate + ", modifyDate=" + modifyDate + ", comments=" + comments + ", likes=" + likes + ", user="
+				+ user + "]";
 	}
-	
-	
+
 }

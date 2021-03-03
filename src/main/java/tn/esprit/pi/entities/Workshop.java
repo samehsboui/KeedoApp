@@ -26,6 +26,8 @@ public class Workshop implements Serializable{
 	private int idWorkshop;
 	@Column(name="content")
 	private String content;
+	@Column(name="pdffile")
+	private String pdffile;
 	@Column(name= "createDate")
 	private LocalDateTime createDate;
 	@Column(name= "modifyDate")
@@ -55,6 +57,14 @@ public class Workshop implements Serializable{
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getPdffile() {
+		return pdffile;
+	}
+
+	public void setPdffile(String pdffile) {
+		this.pdffile = pdffile;
 	}
 
 	public LocalDateTime getCreateDate() {
@@ -91,8 +101,8 @@ public class Workshop implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Workshop [idWorkshop=" + idWorkshop + ", content=" + content + ", createDate=" + createDate
-				+ ", modifyDate=" + modifyDate + ", category=" + category + ", user=" + user + "]";
+		return "Workshop [idWorkshop=" + idWorkshop + ", content=" + content + ", pdffile=" + pdffile + ", createDate="
+				+ createDate + ", modifyDate=" + modifyDate + ", category=" + category + ", user=" + user + "]";
 	}
 
 }

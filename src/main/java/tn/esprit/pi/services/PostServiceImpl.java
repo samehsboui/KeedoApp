@@ -48,11 +48,10 @@ public class PostServiceImpl implements IPostService{
 		LocalDateTime modificationDate = LocalDateTime.now();
 		post.setModifyDate(modificationDate);
 		post.setPostContent(p.getPostContent());
-		post.setPhoto(p.getPhoto());
-		post.setVideo(p.getVideo());
+		post.setMedia(p.getMedia());
 
 		IPostRepository.save(post);
-		return IPostRepository.findById(id).get();
+		return getPostById(id);
 		
 	}
 

@@ -57,8 +57,8 @@ public class PostController {
 		@PutMapping("/Post/update-post/{Postid}")  
 		private Post updatePost(@RequestBody Post posts, @PathVariable("Postid")int Postid)   
 		{  
-				PostServiceImpl.updatePost(posts,Postid);  
-				return posts;  
+			return PostServiceImpl.updatePost(posts,Postid);  
+			 
 			}
 		
 		

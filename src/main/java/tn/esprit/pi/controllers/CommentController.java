@@ -42,8 +42,8 @@ public class CommentController {
 				@PutMapping("/Comment/update-comment/{Commentid}")  
 				private Comment updateComment(@RequestBody Comment comments, @PathVariable("Commentid")int Commentid)   
 				{  
-					CommentServiceImpl.updateComment(comments,Commentid);  
-						return comments;  
+					return CommentServiceImpl.updateComment(comments,Commentid);  
+						  
 					}
 				
 				

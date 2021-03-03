@@ -47,8 +47,11 @@ public class WorkshopServiceImpl implements IWorkshopService{
 		LocalDateTime modificationDate = LocalDateTime.now();
 		workshop.setModifyDate(modificationDate);
 		workshop.setContent(w.getContent());
+		workshop.setPdffile(w.getPdffile());
+		workshop.setCategory(w.getCategory());
+
 		IWorkshopRepository.save(workshop);
-		return IWorkshopRepository.findById(id).get();
+		return getWorkshopById(id);
 	}
 	
 	
