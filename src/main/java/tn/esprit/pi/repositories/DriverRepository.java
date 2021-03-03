@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.pi.entities.Driver;
 
 @Repository
-public interface DriverRepository extends JpaRepository<Driver, Long> {
+public interface DriverRepository extends JpaRepository<Driver, Integer> {
 
 }

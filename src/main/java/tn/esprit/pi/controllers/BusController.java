@@ -32,7 +32,7 @@ public class BusController {
 	    }
 	
 	 @PostMapping("/saveBus/{idDriver}/{idU}")
-		public Bus AffectBusDriver(@RequestBody Bus bus, @PathVariable("idDriver")long idDriver,@PathVariable("idU")int idU)   
+		public Bus AffectBusDriver(@RequestBody Bus bus, @PathVariable("idDriver")int idDriver,@PathVariable("idU")int idU)   
 		{  
 			 
 			return busService.AffectBusDriver(bus, idDriver,idU);

@@ -38,7 +38,7 @@ public class Driver implements Serializable{
 		super();
 	}
 
-	public int getIdDriver() {
+	public long getIdDriver() {
 		return idDriver;
 	}
 

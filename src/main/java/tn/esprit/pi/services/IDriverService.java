@@ -8,10 +8,7 @@ public interface IDriverService {
 	
     List<Driver> getAllDriver();
  	Driver saveDriver(Driver driver);
-	Driver getDriverById(long id);
-	void deleteDrivereById(long id);
-	Driver updateDriver(Driver driver, long id);
-	
-	//void affecteBusToDriver(long idBus, long idDriver);
-
+	Driver getDriverById(int id);
+	void deleteDrivereById(int id);
+	public Driver updateDriver(Driver driver, int id);
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import tn.esprit.pi.entities.Bus;
 @Repository
-public interface BusRepository extends JpaRepository<Bus, Long> {
+public interface BusRepository extends JpaRepository<Bus, Integer> {
 	
 	@Query("SELECT b FROM Bus b WHERE b.driver.firstName =:firstName")
 	public List<Bus> getBusByDriver(@Param("firstName")String D);

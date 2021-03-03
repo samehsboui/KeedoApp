@@ -53,23 +53,11 @@ public class DriverController {
            
 	}
 	@PutMapping("/updatedriver/{idDriver}")
-	public Driver updateDriver(@RequestBody Driver driver, @PathVariable("idDriver")long idDriver) {
+	private Driver updateDriver(@RequestBody Driver driver, @PathVariable("idDriver")int idDriver) {
 
- driverservice.updateDriver(driver, idDriver);
-	return driver;
-
+		return driverservice.updateDriver(driver,idDriver);
+	 
 	}
-	
-	/*
-	 * @GetMapping("/showNewDriverForm")
-	public String showNewDrivereForm(Model model) {
-		// create model attribute to bind form data
-		Driver driver = new Driver();
-		model.addAttribute("driver", driver);
-		return "new_driver";
-	}
-	 */
-
 	
 	
 	@GetMapping("/showbyid/{id}")

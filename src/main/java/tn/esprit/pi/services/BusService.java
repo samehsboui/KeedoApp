@@ -30,7 +30,7 @@ public class BusService implements IBusService {
 	}
 
 	@Override
-	 public Bus AffectBusDriver(Bus bus, long idDriver, int idU) {
+	 public Bus AffectBusDriver(Bus bus, int idDriver, int idU) {
 		// TODO Auto-generated method stub
 		Driver driver =driverRepository.findById(idDriver).get();
 		User user=userRepository.findById(idU).get();
@@ -42,18 +42,18 @@ public class BusService implements IBusService {
 	}
 
 	@Override
-	public Bus getBusById(long id) {
+	public Bus getBusById(int id) {
 		// TODO Auto-generated method stub
 		return busRepository.findById(id).get();
 	}
 
 	@Override
-	public void deleteBusById(long id) {
+	public void deleteBusById(int id) {
 		busRepository.deleteById(id);		
 	}
 
 	@Override
-	public Bus updateBus(Bus bus, long id) {
+	public Bus updateBus(Bus bus, int id) {
 		Bus b=busRepository.findById(id).get();
 	//	Driver driver =driverRepository.findById(idDriver).get();
 		//User user=userRepository.findById(idU).get();

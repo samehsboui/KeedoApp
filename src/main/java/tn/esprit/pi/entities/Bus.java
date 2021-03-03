@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name= "bus")
 public class Bus implements Serializable{
@@ -40,12 +42,15 @@ public class Bus implements Serializable{
 	private Date timeA;
 	@Column(name="capacity")
 	private int capacity;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_driver")
 	private Driver driver;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "bus", fetch= FetchType.EAGER)
 	private Set<Kid> kids;
 	
@@ -53,7 +58,7 @@ public class Bus implements Serializable{
 		super();
 	}
 
-	public int getIdBus() {
+	public long getIdBus() {
 		return idBus;
 	}
 
