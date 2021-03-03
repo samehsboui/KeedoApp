@@ -20,7 +20,7 @@ public class CommentController {
 		@Autowired  
 		CommentServiceImpl CommentServiceImpl;
 		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-comment/{idU}/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/add-comment/{idU}/{idP}
 				@PostMapping("/Comment/add-comment/{idU}/{idP}")  
 				private int addComment(@RequestBody Comment Comments, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{  

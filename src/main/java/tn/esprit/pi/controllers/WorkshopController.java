@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Workshop;
+import tn.esprit.pi.entities.WorkshopCategory;
 import tn.esprit.pi.services.WorkshopServiceImpl;
 
 @RestController
@@ -90,11 +91,18 @@ public class WorkshopController {
 	
 	}
 	
+	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/get-by-category/{category}
+
+	@GetMapping("/Workshop/get-by-category/{category}")
+	public List<Workshop> getWorkshopByCategory(@PathVariable WorkshopCategory category) {
+		 List<Workshop> w = WorkshopServiceImpl.filterWorkshop(category);
+		return w;
+		}
 	
 	//needs fixing
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/Workshops-by-username/?name=
-	@GetMapping("/Workshop/Workshops-by-user/")
+	@GetMapping("/Workshop/Workshops-by-user")
 	private List<Workshop> getWorkshopsByKindergartenName(@RequestParam("name")String name){
 	return WorkshopServiceImpl.getWorkshopsByKindergartenName(name);
 	

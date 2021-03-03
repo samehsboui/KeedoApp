@@ -16,8 +16,8 @@ public interface ICommentRepository  extends CrudRepository<Comment,Integer >{
 	@Query (value= "Delete from Comment c where c.id= :id")
 	public void deleteById(@Param("id") int id);
 	
-	@Query("SELECT c FROM Comment c WHERE c.commentContent LIKE %?1%")
-	List<Comment> findCommentsByTextContaining(String pattern);
+	@Query("SELECT c FROM Comment c WHERE c.commentContent LIKE %?1%") /*or you can create one search that contains comments, posts, users and */ 
+	public List<Comment> findCommentsByTextContaining(String pattern);
 	
 	@Query("SELECT c FROM Comment c WHERE c.user.id =:id")
 	public List<Comment> getCommentsByUserId(@Param("id")int id);

@@ -2,6 +2,7 @@ package tn.esprit.pi.services;
 import java.util.List;
 
 import tn.esprit.pi.entities.Workshop;
+import tn.esprit.pi.entities.WorkshopCategory;
 public interface IWorkshopService {
 	public Workshop addWorkshop(Workshop w, int idU);
 	public void deleteWorkshop(int id);
@@ -13,4 +14,5 @@ public interface IWorkshopService {
 	public List<Workshop> getWorkshopsByKindergartenName(String name);
 	public int CountWorkshopsByUser(int id);
     public List<Workshop> searchWorkshops(String text);
+	public List<Workshop> filterWorkshop(WorkshopCategory category);
 }

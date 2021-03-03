@@ -1,6 +1,7 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
+/*@Table(name= "liking", uniqueConstraints={
+	    @UniqueConstraint(columnNames = {"id_post", "id_user"})
+	})*/
 @Table(name= "liking")
 public class Liking implements Serializable{
 
@@ -35,6 +39,8 @@ public class Liking implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
+	@Column(name= "likeDate")
+	private LocalDateTime likeDate;
 
 	
 	
@@ -42,25 +48,61 @@ public class Liking implements Serializable{
 		super();
 	}
 
+
+
 	public int getIdLiking() {
 		return idLiking;
 	}
+
+
 
 	public void setIdLiking(int idLiking) {
 		this.idLiking = idLiking;
 	}
 
+
+
 	public Post getPost() {
 		return post;
 	}
+
+
 
 	public void setPost(Post post) {
 		this.post = post;
 	}
 
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+
+	public LocalDateTime getLikeDate() {
+		return likeDate;
+	}
+
+
+
+	public void setLikeDate(LocalDateTime likeDate) {
+		this.likeDate = likeDate;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Liking [idLiking=" + idLiking + ", post=" + post + "]";
+		return "Liking [idLiking=" + idLiking + ", post=" + post + ", user=" + user + ", likeDate=" + likeDate + "]";
 	}
+
+	
 	
 }

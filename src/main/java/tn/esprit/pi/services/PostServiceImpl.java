@@ -95,5 +95,9 @@ public class PostServiceImpl implements IPostService{
 	public List<Post> getPostsCommentedByUser(int id) {
 		return IPostRepository.getPostsCommentedByUser(id);
 	}
+	@Override
+	public List<Post> getPostsLikedByUser(int id) {
+		return IPostRepository.getPostsLikedByUser(id);
+	}
 }
 

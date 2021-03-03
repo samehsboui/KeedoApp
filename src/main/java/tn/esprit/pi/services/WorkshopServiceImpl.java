@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.entities.Workshop;
+import tn.esprit.pi.entities.WorkshopCategory;
 import tn.esprit.pi.repositories.IWorkshopRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 
@@ -98,5 +99,10 @@ public class WorkshopServiceImpl implements IWorkshopService{
 
 	}
 	
+	@Override	
+	public List<Workshop> filterWorkshop(WorkshopCategory category) {
+		return IWorkshopRepository.getByCategory(category);
+	}
+
 }
 
