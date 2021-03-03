@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -53,8 +55,8 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
-	@ManyToOne
-	@JoinColumn(name= "id_role")
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idRole")
 	private Role role;
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")

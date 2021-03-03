@@ -14,6 +14,9 @@ public interface IUserservice {
 	public void deleteUserById(Integer userId) throws Exception;
 	public User findUserBylogin(String user) throws Exception;
 	public List<User> findUserLastName(String user) throws Exception;
+	public String getUserRoleDescription(int id);
+	public List<String> findUsersActivated() throws Exception;	
+	public List<String> getUsersFromDisabled();
 
 
 }
