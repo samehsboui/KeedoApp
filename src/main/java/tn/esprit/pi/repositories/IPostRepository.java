@@ -1,6 +1,8 @@
 package tn.esprit.pi.repositories;
 
 import java.util.List;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,6 @@ public interface IPostRepository  extends CrudRepository<Post,Integer >{
 	
 	@Query("SELECT p FROM Post p WHERE p.id IN (SELECT l.post.id FROM Liking l WHERE l.user.id =:id) order by p.createDate desc")
 	public List<Post> getPostsLikedByUser(@Param("id")int id);
+
+
 }

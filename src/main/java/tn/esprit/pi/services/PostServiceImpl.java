@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.entities.User;
+import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.repositories.IPostRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.repositories.ICommentRepository;
+import tn.esprit.pi.repositories.IUnhealthyWordRepository;
 
 
 @Service
@@ -23,16 +25,24 @@ public class PostServiceImpl implements IPostService{
 	
 	@Autowired 
 	private ICommentRepository ICommentRepository;
+	@Autowired 
+	private IUnhealthyWordRepository IUnhealthyWordRepository;
 	
 	@Override
-	public Post addPost(Post p, int idU) {
+	public String addPost(Post p, int idU) {
 		User user=iUserRepository.findById(idU).get();
 		p.setUser(user);
 	    LocalDateTime creationDate = LocalDateTime.now();
 		p.setCreateDate(creationDate);
+		System.out.println("this is the content "+p.getPostContent());
+		for(UnhealthyWord uwd : IUnhealthyWordRepository.findAll()) {
+		if(p.getPostContent().contains(uwd.getWord())){
+			return ("Sorry, you can't post hate speech or bad words on Keedo");
+		}}
 		IPostRepository.save(p);
-		return p;
-	}
+		return ("post added successfully");
+		}
+	
 
 	@Override
 	public void deletePost(int id) {
@@ -98,5 +108,13 @@ public class PostServiceImpl implements IPostService{
 	public List<Post> getPostsLikedByUser(int id) {
 		return IPostRepository.getPostsLikedByUser(id);
 	}
+	
+	//admin
+
+/*
+    @Override
+    public void setPostEnabled(int postId, boolean isEnabled) {
+    	IPostRepository.setPostEnabled(postId, isEnabled);
+    }*/
 }
 

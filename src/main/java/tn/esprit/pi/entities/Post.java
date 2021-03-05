@@ -53,10 +53,8 @@ public class Post implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
-	// @DateTimeFormat(pattern = "YYYY-MM-dd")
-    //private LocalDate creationDate = LocalDate.now();
 	
-    //    private boolean unhealthy = false;
+   // private boolean unhealthy = false;
 	//	  private Integer likeCount = 0;
 	//    private Integer commentCount = 0;
 	public Post() {
@@ -133,5 +131,6 @@ public class Post implements Serializable{
 				+ createDate + ", modifyDate=" + modifyDate + ", comments=" + comments + ", likes=" + likes + ", user="
 				+ user + "]";
 	}
+
 
 }

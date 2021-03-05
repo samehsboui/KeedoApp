@@ -2,15 +2,17 @@ package tn.esprit.pi.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.services.PostServiceImpl;
 
@@ -46,10 +48,10 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-post/{idU}
 		@PostMapping("/Post/add-post/{idU}")  
-		private int addPost(@RequestBody Post Posts, @PathVariable("idU")int idU)   
+		private String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU)   
 		{  
-			PostServiceImpl.addPost(Posts, idU);  
-			return Posts.getIdPost();  
+			return  (PostServiceImpl.addPost(Posts, idU));  
+			
 		}  
 		
 		
@@ -106,5 +108,15 @@ public class PostController {
 					return PostServiceImpl.getPostsLikedByUser(idU);
 
 				}
+				
+				
+///////////admin (add the role in the integration of security)//////////
+
+
+			    @PostMapping("/postApproval")
+			    @ResponseStatus(value = HttpStatus.OK)
+			    public void processPost(@RequestParam int postId, @RequestParam boolean isApproved) {
+			      //  adminService.setPostEnabled(postId, isApproved);
+			    }
 		
 	}

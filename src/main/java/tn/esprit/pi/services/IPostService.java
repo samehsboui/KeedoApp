@@ -3,7 +3,7 @@ import java.util.List;
 import tn.esprit.pi.entities.Post;
 public interface IPostService {
 	
-	public Post addPost(Post p, int idU);
+	public String addPost(Post p, int idU);
 	public void deletePost(int id);
 	public Post updatePost(Post p, int id);
 	public List<Post> getAllPosts();
@@ -14,5 +14,4 @@ public interface IPostService {
     public List<Post> searchPosts(String text);
 	public List<Post> getPostsCommentedByUser(int id);
 	public List<Post> getPostsLikedByUser(int id);
-
 }
