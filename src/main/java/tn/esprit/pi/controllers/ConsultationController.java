@@ -1,6 +1,5 @@
 package tn.esprit.pi.controllers;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
-
-import com.google.api.client.util.DateTime;
 
 import tn.esprit.pi.entities.Consultation;
 import tn.esprit.pi.entities.Kid;

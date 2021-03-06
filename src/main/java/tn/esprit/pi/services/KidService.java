@@ -32,7 +32,7 @@ public class KidService implements IKidService {
 
 	@Override
 	public void deleteKid(int id) {
-		kidRepository.deleteById(id);
+		kidRepository.deleteKidById(id);
 	}
 
 	@Override
