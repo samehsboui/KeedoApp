@@ -33,7 +33,7 @@ public class Role implements Serializable{
 	@Column(name="roleType")
 	private RoleType roleType;
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+	@OneToMany( mappedBy = "role")
 	private Set<User> user;
 	
 	public Role() {
