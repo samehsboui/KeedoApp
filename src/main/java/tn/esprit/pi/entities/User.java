@@ -55,7 +55,7 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade= CascadeType.MERGE)
     @JoinColumn(name = "idRole")
 	private Role role;
 	@JsonIgnore
@@ -92,6 +92,12 @@ public class User implements Serializable{
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	boolean valid;
+    @Column(name = "accountLocked", columnDefinition = "boolean default false")
+    private boolean accountNonLocked;
+    @Column(name = "failedAttempt", columnDefinition = "int default 0")
+    private int failedAttempt;
+    @Column(name = "lockTime")
+    private Date lockTime;
 	
 	public User() {
 		super();
@@ -289,6 +295,30 @@ public class User implements Serializable{
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+	
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public int getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(int failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
 	}
 
 	@Override

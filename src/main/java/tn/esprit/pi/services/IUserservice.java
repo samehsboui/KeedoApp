@@ -2,8 +2,10 @@ package tn.esprit.pi.services;
 
 import java.util.List;
 
-import tn.esprit.pi.entities.User;
+import org.springframework.stereotype.Service;
 
+import tn.esprit.pi.entities.User;
+@Service
 public interface IUserservice {
 	public List<User> getAllUsers();
 	public User getUserById(int id) throws Exception;
@@ -17,6 +19,9 @@ public interface IUserservice {
 	public String getUserRoleDescription(int id);
 	public List<String> findUsersActivated() throws Exception;	
 	public List<String> getUsersFromDisabled();
-
+	public void increaseFailedAttempts(User user);
+	boolean unlockWhenTimeExpired(User user);
+	void resetFailedAttempts(String email);
+	void lock(User user);
 
 }
