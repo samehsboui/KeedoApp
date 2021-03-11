@@ -1,4 +1,4 @@
-package tn.esprit.pi.service;
+package tn.esprit.pi.services;
 
 
 import java.util.List;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
-import tn.esprit.pi.repository.ClaimRepository;
 
 
 
@@ -18,7 +17,7 @@ public class ClaimService implements IClaimService {
 	
 	
 	@Autowired
-	ClaimRepository cr;
+	tn.esprit.pi.repositories.ClaimRepository cr;
 
 	@Override
 	public Claim addClaim(Claim c) {

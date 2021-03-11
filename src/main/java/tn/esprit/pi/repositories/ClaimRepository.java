@@ -1,4 +1,4 @@
-package tn.esprit.pi.repository;
+package tn.esprit.pi.repositories;
 
 
 

@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -76,8 +77,15 @@ public class User implements Serializable{
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "follower")
+	private Set<Follow> follower;
 	
-	
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "following")
+	private Set<Follow> following;
+
+	@OneToOne(mappedBy="director")
+	private Kindergarden  kindergarden;
+
 	 private boolean isPrivate;
 	
 	 public boolean isPrivate() {
@@ -204,13 +212,7 @@ public class User implements Serializable{
 		this.posts = posts;
 	}
 
-	public Set<Follow> getFollows() {
-		return follows;
-	}
 
-	public void setFollows(Set<Follow> follows) {
-		this.follows = follows;
-	}
 
 	public Set<Workshop> getWorkshops() {
 		return workshops;
@@ -275,15 +277,48 @@ public class User implements Serializable{
 	public void setTopics(Set<Topic> topics) {
 		this.topics = topics;
 	}
+	
+	
+	
+
+	public Set<Follow> getFollower() {
+		return follower;
+	}
+
+	public void setFollower(Set<Follow> follower) {
+		this.follower = follower;
+	}
+
+	public Set<Follow> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<Follow> following) {
+		this.following = following;
+	}
+
+	public Kindergarden getKindergarden() {
+		return kindergarden;
+	}
+
+	public void setKindergarden(Kindergarden kindergarden) {
+		this.kindergarden = kindergarden;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
+				+ role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops + ", events=" + events
+				+ ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages + ", bus=" + bus
+				+ ", answers=" + answers + ", topics=" + topics + ", follower=" + follower + ", following=" + following
+				+ ", kindergarden=" + kindergarden + ", isPrivate=" + isPrivate + "]";
 	}
+
 	
 }
