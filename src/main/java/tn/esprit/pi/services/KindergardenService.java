@@ -40,7 +40,7 @@ public class KindergardenService implements IKindergardenService{
 	@Override
 	public void removeKindergarden(int id) {
 		// TODO Auto-generated method stub
-		Kindergarden k=kindergardenRepository.findById(id);
+		Kindergarden k=kindergardenRepository.findById(id).get();
 		kindergardenRepository.delete(k);
 	}
 
@@ -49,7 +49,7 @@ public class KindergardenService implements IKindergardenService{
 		// TODO Auto-generated method stub
 		
 		User u=ur.findByidUser(kindergarden.getDirector().getIdUser());
-		Kindergarden k=kindergardenRepository.findById(id);
+		Kindergarden k=kindergardenRepository.findById(id).get();
 k.setName(kindergarden.getName());
 k.setDirector(kindergarden.getDirector());
 		return kindergardenRepository.save(k);
@@ -58,7 +58,7 @@ k.setDirector(kindergarden.getDirector());
 	@Override
 	public Kindergarden getKindergardenById(int id) {
 		// TODO Auto-generated method stub
-		return kindergardenRepository.findById(id);
+		return kindergardenRepository.findById(id).get();
 	}
 
 	@Override

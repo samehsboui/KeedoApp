@@ -10,7 +10,7 @@ import tn.esprit.pi.entities.User;
 @Repository
 public interface KindergardenRepository  extends JpaRepository<Kindergarden, Integer>{
 	
-	Kindergarden findById(int k);
+	
 	Kindergarden findByName(String name);
 	Kindergarden findByDirector(User director);
 

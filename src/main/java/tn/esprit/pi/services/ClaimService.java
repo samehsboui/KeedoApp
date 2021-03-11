@@ -40,7 +40,7 @@ public class ClaimService implements IClaimService {
 		
 		
 		
-		Kindergarden k=kr.findById(kindergarden);
+		Kindergarden k=kr.findById(kindergarden).get();
 		
 			c.setUser(u);
 			c.setKindergarden(k);
@@ -74,7 +74,7 @@ public class ClaimService implements IClaimService {
 	public Claim updateClaim(Claim c, int id) {
 
 		User u=ur.findByidUser(c.getUser().getIdUser());
-		Kindergarden k=kr.findById(c.getKindergarden().getId());
+		Kindergarden k=kr.findById(c.getKindergarden().getId()).get();
 		
 		
 		Claim claim=cr.findById(id).get();
