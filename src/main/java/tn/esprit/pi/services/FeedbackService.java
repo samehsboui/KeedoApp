@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 
 
 import tn.esprit.pi.entities.Feedback;
+import tn.esprit.pi.entities.Meeting;
+import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FeedbackRepository;
+import tn.esprit.pi.repositories.MeetingRepository;
 
 
 @Service
@@ -16,10 +19,13 @@ public class FeedbackService implements IFeedbackService{
 	
 	@Autowired
 	FeedbackRepository feedbackrepository;
+	@Autowired
+	MeetingRepository meetingrepository;
 	
 	@Override
-	public Feedback createFeedback(Feedback fb) {
-		
+	public Feedback createFeedback(Feedback fb, int meeting) {
+		Meeting m=meetingrepository.findById(meeting).get();
+		fb.setMeeting(m);
 		return feedbackrepository.save(fb);
 	}
 
@@ -61,6 +67,8 @@ public class FeedbackService implements IFeedbackService{
 
 		return feedbacks;
 	}
+
+
 	
 	
 	

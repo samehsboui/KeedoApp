@@ -2,21 +2,37 @@ package tn.esprit.pi.repositories;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tn.esprit.pi.entities.Claim;
-import tn.esprit.pi.entities.ClaimCategory;
+
+
+import tn.esprit.pi.entities.Question;
 import tn.esprit.pi.entities.Response;
 
-@Repository
-public interface ResponseRepository extends CrudRepository<Response,Integer>{
 
+@Repository
+public interface ResponseRepository extends JpaRepository<Response,Integer>{
+
+	List<Response> findByQuestion(Question q);
 	
-	@Query("SELECT r FROM Response r WHERE r.question.id =:question")
-	public List<Response> getResponseByQuestion(@Param("question") int question);
+	@Query("SELECT  r From Response r join r.question q join q.feedback f Join f.meeting.users u  WHERE u.idUser =:user ")
+	List<Response> UserQuestionsResponses(@Param("user") int user);
+
+	@Query("SELECT  r From Response r join r.question q join q.feedback f Join f.meeting.users u  WHERE u.idUser =:user and q.id=:question")
+
+	Response findbyUserAndQuestion(@Param("user") int user,@Param("question") int question);
 	
+/*
+	List<Response> findByFeedback(Feedback f);
 	
+	@Query("SELECT  r From Response r join r.feedback f join f.meeting.users u  WHERE u.idUser =:user ")
+	List<Response> UserResponses(@Param("user") int user);
+
+	@Query("SELECT  r From Response r join r.feedback f join f.meeting.users u  WHERE u.idUser =:user and r.feedback.idFeedback=:feedback")
+	Response findbyUserAndFeedback(@Param("user") int user,@Param("feedback") int feedback);
+
+*/
 }
