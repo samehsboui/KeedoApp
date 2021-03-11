@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import tn.esprit.pi.entities.Question;
-import tn.esprit.pi.services.QuestionService;
 
+import tn.esprit.pi.services.QuestionService;
+ 
 @RestController
 public class QuestionController {
 
-	
 	@Autowired
 	QuestionService questionservice;
 	
-	@PostMapping("/Questions/new")  
-	private int addQuestion(@RequestBody Question question)   
+	
+	@PostMapping("/Questions/new-question-of/{feedback}")  
+	private int addQuestion(@RequestBody Question question,@PathVariable("feedback") int feedback)   
 	{  
-		questionservice.addQuestion(question);
+		questionservice.createQuestion(question, feedback);
 		return question.getId();
 	} 
 	
@@ -57,6 +57,12 @@ public class QuestionController {
 		return list;
 	}
 	
+	@GetMapping("/count-feedback-questions/{idFeedback}")
+	 @ResponseBody
+	 public int CountFeedbackQuestions(@PathVariable("idFeedback") int idFeedback) {
+	
+	return questionservice.CountFeedbackQuestions(idFeedback);
+	}
 	
 	@DeleteMapping("/Questions/delete-question/{idQuestion}")  
 	private void RemoveQuestion(@PathVariable("idQuestion") int idQuestion)   
@@ -64,12 +70,5 @@ public class QuestionController {
 		questionservice.removeQuestion(idQuestion);
 	} 
 	
-	
-	@GetMapping("/count-feedback-questions/{idFeedback}")
-	 @ResponseBody
-	 public int CountFeedbackQuestions(@PathVariable("idFeedback") int idFeedback) {
-	
-	return questionservice.CountFeedbackQuestions(idFeedback);
-	}
 	
 }
