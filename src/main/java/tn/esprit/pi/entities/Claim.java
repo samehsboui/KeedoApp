@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name= "claim")
@@ -29,10 +31,11 @@ public class Claim implements Serializable{
 	@Column(name= "category")
 	@Enumerated(EnumType.STRING)
 	private ClaimCategory category;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_kindergarden")
 	private Kindergarden kindergarden;

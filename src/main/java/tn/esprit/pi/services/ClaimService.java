@@ -73,11 +73,15 @@ public class ClaimService implements IClaimService {
 	@Override
 	public Claim updateClaim(Claim c, int id) {
 
+		User u=ur.findByidUser(c.getUser().getIdUser());
+		Kindergarden k=kr.findById(c.getKindergarden().getId());
+		
+		
 		Claim claim=cr.findById(id).get();
 		claim.setCategory(c.getCategory());
 		claim.setDescription(c.getDescription());
-		claim.setKindergarden(c.getKindergarden());
-		claim.setUser(c.getUser());
+		claim.setKindergarden(k);
+		claim.setUser(u);
 		return cr.save(claim);
 	}
 

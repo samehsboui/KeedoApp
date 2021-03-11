@@ -17,10 +17,6 @@ import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
 import tn.esprit.pi.services.ClaimService;
 
-
-
-
-
 @RestController
 public class ClaimController {
 	@Autowired

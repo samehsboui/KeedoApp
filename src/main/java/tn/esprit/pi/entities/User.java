@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name= "user")
 public class User implements Serializable{
@@ -66,6 +68,7 @@ public class User implements Serializable{
 	private Set<Event> events;
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Meeting> meetings; 
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
@@ -82,7 +85,7 @@ public class User implements Serializable{
 	
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "following")
 	private Set<Follow> following;
-
+	@JsonIgnore
 	@OneToOne(mappedBy="director")
 	private Kindergarden  kindergarden;
 
