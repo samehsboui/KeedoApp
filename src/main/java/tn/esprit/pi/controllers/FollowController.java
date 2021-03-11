@@ -1,10 +1,5 @@
 package tn.esprit.pi.controllers;
 
-
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,15 +54,15 @@ public class FollowController {
 	        return followservice.declineFollow(followRequestId);
 	    }
 	    
-	    
-	    @GetMapping("/{userId}/follow")
+	    /*
+	    @GetMapping("/{userId}/follow/{currentUser}")
 	    public FollowResponse isUserFollowedByCurrentUser(@PathVariable(value = "currentuser")int currentUser,
 	                                                      @PathVariable(value = "userId") int userId) {
 	        return followservice.isUserFollowedByCurrentUser(currentUser, userId);
 	    }
+	    */
 	    
-	    
-	    @GetMapping("/{currentuser}/ownfollows")
+	    @GetMapping("/{currentuser}/ownfollowers")
 		 @ResponseBody
 		 public int getnbCrrentUserFollows(@PathVariable(value = "currentuser")int currentUser) {
 		
@@ -80,54 +75,6 @@ public class FollowController {
 			followservice.unfollow(idFollow); 
 		}  
 	    
-	/*
-	 @PostMapping("/{userId}/{current}")
 
-	    public void followUser(@PathVariable(value = "userId") int userid,@PathVariable(value = "current")int current) {
-	         followservice.followuser(userid, current);
-	    } 
-	 
-	   @GetMapping("isfollowing/{userId}/{current}")
-	    public boolean isUserFollowingAnotherUser(@PathVariable(value = "userId") int userid,@PathVariable(value = "current")int current) {
-	        return followservice.usFollowing(userid, current);
-	    }
-	   
-	   
-	   @GetMapping("/{userId}/followers")
-	    public List<Follow> getUserFollowers(@PathVariable(value = "userId") int userId) {
-	        List<Follow> list =followservice.getUserFollowers(userId);
-	        return list;
-	    }
-	   
-	   
-	   @GetMapping("/{userId}/followers-number")
-	    public int CountUserFollowers(@PathVariable(value = "userId") int userId) {
-	        List<Follow> list =followservice.getUserFollowers(userId);
-	        return list.size();
-	    }
-	   */
-	/*
-	@GetMapping("/retrieve-all-follows")
-	 @ResponseBody
-	 public List<Follow> getfollows() {
-	 List<Follow> list = followservice.retreiveallfollows();
-	return list;
-	}
-	
-	
-	@GetMapping("/follow/retrieve-follow-details/{idFollow}")
-	 @ResponseBody
-	 public Follow getFollow(@PathVariable("idFollow") int idFollow) {
-
-	
-		return followservice.getFollowById(idFollow);
-	}
-	
-	@DeleteMapping("/follows/unfollow/{idFollow}")  
-	private void Unfollow(@PathVariable("idFollow") int idFollow)   
-	{  
-		followservice.unfollow(idFollow); 
-	}  
-	*/
 	
 }

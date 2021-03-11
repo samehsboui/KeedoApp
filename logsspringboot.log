@@ -10472,3 +10472,31 @@ java.lang.NullPointerException: null
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.43.jar:9.0.43]
 	at java.lang.Thread.run(Unknown Source) [na:1.8.0_281]
 
+2021-03-11 16:22:58.711  INFO 7080 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_281 on DESKTOP-79DD2BC with PID 7080 (C:\Users\Lenovo\Documents\GitHub\KeedoApp\target\classes started by Lenovo in C:\Users\Lenovo\Documents\GitHub\KeedoApp)
+2021-03-11 16:22:58.714  INFO 7080 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-11 16:23:00.151  INFO 7080 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-11 16:23:00.152  INFO 7080 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-11 16:23:00.409  INFO 7080 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-11 16:23:00.703  INFO 7080 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-11 16:23:00.818  INFO 7080 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-11 16:23:00.973  INFO 7080 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-11 16:23:01.321  INFO 7080 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-11 16:23:02.463  INFO 7080 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-11 16:23:02.554  WARN 7080 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-11 16:23:04.223  INFO 7080 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 5.905 seconds (JVM running for 6.615)
+2021-03-11 16:23:06.500  INFO 7080 --- [http-nio-8082-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-11 16:30:15.134  WARN 7080 --- [http-nio-8082-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingPathVariableException: Missing URI template variable 'currentuser' for method parameter of type int]
+2021-03-11 16:31:00.833  INFO 10220 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_281 on DESKTOP-79DD2BC with PID 10220 (C:\Users\Lenovo\Documents\GitHub\KeedoApp\target\classes started by Lenovo in C:\Users\Lenovo\Documents\GitHub\KeedoApp)
+2021-03-11 16:31:00.835  INFO 10220 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-11 16:31:02.326  INFO 10220 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-11 16:31:02.327  INFO 10220 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-11 16:31:02.432  INFO 10220 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-11 16:31:02.708  INFO 10220 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-11 16:31:02.804  INFO 10220 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-11 16:31:02.950  INFO 10220 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-11 16:31:03.293  INFO 10220 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-11 16:31:04.427  INFO 10220 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-11 16:31:04.500  WARN 10220 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-11 16:31:06.036  INFO 10220 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 5.596 seconds (JVM running for 6.197)
+2021-03-11 16:31:15.981  INFO 10220 --- [http-nio-8082-exec-2] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-11 16:31:16.050  WARN 10220 --- [http-nio-8082-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingPathVariableException: Missing URI template variable 'currentuser' for method parameter of type int]
