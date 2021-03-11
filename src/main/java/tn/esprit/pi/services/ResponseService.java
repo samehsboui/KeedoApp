@@ -8,8 +8,10 @@ import tn.esprit.pi.entities.Feedback;
 
 import tn.esprit.pi.entities.Question;
 import tn.esprit.pi.entities.Response;
+import tn.esprit.pi.entities.Role;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FeedbackRepository;
+import tn.esprit.pi.repositories.IRoleRepository;
 import tn.esprit.pi.repositories.MeetingRepository;
 import tn.esprit.pi.repositories.QuestionRepository;
 import tn.esprit.pi.repositories.ResponseRepository;
@@ -31,8 +33,8 @@ public class ResponseService implements IResponseService{
 	@Autowired 
 	UserRepository userrepository;
 	
-
-
+	@Autowired
+	IRoleRepository roleRepository;
 	@Override
 	public Response FeedbackResponseQuestion(Response response,int question) {
 		// TODO Auto-generated method stub
@@ -76,23 +78,25 @@ public class ResponseService implements IResponseService{
 	}
 
 	@Override
-	public List<Response> getAllUserResponses(int user) {
+	public List<Response> getAllUserResponses(int user) throws Exception {
 		
 		User u=userrepository.findById(user).get();
-		List <Response> responses=(List<Response>) responserepository.UserQuestionsResponses(u.getIdUser());
+Role role =roleRepository.findRoleByroleType(u.getRole().getRoleType().Parent);
+		List <Response> responses=(List<Response>) responserepository.UserQuestionsResponses(u.getIdUser(),role.getRoleType());
 
 		return responses;
 	}
 	
 
 	@Override
-	public Response userResponseByQuestion( int user ,int question) {
+	public Response userResponseByQuestion( int user ,int question) throws Exception {
 		
 		
 		Question q=questionrepository.findById(question).get();
 		User u=userrepository.findById(user).get();
-		
-		return responserepository.findbyUserAndQuestion(u.getIdUser(),q.getId());
+		Role role =roleRepository.findRoleByroleType(u.getRole().getRoleType().Parent);
+
+		return responserepository.findbyUserAndQuestion(u.getIdUser(),q.getId(),role.getRoleType());
 
 
 

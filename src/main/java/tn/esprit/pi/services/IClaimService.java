@@ -11,7 +11,7 @@ import tn.esprit.pi.entities.ClaimCategory;
 
 
 public interface IClaimService {
-	Claim addClaim(Claim c);
+	Claim addClaim(Claim c, int user,int kindergarden);
 	List<Claim> retrieveAllclaims();
 	void deleteClaim(int id);
 	

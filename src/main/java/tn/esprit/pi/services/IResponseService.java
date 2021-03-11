@@ -9,8 +9,8 @@ public interface IResponseService {
 
 
 	Response FeedbackResponseQuestion(Response response,int question);
-	Response userResponseByQuestion(int user ,int question);
-	List<Response> getAllUserResponses(int user);
+	Response userResponseByQuestion(int user ,int question)throws Exception ;
+	List<Response> getAllUserResponses(int user)throws Exception ;
 
 	List<Response> getAllResponses(int meeting);
 	void removeResponse(int id);

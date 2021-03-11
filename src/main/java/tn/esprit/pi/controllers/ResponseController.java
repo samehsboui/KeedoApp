@@ -31,10 +31,12 @@ public class ResponseController {
 		return response.getId();
 	} 
 	
+	
+
 	@GetMapping("/Responses/retrieve-all-responses_of/{user}")
 	 @ResponseBody
 
-	 public List<Response> getAllUserResponse(@PathVariable("user") int user) {
+	 public List<Response> getAllUserResponse(@PathVariable("user") int user) throws Exception {
 		
 			Role r=new Role();
 			//if (r.getRoleType()==RoleType.Parent)
@@ -45,11 +47,14 @@ public class ResponseController {
 
 	}
 	
-	@GetMapping("/Responses/retrieve-response-of-user/{user}/of-feedback/{question}")
+	
+	
+	
+	@GetMapping("/Responses/retrieve-response-of-user/{user}/of-question/{question}")
 	 @ResponseBody
 	 
 
-	 public Response getResponse(@PathVariable("user") int user ,@PathVariable("question") int question) {
+	 public Response getResponse(@PathVariable("user") int user ,@PathVariable("question") int question) throws Exception {
 
 	
 		return responseservice.userResponseByQuestion( user, question);

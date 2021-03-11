@@ -28,10 +28,10 @@ public class ClaimController {
 	
 
 	
-	@PostMapping("/Claims/add-claim")  
-	private int addClaim(@RequestBody Claim claim)   
+	@PostMapping("/Claims/add-claim/{user}/{kindergarten}")  
+	private int addClaim(@RequestBody Claim claim, @PathVariable("user") int user,@PathVariable("kindergarten") int kindergarten)   
 	{  
-		claimService.addClaim(claim);  
+		claimService.addClaim(claim,user,kindergarten);  
 		return claim.getIdClaim();  
 	}  
 	
