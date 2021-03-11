@@ -1,9 +1,7 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,14 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name= "question")
 public class Question implements Serializable{
 private static final long serialVersionUID = 1L;
 	
@@ -31,15 +25,16 @@ private static final long serialVersionUID = 1L;
 	@Column(name= "question")
 	private String question;
 	
-	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL,mappedBy="question")
-	private Set<Response>  responses;
 	
-	@JsonIgnore
+	@OneToOne(mappedBy="question")
+	private Response  response;
+	
+	
 	@ManyToOne
 	@JoinColumn(name= "Idfeedback")
 	private Feedback feedback;
-
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -52,14 +47,11 @@ private static final long serialVersionUID = 1L;
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	
-	
-	
-	public Set<Response> getResponses() {
-		return responses;
+	public Response getResponse() {
+		return response;
 	}
-	public void setResponse(Set<Response> responses) {
-		this.responses = responses;
+	public void setResponse(Response response) {
+		this.response = response;
 	}
 	public Feedback getFeedback() {
 		return feedback;
@@ -70,8 +62,7 @@ private static final long serialVersionUID = 1L;
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-
+	
 	
 	
 	

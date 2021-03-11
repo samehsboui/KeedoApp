@@ -5,20 +5,16 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name= "response")
 public class Response implements Serializable{
 private static final long serialVersionUID = 1L;
 	
@@ -29,17 +25,13 @@ private static final long serialVersionUID = 1L;
 	
 	@Column(name= "response")
 	private String response;	 
-	@Enumerated(EnumType.STRING)
-	private Satistfaction satisfactionDegree;
 	
-	@Column(name= "rating")
-	private int rating;
-
+	
 	@JsonIgnore
 	
-	 @ManyToOne
+	 @OneToOne(cascade = CascadeType.ALL)
 	  
-	@JoinColumn(name= "IdQuestion")
+	@JoinColumn(name= "IdQuestion", referencedColumnName = "id")
 	private Question question;
 
 
@@ -68,41 +60,16 @@ private static final long serialVersionUID = 1L;
 	}
 
 
-
-
 	public void setResponse(String response) {
 		this.response = response;
 	}
 
 
-	public Satistfaction getSatisfactionDegree() {
-		return satisfactionDegree;
-	}
-
-
-	public void setSatisfactionDegree(Satistfaction satisfactionDegree) {
-		this.satisfactionDegree = satisfactionDegree;
-	}
-
-
-	public int getRating() {
-		return rating;
-	}
-
-
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
-
-
 	@Override
 	public String toString() {
-		return "Response [id=" + id + ", response=" + response + ", satisfactionDegree=" + satisfactionDegree
-				+ ", rating=" + rating + ", question=" + question + "]";
+		return "Response [id=" + id + ", response=" + response + ", question=" + question + "]";
 	}
-
-
-
+	
 	
 	
 }

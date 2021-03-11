@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Response;
-import tn.esprit.pi.entities.Role;
-import tn.esprit.pi.entities.RoleType;
-import tn.esprit.pi.entities.User;
 import tn.esprit.pi.services.ResponseService;
 
 @RestController
@@ -24,46 +21,48 @@ public class ResponseController {
 	@Autowired
 	ResponseService responseservice;
 	
-	@PostMapping("/Responses/responseTo/{question}")  
-	private int addResponse(@RequestBody Response response,@PathVariable("question") int question)   
+	@PostMapping("/Responses/new")  
+	private int addResponse(@RequestBody Response response)   
 	{  
-		responseservice.FeedbackResponseQuestion(response, question);
+		responseservice.QuestionResponse(response);
 		return response.getId();
 	} 
 	
-	@GetMapping("/Responses/retrieve-all-responses_of/{user}")
+	
+	@GetMapping("/retrieve-all-responses")
 	 @ResponseBody
 
-	 public List<Response> getAllUserResponse(@PathVariable("user") int user) {
-		
-			Role r=new Role();
-			//if (r.getRoleType()==RoleType.Parent)
-	 List<Response> list = responseservice.getAllUserResponses(user);
-			
+	 public List<Response> getquestions() {
+	 List<Response> list = responseservice.getAlResponses();
 	 return list;
-	
-
 	}
 	
-	@GetMapping("/Responses/retrieve-response-of-user/{user}/of-feedback/{question}")
+	@GetMapping("/Response/retrieve-response-details/{idResponse}")
 	 @ResponseBody
 	 
 
-	 public Response getResponse(@PathVariable("user") int user ,@PathVariable("question") int question) {
+	 public Response getResponse(@PathVariable("idResponse") int idResponse) {
 
 	
-		return responseservice.userResponseByQuestion( user, question);
+		return responseservice.getResponseById(idResponse);
 	}
 	
 	
+	@GetMapping("/Responses/retrieve-question-response/{idQuestion}")
+	 @ResponseBody
+	 
+
+	 public List<Response> getQuestionResponses(@PathVariable("idQuestion") int idQuestion) {
+
+		List<Response> list = responseservice.getResponseByQuestion(idQuestion);
+		return list;
+	}
 	
-	
+
 	@DeleteMapping("/Responses/delete-response/{idResponse}")  
 	private void RemoveResponse(@PathVariable("idResponse") int idResponse)   
 	{  
 		responseservice.removeResponse(idResponse);
 	} 
-
-
 	
 }

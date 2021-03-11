@@ -2,14 +2,18 @@ package tn.esprit.pi.services;
 
 import java.util.List;
 
+
 import tn.esprit.pi.entities.Question;
 
 public interface IQuestionService {
-	Question createQuestion(Question fb,int feedback);
+	
+	
+	Question addQuestion(Question question);
 	List<Question> getAllQuestions();
 	void removeQuestion(int id);
 	Question getQuestionById(int id);
-	int CountFeedbackQuestions(int feedback);
+	int CountFeedbackQuestions(int idfeedback);
 	
-	List<Question> getQuestionByFeedback(int feedback);
+	List<Question> getQuestionByFeedback(int idfeedback);
+
 }
