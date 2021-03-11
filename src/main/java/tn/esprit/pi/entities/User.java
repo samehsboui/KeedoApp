@@ -77,6 +77,11 @@ public class User implements Serializable{
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+	private List<Notification> notifciations;
+	//
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Participation> participations;
 	
@@ -278,6 +283,18 @@ public class User implements Serializable{
 
 	public void setDonations(List<Donation> donations) {
 		this.donations = donations;
+	}
+
+	public List<Notification> getNotifciations() {
+		return notifciations;
+	}
+
+	public void setNotifciations(List<Notification> notifciations) {
+		this.notifciations = notifciations;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 

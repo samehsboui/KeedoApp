@@ -8,7 +8,7 @@ import tn.esprit.pi.entities.Jackpot;
 import tn.esprit.pi.repositories.IJackPotRepository;
 
 @Service
-public class JackPotService implements IJackPotService {
+public class JackPotServiceImpl implements IJackPotService {
 	
 	
 	@Autowired

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="meeting")
 public class Meeting implements Serializable{
@@ -30,6 +32,8 @@ public class Meeting implements Serializable{
 	@Temporal(TemporalType.DATE)
 	@Column(name= "date")
 	private Date date;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="hh:mm")
+
 	@Temporal(TemporalType.TIME)
 	@Column(name= "time")
 	private Date time;

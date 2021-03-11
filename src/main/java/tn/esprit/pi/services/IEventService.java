@@ -13,7 +13,7 @@ public interface IEventService {
 	
 	public void addEvent(Event e);
 	public void deleteEvent(int id);
-	public Event updateEvent(Event e , int id);
+	public int updateEvent(Event e , int id);
 	public List<Event> getAllEvents();
 	public Event getEventById(int id);
 	
@@ -21,14 +21,17 @@ public interface IEventService {
 	
 	public List<Event> filterEvent(EventCategory category);
 	
-	public String affecterEventUser(int iduser,int idevent);
+	public String addParticipation(int iduser,int idevent);
 	
 	
 	public Map<Integer,Integer>getEventsByViews();
 	
 	public List<String> displayBestEventsByViews() ;
-	
-	
+	public String affecterCategoryEvent(String category,int idevent);
+    public String affecterEventAdv(int idavert,int idevent);
+	public List<Event> upcomeEvents();
+	public void refundUsers(int eid) ;
+	public void findEventById(int id) ;
 
 
 }

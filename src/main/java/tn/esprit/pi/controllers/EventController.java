@@ -1,5 +1,10 @@
 package tn.esprit.pi.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +17,10 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +28,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tn.esprit.pi.entities.Event;
 import tn.esprit.pi.entities.EventCategory;
@@ -29,56 +47,90 @@ import tn.esprit.pi.services.EventServiceImpl;
 @RestController
 public class EventController {
 
-
 	@Autowired  
 	private EventServiceImpl eventServiceImpl;  
-	//creating a get mapping that retrieves all the event detail from the database   
+
+	
+	
+	
+	
+	//---------------------------------------------ADMIN METHODS------------------------------------------------------
+
 	@GetMapping("/event/get-all-events")  
 	private List<Event> getAllEvents()   
 	{  
 		return eventServiceImpl.getAllEvents();  
 	}  
+	
 	//creating a get mapping that retrieves the detail of a specific event  
 	@GetMapping("/event/detail-event/{eventid}")  
 	private Event getEvent(@PathVariable("eventid") int eventid)   
 	{  
 		return eventServiceImpl.getEventById(eventid);  
 	}  
-	//creating a delete mapping that deletes a specified event  
-	@DeleteMapping("/event/delete-event/{eventid}")  
-	private void deleteEvent(@PathVariable("eventid") int eventid)   
-	{  
-		eventServiceImpl.deleteEvent(eventid);  
-	}  
+	
 	//creating post mapping that post the event detail in the database  
-	@PostMapping("/event/add-event")  
-	private int addEvent(@RequestBody Event events)   
-	{  
-		eventServiceImpl.addEvent(events);  
-		return events.getIdEvenement();  
-	}  
+	ObjectMapper objectMapper = new ObjectMapper();
+
+	//creating post mapping that post the event detail in the database  
+		@PostMapping(value="/event/add-event", consumes = {
+				MediaType.APPLICATION_JSON_VALUE,
+				MediaType.MULTIPART_FORM_DATA_VALUE
+		})  
+		private Event addEvent(@RequestPart("evJson")String evJson,@RequestPart("image") MultipartFile file
+)   
+		{  Event ev  = new Event();
+			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+			System.out.println("image name ="+fileName);
+			try {
+				ev= objectMapper.readValue(evJson, Event.class);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/")
+					.path(fileName).toUriString();
+			System.out.println("file url =====>"+fileDownloadUri);
+			ev.setImage(fileDownloadUri.getBytes());
+
+			
+			
+			eventServiceImpl.addEvent(ev);  
+			return ev;  
+		}
+	
 	//creating put mapping that updates the event detail   
 	@PutMapping("/event/update-event/{eventid}")  
-	private Event updateEvent(@RequestBody Event events, @PathVariable("eventid")int eventid)   
+	private ResponseEntity<String> updateEvent(@RequestBody Event events, @PathVariable("eventid")int eventid)   
 	{  
 	
 		eventServiceImpl.updateEvent(events,eventid);  
-		return events;  
+	    return new ResponseEntity<String>("Event updated successfully",HttpStatus.OK);
 	}
 	
 	//creating put mapping that updates the event detail   
 		@PutMapping("/event/affecter-event/{iduser}/{idevent}")  
-		private String affecterEventUser(@PathVariable("iduser")int iduser,@PathVariable("idevent")int idevent)   
+		private  String participateToEvent(@PathVariable("iduser")int iduser,@PathVariable("idevent")int idevent)   
 		{  
 		
-			return eventServiceImpl.affecterEventUser(iduser, idevent);
+			String result = eventServiceImpl.addParticipation(iduser, idevent);
+		    return result;
 			
 		}
-	//creating get mapping that getEventByName   
+		
+		@GetMapping("/event/retrieve-Event-ById/{id}")
+		public Event getEventById(@PathVariable("id") int id) {
+			 Event ev = eventServiceImpl.getEventById(id);
+			 
+			return ev;
+		}
+			
+	//creating get mapping that getEventBy Name   
 
 	@GetMapping("/event/retrieve-Event-ByName/{name}")
 	public Event getEventByName(@PathVariable String name) {
 		 Event ev = eventServiceImpl.findEventByName(name);
+		 
 		return ev;
 		}
 	@GetMapping("/event/retrieve-Event-ByCategory/{category}")
@@ -96,5 +148,32 @@ public class EventController {
 	public List<String> displaybestEventsByViews(){
 		return eventServiceImpl.displayBestEventsByViews();
 		}
+	
+	//creating put mapping that updates the event detail   
+	@PutMapping("/event/affecter-category-event/{category}/{idevent}")  
+			private String affecterCategoryEvent(@PathVariable("category")String category,@PathVariable("idevent")int idevent)   
+	{  
+			
+				return eventServiceImpl.affecterCategoryEvent(category, idevent);
+				
+	}
+	@GetMapping("/event/upcomingEvent")
+	public List<Event> upcomingEvents() {
+		List<Event> upevents = eventServiceImpl.upcomeEvents();
+		System.out.println("hi="+upevents);
+		return upevents;
+	}
+	
+	
+	@DeleteMapping("/event/delete-event/{event-id}")
+	@ResponseBody
+	public ResponseEntity<String> deleteEvent(@PathVariable("event-id") int eventID) {
+		eventServiceImpl.refundUsers(eventID);//refund contributions & participations prices to its users
+
+		eventServiceImpl.deleteEvent(eventID);
+
+		return new ResponseEntity<String>("Event canceled with upgrading price and refund money to user participate",HttpStatus.ACCEPTED);
+	}
+	
 	
 }

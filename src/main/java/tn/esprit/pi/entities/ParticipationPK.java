@@ -17,27 +17,19 @@ public class ParticipationPK implements Serializable {
 	private int idUser;
 	private int idEvent;
 	
-	private int number;
-	
-	
 	
 	public ParticipationPK() {
 		super();
 	}
-	public ParticipationPK(int idUser, int idEvent,int number) {
+	public ParticipationPK(int idUser, int idEvent) {
 		super();
 		this.idUser = idUser;
 		this.idEvent = idEvent;
-		this.number = number;
+		
 	}
 	
 	
-	public int getNumber() {
-		return number;
-	}
-	public void setNumber(int number) {
-		this.number = number;
-	}
+	
 	public int getIdUser() {
 		return idUser;
 	}

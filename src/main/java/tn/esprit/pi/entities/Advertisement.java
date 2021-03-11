@@ -1,6 +1,9 @@
 package tn.esprit.pi.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,24 +20,27 @@ public class Advertisement implements Serializable{
 	private static final long serialVersionUID = 2329896158303253039L;
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	private Long Id;
-	private String Canal;
+	private int Id;
+	private String canal;
 	@Temporal(TemporalType.DATE)
 	private Date beginningDate;
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	private int targetViews;
 	private int views;
+	
+	@Enumerated(EnumType.STRING)
+	private TypeAd typeAd;
 	@ManyToOne
 	private Event event;
 	public Advertisement() {
 		super();
 	}
 
-	public Advertisement(Long id, String canal, Date beginningDate, Date endDate, int targetViews, int views) {
+	public Advertisement(int id, String canal, Date beginningDate, Date endDate, int targetViews, int views) {
 		super();
 		Id = id;
-		Canal = canal;
+		canal = canal;
 		this.beginningDate = beginningDate;
 		this.endDate = endDate;
 		this.targetViews = targetViews;
@@ -43,27 +49,27 @@ public class Advertisement implements Serializable{
 
 	public Advertisement(String canal, Date beginningDate, Date endDate, int targetViews, int views) {
 		super();
-		Canal = canal;
+		canal = canal;
 		this.beginningDate = beginningDate;
 		this.endDate = endDate;
 		this.targetViews = targetViews;
 		this.views = views;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return Id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		Id = id;
 	}
 
 	public String getCanal() {
-		return Canal;
+		return canal;
 	}
 
 	public void setCanal(String canal) {
-		Canal = canal;
+		canal = canal;
 	}
 
 	public Date getBeginningDate() {
@@ -98,61 +104,33 @@ public class Advertisement implements Serializable{
 		this.views = views;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((Canal == null) ? 0 : Canal.hashCode());
-		result = prime * result + ((Id == null) ? 0 : Id.hashCode());
-		result = prime * result + ((beginningDate == null) ? 0 : beginningDate.hashCode());
-		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-		result = prime * result + targetViews;
-		result = prime * result + views;
-		return result;
+	
+
+	public Event getEvent() {
+		return event;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Advertisement other = (Advertisement) obj;
-		if (Canal == null) {
-			if (other.Canal != null)
-				return false;
-		} else if (!Canal.equals(other.Canal))
-			return false;
-		if (Id == null) {
-			if (other.Id != null)
-				return false;
-		} else if (!Id.equals(other.Id))
-			return false;
-		if (beginningDate == null) {
-			if (other.beginningDate != null)
-				return false;
-		} else if (!beginningDate.equals(other.beginningDate))
-			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
-				return false;
-		} else if (!endDate.equals(other.endDate))
-			return false;
-		if (targetViews != other.targetViews)
-			return false;
-		if (views != other.views)
-			return false;
-		return true;
+	public void setEvent(Event event) {
+		this.event = event;
+	}
+	
+	
+	
+	public TypeAd getTypeAd() {
+		return typeAd;
+	}
+
+	public void setTypeAd(TypeAd typeAd) {
+		this.typeAd = typeAd;
 	}
 
 	@Override
 	public String toString() {
-		return "Advertisement [Id=" + Id + ", Canal=" + Canal + ", beginningDate=" + beginningDate + ", endDate="
+		return "Advertisement [Id=" + Id + ", Canal=" + canal + ", beginningDate=" + beginningDate + ", endDate="
 				+ endDate + ", targetViews=" + targetViews + ", views=" + views + "]";
 	}
-	
+
+
 	
 	
 }
