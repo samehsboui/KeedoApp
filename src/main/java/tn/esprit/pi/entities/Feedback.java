@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,10 +38,13 @@ public class Feedback implements Serializable{
 	@Column(name= "CreatedAt")
 	private LocalDateTime createdAt;
 	
-	
+
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "feedback")
 	private Set<Question> questions;
+
+
+
 	
 	@JsonIgnore
 	@ManyToOne
@@ -58,7 +63,7 @@ public class Feedback implements Serializable{
 		this.idFeedback = idFeedback;
 	}
 
-	
+
 	public Set<Question> getQuestions() {
 		return questions;
 	}
@@ -77,6 +82,8 @@ public class Feedback implements Serializable{
 
 	
 	
+	
+	
 	public String getTitle() {
 		return title;
 	}
@@ -92,6 +99,10 @@ public class Feedback implements Serializable{
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
+
+	
+	
+	
 
 	@Override
 	public String toString() {

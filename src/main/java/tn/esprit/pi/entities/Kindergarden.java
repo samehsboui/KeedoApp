@@ -1,7 +1,6 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,9 +31,10 @@ private static final long serialVersionUID = 1L;
 	@Column(name= "Name")
 	private String name;
 	
-	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
+	
 	
 	@JsonIgnore
 	
@@ -42,7 +42,6 @@ private static final long serialVersionUID = 1L;
 	  
 	@JoinColumn(name= "IdDirector", referencedColumnName = "id")
 	private User director;
-
 
 	
 	public Kindergarden() {
@@ -82,6 +81,8 @@ private static final long serialVersionUID = 1L;
 		this.claims = claims;
 	}
 
+	
+	
 	public User getDirector() {
 		return director;
 	}
@@ -96,6 +97,8 @@ private static final long serialVersionUID = 1L;
 	}
 
 
+	
+	
 
 	
 
