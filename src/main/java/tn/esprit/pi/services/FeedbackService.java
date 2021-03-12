@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import tn.esprit.pi.entities.Feedback;
 import tn.esprit.pi.entities.Meeting;
-
+import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FeedbackRepository;
 import tn.esprit.pi.repositories.MeetingRepository;
 import com.twilio.Twilio;
@@ -36,11 +36,12 @@ public class FeedbackService implements IFeedbackService{
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 		Meeting m=meetingrepository.findById(meeting).get();
 		
+
 		
 		fb.setMeeting(m);
 
 		Message.creator(new PhoneNumber("+21650082707"), new PhoneNumber("+14435012866"),
-				   "Message from Spring Boot Application").create();
+				   "Please check our application to give you feedback according to the meeting passed on "+m.getDate()+" at "+m.getTime()).create();
 		return feedbackrepository.save(fb);
 	}
 
