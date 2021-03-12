@@ -39,9 +39,9 @@ public class Meeting implements Serializable{
 	private String description;
 	@Column(name= "status")
 	private boolean status;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="meeting", fetch= FetchType.EAGER)
+	@OneToMany(cascade= CascadeType.ALL, mappedBy="meeting")
 	private Set<Feedback> feedbacks;
-	@ManyToMany(cascade= CascadeType.ALL, mappedBy="meetings", fetch= FetchType.EAGER)
+	@ManyToMany(cascade= CascadeType.ALL, mappedBy="meetings")
 	private Set<User> users;
 	
 	public Meeting() {

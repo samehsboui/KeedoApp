@@ -1,11 +1,14 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +33,10 @@ private static final long serialVersionUID = 1L;
 	
 	@Column(name= "question")
 	private String question;
-	
+
+    @Column(name = "type")
+    private String type;
+    
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL,mappedBy="question")
 	private Set<Response>  responses;
@@ -39,7 +45,8 @@ private static final long serialVersionUID = 1L;
 	@ManyToOne
 	@JoinColumn(name= "Idfeedback")
 	private Feedback feedback;
-
+	@Column(name = "createdAt")
+    private LocalDateTime createdAt;
 	public int getId() {
 		return id;
 	}
@@ -70,6 +77,29 @@ private static final long serialVersionUID = 1L;
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+	public void setResponses(Set<Response> responses) {
+		this.responses = responses;
+	}
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", question=" + question + ", type=" + type + ", responses=" + responses
+				+ ", feedback=" + feedback + ", createdAt=" + createdAt + "]";
+	}
+	
+	
+
+	
+	
+
+    
+	
+	
 
 
 	

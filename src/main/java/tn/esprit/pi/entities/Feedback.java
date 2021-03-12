@@ -38,7 +38,8 @@ public class Feedback implements Serializable{
 	@Column(name= "CreatedAt")
 	private LocalDateTime createdAt;
 	
-
+	@Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "feedback")
 	private Set<Question> questions;
@@ -104,10 +105,18 @@ public class Feedback implements Serializable{
 	
 	
 
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	@Override
 	public String toString() {
-		return "Feedback [idFeedback=" + idFeedback + ", title=" + title + ", createdAt=" + createdAt + ", questions="
-				+ questions + ", meeting=" + meeting + "]";
+		return "Feedback [idFeedback=" + idFeedback + ", title=" + title + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", questions=" + questions + ", meeting=" + meeting + "]";
 	}
 
 	

@@ -1,6 +1,7 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,7 +43,13 @@ private static final long serialVersionUID = 1L;
 	  
 	@JoinColumn(name= "IdDirector", referencedColumnName = "id")
 	private User director;
-
+  
+	
+	@Column(name = "createdAt")
+    private LocalDateTime createdAt;
+	
+	@Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
 	
 	public Kindergarden() {
 		super();
@@ -91,10 +98,31 @@ private static final long serialVersionUID = 1L;
 		this.director = director;
 	}
 
+	
+	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	@Override
 	public String toString() {
-		return "Kindergarden [id=" + id + ", name=" + name + ", claims=" + claims + ", director=" + director + "]";
+		return "Kindergarden [id=" + id + ", name=" + name + ", claims=" + claims + ", director=" + director
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
+
+	 
 
 
 	

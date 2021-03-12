@@ -1,8 +1,8 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,20 +26,57 @@ private static final long serialVersionUID = 1L;
 	@Column(name= "id")
 	private int id;	
 	
+	@Column(name = "createdAt")
+    private LocalDateTime createdAt;
+	
+
 	@Column(name= "response")
-	private String response;	 
+	private String response;	
+	/*
 	@Enumerated(EnumType.STRING)
 	private Satistfaction satisfactionDegree;
 	
 	@Column(name= "rating")
 	private int rating;
+	
+	*/
+	  @Column(name = "isText")
+	    private boolean isText;
 
+	    @Column(name = "isNumeric")
+	    private boolean isNumeric;
+
+	    @Column(name = "isYesNo")
+	    private boolean isYesNo;
 	@JsonIgnore
 	
 	 @ManyToOne
 	  
 	@JoinColumn(name= "IdQuestion")
 	private Question question;
+
+
+	
+	
+	public Response(int id, LocalDateTime createdAt, String response, Question question) {
+		super();
+		this.id = id;
+		this.createdAt = createdAt;
+		this.response = response;
+		this.question = question;
+		this.isText = false;
+		this.isNumeric = false;
+		this.isYesNo = false;
+		
+if (question.getQuestion().compareTo("text")==0){
+	this.isText = true;
+}else if(question.getQuestion().compareTo("numeric")==0){
+	this.isNumeric = true;
+}else{
+	this.isYesNo = true;
+}
+	
+	}
 
 
 	public int getId() {
@@ -73,7 +109,7 @@ private static final long serialVersionUID = 1L;
 	public void setResponse(String response) {
 		this.response = response;
 	}
-
+	/*
 
 	public Satistfaction getSatisfactionDegree() {
 		return satisfactionDegree;
@@ -94,12 +130,28 @@ private static final long serialVersionUID = 1L;
 		this.rating = rating;
 	}
 
+*/
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Response [id=" + id + ", response=" + response + ", satisfactionDegree=" + satisfactionDegree
-				+ ", rating=" + rating + ", question=" + question + "]";
+		return "Response [id=" + id + ", createdAt=" + createdAt + ", response=" + response + ", isText=" + isText
+				+ ", isNumeric=" + isNumeric + ", isYesNo=" + isYesNo + ", question=" + question + "]";
 	}
+
+
+	
+
+
+ 
 
 
 

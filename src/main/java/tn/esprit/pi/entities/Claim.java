@@ -1,6 +1,7 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +40,12 @@ public class Claim implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_kindergarden")
 	private Kindergarden kindergarden;
+	
+	@Column(name = "createdAt")
+    private LocalDateTime createdAt;
+	
+	@Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
 	
 	public Claim() {
 		super();
@@ -87,11 +94,32 @@ public class Claim implements Serializable{
 		this.kindergarden = kindergarden;
 	}
 
+	
+	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	@Override
 	public String toString() {
 		return "Claim [idClaim=" + idClaim + ", description=" + description + ", category=" + category + ", user="
-				+ user + ", kindergarden=" + kindergarden + "]";
+				+ user + ", kindergarden=" + kindergarden + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+				+ "]";
 	}
+
+	 
 	
 	
 	
