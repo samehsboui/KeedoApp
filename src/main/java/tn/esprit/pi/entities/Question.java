@@ -34,8 +34,8 @@ private static final long serialVersionUID = 1L;
 	@Column(name= "question")
 	private String question;
 
-    @Column(name = "type")
-    private String type;
+	@Enumerated(EnumType.STRING)
+    private QuestionType type;
     
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL,mappedBy="question")
@@ -62,6 +62,12 @@ private static final long serialVersionUID = 1L;
 	
 	
 	
+	public QuestionType getType() {
+		return type;
+	}
+	public void setType(QuestionType type) {
+		this.type = type;
+	}
 	public Set<Response> getResponses() {
 		return responses;
 	}

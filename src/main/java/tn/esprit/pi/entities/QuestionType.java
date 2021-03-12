@@ -2,6 +2,6 @@ package tn.esprit.pi.entities;
 
 public enum QuestionType {
 	
-	Text,Numeric,YesNo
+	Text,Stars,Satifaction
 
 }

@@ -32,22 +32,15 @@ private static final long serialVersionUID = 1L;
 
 	@Column(name= "response")
 	private String response;	
-	/*
+	
 	@Enumerated(EnumType.STRING)
 	private Satistfaction satisfactionDegree;
 	
 	@Column(name= "rating")
 	private int rating;
 	
-	*/
-	  @Column(name = "isText")
-	    private boolean isText;
 
-	    @Column(name = "isNumeric")
-	    private boolean isNumeric;
-
-	    @Column(name = "isYesNo")
-	    private boolean isYesNo;
+	 
 	@JsonIgnore
 	
 	 @ManyToOne
@@ -58,24 +51,35 @@ private static final long serialVersionUID = 1L;
 
 	
 	
-	public Response(int id, LocalDateTime createdAt, String response, Question question) {
+	
+
+
+	public Response() {
+		super();
+	}
+
+
+	public Response(int id, LocalDateTime createdAt, String response, Satistfaction satisfactionDegree, int rating,
+			Question question) {
 		super();
 		this.id = id;
 		this.createdAt = createdAt;
-		this.response = response;
+		this.response = null;
+		this.satisfactionDegree = null;
+		this.rating = 0;
 		this.question = question;
-		this.isText = false;
-		this.isNumeric = false;
-		this.isYesNo = false;
 		
-if (question.getQuestion().compareTo("text")==0){
-	this.isText = true;
-}else if(question.getQuestion().compareTo("numeric")==0){
-	this.isNumeric = true;
-}else{
-	this.isYesNo = true;
-}
-	
+		if (question.getType()==QuestionType.Text){
+			this.response = response;
+
+		}else if(question.getType()==QuestionType.Satifaction){
+			this.satisfactionDegree = satisfactionDegree;
+
+		}else
+		{
+			this.rating = rating;
+
+		}
 	}
 
 
@@ -109,7 +113,7 @@ if (question.getQuestion().compareTo("text")==0){
 	public void setResponse(String response) {
 		this.response = response;
 	}
-	/*
+	
 
 	public Satistfaction getSatisfactionDegree() {
 		return satisfactionDegree;
@@ -130,7 +134,7 @@ if (question.getQuestion().compareTo("text")==0){
 		this.rating = rating;
 	}
 
-*/
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -143,9 +147,12 @@ if (question.getQuestion().compareTo("text")==0){
 
 	@Override
 	public String toString() {
-		return "Response [id=" + id + ", createdAt=" + createdAt + ", response=" + response + ", isText=" + isText
-				+ ", isNumeric=" + isNumeric + ", isYesNo=" + isYesNo + ", question=" + question + "]";
+		return "Response [id=" + id + ", createdAt=" + createdAt + ", response=" + response + ", satisfactionDegree="
+				+ satisfactionDegree + ", rating=" + rating + ", question=" + question + "]";
 	}
+
+
+
 
 
 	
