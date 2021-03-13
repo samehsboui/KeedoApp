@@ -7,15 +7,15 @@ import java.util.List;
 
 @Service
 public interface IUnhealthyWordService {
-    void removeWord(String word);
+    public void removeWord(String word);
 
-    boolean wordExists(String word);
+    public boolean wordExists(String word);
 
     //void addWord(UnhealthyWord u, String word);
 
-    void deleteWord(String word);
+    public void deleteWord(String word);
 
-    List<UnhealthyWord> getUnhealthyWordList();
+    public List<UnhealthyWord> getUnhealthyWordList();
 
-	void addWord(UnhealthyWord u);
+	public void addWord(UnhealthyWord u);
 }

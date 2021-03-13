@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.entities.Post;
+import tn.esprit.pi.entities.Report;
+import tn.esprit.pi.entities.ReportPK;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.repositories.IPostRepository;
+import tn.esprit.pi.repositories.IReportRepository;
 import tn.esprit.pi.repositories.IUserRepository;
-import tn.esprit.pi.repositories.ICommentRepository;
 import tn.esprit.pi.repositories.IUnhealthyWordRepository;
+
 
 
 @Service
@@ -21,10 +24,12 @@ public class PostServiceImpl implements IPostService{
 	IPostRepository IPostRepository;
 	
 	@Autowired 
-	private IUserRepository iUserRepository;
+	IReportRepository IReportRepository;
 	
 	@Autowired 
-	private ICommentRepository ICommentRepository;
+	private IUserRepository iUserRepository;
+	
+
 	@Autowired 
 	private IUnhealthyWordRepository IUnhealthyWordRepository;
 	
@@ -109,12 +114,58 @@ public class PostServiceImpl implements IPostService{
 		return IPostRepository.getPostsLikedByUser(id);
 	}
 	
+	@Override
+	public String sharePost(int idP, int idU) {
+		User user=iUserRepository.findById(idU).get();
+		Post post=IPostRepository.findById(idP).get();
+		Post newp = new Post();
+		newp.setUser(user);
+		newp.setPostContent(post.getPostContent());
+		newp.setMedia(post.getMedia());
+		newp.setOwner(post.getUser().getIdUser());
+	    LocalDateTime creationDate = LocalDateTime.now();
+		newp.setCreateDate(creationDate);
+		IPostRepository.save(newp);
+		return ("post shared successfully");
+		}
+	@Override
+	public boolean isReportExists(int idu, int idp) {
+	 int count =IReportRepository.isReportExists(idu, idp);
+	 if (count==0){
+		return false;
+	}
+	 else {
+		 return true;
+	 }
+	 }
+	@Override
+	public String reportPost(int idP, int idU) {
+		Report r = new Report();
+		ReportPK reportPK= new ReportPK();
+		reportPK.setIdPost(idP);
+		reportPK.setIdUser(idU);
+		r.setReportPK(reportPK);
+		LocalDateTime creationDate = LocalDateTime.now();
+		r.setReportDate(creationDate);
+		IReportRepository.save(r);
+		return ("post reported successfully");
+		}
 	//admin
-
-/*
-    @Override
-    public void setPostEnabled(int postId, boolean isEnabled) {
-    	IPostRepository.setPostEnabled(postId, isEnabled);
-    }*/
+	
+	@Override
+	public List<Post> getReportedPosts() {
+		return IPostRepository.getReportedPosts();
+	}
+	
+	@Override
+	public void approveReportedPost(int idP){
+		//IReportRepository.deleteByPost(idP);
+		IReportRepository.deleteReport(idP);
+	}
+	
+	@Override
+	public void disapproveReportedPost(int idP){
+		
+	}
+	
 }
-

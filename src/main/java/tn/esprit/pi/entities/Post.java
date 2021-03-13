@@ -42,6 +42,7 @@ public class Post implements Serializable{
 	private LocalDateTime createDate;
 	@Column(name= "modifyDate")
 	private LocalDateTime modifyDate;
+	private int owner;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
     @OrderBy("desc")
@@ -49,6 +50,9 @@ public class Post implements Serializable{
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "post", fetch= FetchType.EAGER)
 	private Set<Liking> likes = new HashSet<Liking>();
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="post")
+	private Set<Report> reports;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_user")
@@ -101,6 +105,14 @@ public class Post implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 
+	public int getOwner() {
+		return owner;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
+
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -128,9 +140,8 @@ public class Post implements Serializable{
 	@Override
 	public String toString() {
 		return "Post [idPost=" + idPost + ", postContent=" + postContent + ", media=" + media + ", createDate="
-				+ createDate + ", modifyDate=" + modifyDate + ", comments=" + comments + ", likes=" + likes + ", user="
-				+ user + "]";
+				+ createDate + ", modifyDate=" + modifyDate + ", owner=" + owner + ", comments=" + comments + ", likes="
+				+ likes + ", user=" + user + "]";
 	}
-
 
 }

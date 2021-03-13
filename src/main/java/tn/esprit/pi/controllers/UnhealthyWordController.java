@@ -15,9 +15,13 @@ public class UnhealthyWordController {
 	//URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/add
     @PostMapping("UnhealthyWords/add")
     public String addWord(@RequestBody UnhealthyWord word) {
- //       if (!unhealthyWordRepository.existsByWord(word))
+      if (unhealthyWordService.wordExists(word.getWord())){
+          return ("this word is already added");
+
+      }
         unhealthyWordService.addWord(word);
-        return (" added successfully");
+        return ("added successfully");
+        
     }
 
     //URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/delete/?word=

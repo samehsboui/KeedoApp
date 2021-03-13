@@ -4,4 +4,3 @@ public enum WorkshopCategory {
 	
 		Coloring,Poem,Craft
 	}
-

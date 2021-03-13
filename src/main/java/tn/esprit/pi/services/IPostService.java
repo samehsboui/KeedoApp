@@ -14,4 +14,10 @@ public interface IPostService {
     public List<Post> searchPosts(String text);
 	public List<Post> getPostsCommentedByUser(int id);
 	public List<Post> getPostsLikedByUser(int id);
+	public String sharePost(int idP, int idU);
+	public String reportPost(int idP, int idU);
+	public boolean isReportExists(int idu, int idp);
+	public List<Post> getReportedPosts();
+	void approveReportedPost(int idP);
+	void disapproveReportedPost(int idP);
 }
