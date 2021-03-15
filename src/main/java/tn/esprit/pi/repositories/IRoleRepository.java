@@ -1,8 +1,7 @@
 package tn.esprit.pi.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 
 import tn.esprit.pi.entities.Role;
 import tn.esprit.pi.entities.RoleType;
@@ -15,6 +14,8 @@ public interface IRoleRepository extends JpaRepository<Role, Integer> {
 
 	public Role findParent(@Param("role")String role) ;
 */
+
+	public Role findRoleByroleType(String user) throws Exception;
 	
 	public Role findRoleByidRole(int user) throws Exception;
 

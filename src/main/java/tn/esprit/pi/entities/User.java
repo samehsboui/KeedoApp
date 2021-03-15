@@ -90,7 +90,15 @@ public class User implements Serializable{
 	private Kindergarden  kindergarden;
 
 	 private boolean isPrivate;
-	
+	 boolean valid;
+	    @Column(name = "accountLocked", columnDefinition = "boolean default false")
+	    private boolean accountNonLocked;
+	    @Column(name = "failedAttempt", columnDefinition = "int default 0")
+	    private int failedAttempt;
+	    @Column(name = "lockTime")
+	    private Date lockTime;
+		
+
 	 public boolean isPrivate() {
 	        return isPrivate;
 	    }
@@ -310,6 +318,38 @@ public class User implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public int getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(int failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
 	}
 
 	@Override
