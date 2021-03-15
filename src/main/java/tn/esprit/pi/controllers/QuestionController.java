@@ -1,5 +1,6 @@
 package tn.esprit.pi.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,26 @@ public class QuestionController {
 	
 	
 	@PostMapping("/Questions/new-question-of/{feedback}")  
-	private int addQuestion(@RequestBody Question question,@PathVariable("feedback") int feedback)   
+	private String addQuestion(@RequestBody Question question,@PathVariable("feedback") int feedback)   
 	{  
+		
+		question.setCreatedAt(LocalDateTime.now());
 		questionservice.createQuestion(question, feedback);
-		return question.getId();
+		
+		question.getId();
+		return "The feedback survey question has been added successfuly ";
+				
 	} 
 	
 	@GetMapping("/retrieve-all-questions")
 	 @ResponseBody
 
 	 public List<Question> getquestions() {
+		
+	
 	 List<Question> list = questionservice.getAllQuestions();
+	 
+
 	return list;
 	}
 	
@@ -47,14 +57,14 @@ public class QuestionController {
 		return questionservice.getQuestionById(idQuestion);
 	}
 	
-	@GetMapping("/Questions/retrieve-feedback-question/{idFeedback}")
+	@GetMapping("/Questions/retrieve-feedback-questions/{idFeedback}")
 	 @ResponseBody
 	 
 
 	 public List<Question> getFeedbackQuestions(@PathVariable("idFeedback") int idFeedback) {
 
 		List<Question> list = questionservice.getQuestionByFeedback(idFeedback);
-		return list;
+		return  list;
 	}
 	
 	@GetMapping("/count-feedback-questions/{idFeedback}")
@@ -65,9 +75,11 @@ public class QuestionController {
 	}
 	
 	@DeleteMapping("/Questions/delete-question/{idQuestion}")  
-	private void RemoveQuestion(@PathVariable("idQuestion") int idQuestion)   
+	private String RemoveQuestion(@PathVariable("idQuestion") int idQuestion)   
 	{  
 		questionservice.removeQuestion(idQuestion);
+		
+		return "The feedback survey question has been removed successfuly";
 	} 
 	
 	

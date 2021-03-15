@@ -30,7 +30,7 @@ private static final long serialVersionUID = 1L;
     private LocalDateTime createdAt;
 	
 
-	@Column(name= "response")
+	@Column(name= "input")
 	private String response;	
 	
 	@Enumerated(EnumType.STRING)
@@ -139,13 +139,24 @@ private static final long serialVersionUID = 1L;
 	}
 
 
+	 
 	@Override
 	public String toString() {
 		return "Response [id=" + id + ", createdAt=" + createdAt + ", response=" + response + ", satisfactionDegree="
 				+ satisfactionDegree + ", rating=" + rating + ", question=" + question + "]";
 	}
 
+ 
 
+
+	
+	
+	
+
+
+
+	
+	
 
 
 

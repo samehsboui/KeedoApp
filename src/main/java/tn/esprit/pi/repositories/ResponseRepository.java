@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
-
+import tn.esprit.pi.entities.Feedback;
 import tn.esprit.pi.entities.Question;
 import tn.esprit.pi.entities.Response;
 import tn.esprit.pi.entities.RoleType;
@@ -25,6 +24,14 @@ public interface ResponseRepository extends JpaRepository<Response,Integer>{
 	@Query("SELECT  r From Response r join r.question q join q.feedback f Join f.meeting.users u  WHERE u.idUser =:user and q.id=:question and u.role.roleType=:role")
 
 	Response findbyUserAndQuestion(@Param("user") int user,@Param("question") int question, @Param("role") RoleType role);
+
+	
+	@Query("SELECT  r From Response r join r.question q join q.feedback f  WHERE f.id =:feedback ")
+
+	List<Response> findbyFeedback(@Param("feedback")int feedback);
+	
+
+	
 	
 /*
 	List<Response> findByFeedback(Feedback f);

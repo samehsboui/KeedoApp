@@ -1,5 +1,6 @@
 package tn.esprit.pi.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,29 @@ public class ResponseController {
 	ResponseService responseservice;
 	
 	@PostMapping("/Responses/responseTo/{question}")  
-	private int addResponse(@RequestBody Response response,@PathVariable("question") int question)   
+	private String addResponse(@RequestBody Response response,@PathVariable("question") int question)   
 	{  
+		
+		response.setCreatedAt(LocalDateTime.now());
 		responseservice.FeedbackResponseQuestion(response, question);
-		return response.getId();
+	
+		return "The answer to question "+question+" of '"+response.getQuestion().getFeedback().getMeeting().getTypeMeeting()+"' Meeting Feedback wich is titled '"+response.getQuestion().getFeedback().getTitle()+"' is well recorded   ";
 	} 
 	
 	
+	@GetMapping("/Responses/retrieve-all-responses_of_feedback/{feedback}")
+	 @ResponseBody
 
+	 public List<Response> getFeedbackResponses(@PathVariable("feedback") int feedback) throws Exception {
+		
+	 List<Response> list = responseservice.getResponseByFeedback(feedback);
+			
+	 return list;
+	
+
+	}
+	
+	
 	@GetMapping("/Responses/retrieve-all-responses_of/{user}")
 	 @ResponseBody
 

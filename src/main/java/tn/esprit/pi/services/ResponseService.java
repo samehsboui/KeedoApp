@@ -69,6 +69,18 @@ public class ResponseService implements IResponseService{
 
 		return responses;
 	}
+	
+	@Override
+	public List<Response> getResponseByFeedback(int feedback) {
+		// TODO Auto-generated method stub
+		
+		Feedback f=feedbackrepository.findById(feedback).get();
+		//Question q=questionrepository.findByFeedback(f);
+
+		List <Response> responses=(List<Response>) responserepository.findbyFeedback(f.getIdFeedback());
+
+		return responses;
+	}
 
 	@Override
 	public List<Response> getAllResponses(int meeting) {

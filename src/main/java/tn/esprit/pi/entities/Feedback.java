@@ -112,11 +112,16 @@ public class Feedback implements Serializable{
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+  
+	
+	
+	
+	 
 
 	@Override
 	public String toString() {
 		return "Feedback [idFeedback=" + idFeedback + ", title=" + title + ", createdAt=" + createdAt + ", updatedAt="
-				+ updatedAt + ", questions=" + questions + ", meeting=" + meeting + "]";
+				+ updatedAt + ", questions=" + questions +  "]";
 	}
 
 	

@@ -17,6 +17,7 @@ public interface IResponseService {
 	Response getResponseById(int id);
 	
 	List<Response> getResponseByFeedbackQuestion(int question);
+	List<Response> getResponseByFeedback(int feedback);
 
 
 	

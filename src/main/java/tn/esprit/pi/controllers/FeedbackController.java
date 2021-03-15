@@ -27,18 +27,18 @@ public class FeedbackController {
 
 
 	@PostMapping("/Feedbacks/new-feedback-of/{meeting}")  
-	private int createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
+	private String  createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
 	{  
 		feedbackservice.createFeedback(fb,meeting);
-		return fb.getIdFeedback(); 
+		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
 	}  
 	
 	@GetMapping("/retrieve-all-feedbacks")
 	 @ResponseBody
 
-	 public List<Feedback> getfeedbacks() {
+	 public String getfeedbacks() {
 	 List<Feedback> list = feedbackservice.getAllFeedbacks();
-	return list;
+	return "Feedback List : \n"+list;
 	}
 	
 	
@@ -46,17 +46,20 @@ public class FeedbackController {
 	 @ResponseBody
 	 
 
-	 public Feedback getFeedback(@PathVariable("idFeedback") int idFeedback) {
+	 public String getFeedback(@PathVariable("idFeedback") int idFeedback) {
 
 	
-		return feedbackservice.getFeedbackById(idFeedback);
+		return "Feedback Details: \n"+feedbackservice.getFeedbackById(idFeedback);
 	}
 	
 	@DeleteMapping("/Feedbacks/delete-feedback/{idFeedback}")  
 	 @ResponseBody
-	private void RemoveFeedback(@PathVariable("idFeedback") int idFeedback)   
+	private String RemoveFeedback(@PathVariable("idFeedback") int idFeedback)   
 	{  
+		
+		
 		feedbackservice.removeFeedback(idFeedback); 
+		return "The Feedback Of Meeting Passed On"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
 	}  
 	
 	@GetMapping("/count-feedbacks")

@@ -92,10 +92,15 @@ private static final long serialVersionUID = 1L;
 	public void setResponses(Set<Response> responses) {
 		this.responses = responses;
 	}
+	
+	
+	
+	
+	 
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", question=" + question + ", type=" + type + ", responses=" + responses
-				+ ", feedback=" + feedback + ", createdAt=" + createdAt + "]";
+				+  ", createdAt=" + createdAt + "]";
 	}
 	
 	
