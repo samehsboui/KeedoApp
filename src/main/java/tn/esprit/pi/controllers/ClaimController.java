@@ -93,4 +93,8 @@ public class ClaimController {
 			 
 				return claimService.CountClaimByKindergarden(name);
 			}
+		
+		
+		
+		
 }

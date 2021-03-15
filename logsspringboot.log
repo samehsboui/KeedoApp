@@ -36877,3 +36877,29 @@ java.lang.StackOverflowError: null
 2021-03-15 16:02:08.140  WARN 1756 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2021-03-15 16:02:09.706  INFO 1756 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 5.632 seconds (JVM running for 6.07)
 2021-03-15 16:02:11.830  INFO 1756 --- [http-nio-8082-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-15 17:01:07.786  INFO 12592 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_281 on DESKTOP-79DD2BC with PID 12592 (C:\Users\Lenovo\Documents\GitHub\KeedoApp\target\classes started by Lenovo in C:\Users\Lenovo\Documents\GitHub\KeedoApp)
+2021-03-15 17:01:07.796  INFO 12592 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-15 17:01:09.413  INFO 12592 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-15 17:01:09.429  INFO 12592 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-15 17:01:09.617  INFO 12592 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-15 17:01:09.876  INFO 12592 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-15 17:01:09.932  INFO 12592 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-15 17:01:10.140  INFO 12592 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-15 17:01:10.466  INFO 12592 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-15 17:01:11.585  INFO 12592 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-15 17:01:11.654  WARN 12592 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-15 17:01:13.252  INFO 12592 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 5.919 seconds (JVM running for 6.347)
+2021-03-15 17:01:43.026  INFO 12592 --- [http-nio-8082-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-15 17:17:21.681  INFO 13140 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_281 on DESKTOP-79DD2BC with PID 13140 (C:\Users\Lenovo\Documents\GitHub\KeedoApp\target\classes started by Lenovo in C:\Users\Lenovo\Documents\GitHub\KeedoApp)
+2021-03-15 17:17:21.681  INFO 13140 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-15 17:17:23.262  INFO 13140 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-15 17:17:23.272  INFO 13140 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-15 17:17:23.367  INFO 13140 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-15 17:17:23.617  INFO 13140 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-15 17:17:23.664  INFO 13140 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-15 17:17:23.851  INFO 13140 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-15 17:17:24.179  INFO 13140 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-15 17:17:25.288  INFO 13140 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-15 17:17:25.388  WARN 13140 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-15 17:17:27.012  INFO 13140 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 5.775 seconds (JVM running for 6.211)
+2021-03-15 17:18:12.287  INFO 13140 --- [http-nio-8082-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'

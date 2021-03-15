@@ -40,6 +40,9 @@ public class Feedback implements Serializable{
 	
 	@Column(name = "updatedAt")
     private LocalDateTime updatedAt;
+	
+	
+	
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "feedback")
 	private Set<Question> questions;

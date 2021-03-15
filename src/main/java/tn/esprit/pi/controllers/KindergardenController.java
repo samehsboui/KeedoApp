@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.Kindergarden;
+import tn.esprit.pi.services.ClaimService;
 import tn.esprit.pi.services.KindergardenService;
 
 @RestController
@@ -20,6 +21,9 @@ public class KindergardenController {
 	
 	@Autowired
 	KindergardenService kindergardenService;
+	@Autowired
+	ClaimService claimService;
+	
 	
 	@PostMapping("/Kindergartens/add-kindergarden/{director}")  
 	private int addKindergarten(@RequestBody Kindergarden kindergarden, @PathVariable("director") int director)   
@@ -68,5 +72,17 @@ public class KindergardenController {
 			return kindergardenService.getKindergardenByName(name);
 		}
 	
+	
+	@GetMapping("/Kindergartens/kindergarden-review/{name}")
+	 @ResponseBody
+	public String getKindergartenReview(@PathVariable String name) {
+		Kindergarden k=kindergardenService.getKindergardenByName(name);
+		if (claimService.CountClaimByKindergarden(k.getName())<=1)
+			return k.getName()+" Is the most Recommended Kindergarden .";
+		else
+			return k.getName()+" Is the Worst Recommended Kindergarden .";
+		
+		 
+		}
 	
 }
