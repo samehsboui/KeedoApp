@@ -78,9 +78,9 @@ public class KindergardenController {
 	public String getKindergartenReview(@PathVariable String name) {
 		Kindergarden k=kindergardenService.getKindergardenByName(name);
 		if (claimService.CountClaimByKindergarden(k.getName())<=1)
-			return k.getName()+" Is the most Recommended Kindergarden .";
+			return k.getName()+" Is the most Recommended Kindergarten .";
 		else
-			return k.getName()+" Is the Worst Recommended Kindergarden .";
+			return k.getName()+" Is the Worst Recommended Kindergarten .";
 		
 		 
 		}
