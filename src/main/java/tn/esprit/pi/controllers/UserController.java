@@ -74,7 +74,7 @@ public class UserController {
 	
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
 	@GetMapping("/findUserBylogin/{username}")
-	public User findUserBylogin(@PathVariable("username") String username) throws Exception {
+	public User findUserBylogin( @PathVariable("username") String username) throws Exception {
 		return iuserservice.findUserBylogin(username);
 	}
 	

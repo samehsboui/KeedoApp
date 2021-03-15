@@ -33,7 +33,6 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	@Query("SELECT CONCAT(u.firstName,CONCAT(' ',u.lastName)) FROM User u where  u.valid =FALSE")
 	public List<String> getUsersFromDisabled();
-	void updateFailedAttempts(int newFailAttempts, String login);
 
 
 }

@@ -99,7 +99,7 @@ public class UserService implements IUserservice {
 		return userRepository.getUsersFromDisabled();
 	}
 	
-	@Override
+	/*@Override
 	public void increaseFailedAttempts(User user) {
         int newFailAttempts = user.getFailedAttempt() + 1;
         userRepository.updateFailedAttempts(newFailAttempts, user.getLogin());
@@ -107,7 +107,7 @@ public class UserService implements IUserservice {
     @Override
     public void resetFailedAttempts(String email) {
     	userRepository.updateFailedAttempts(0, email);
-    }
+    }*/
     @Override
     public void lock(User user) {
         user.setAccountNonLocked(false);
@@ -137,4 +137,16 @@ public class UserService implements IUserservice {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
 }
+
+	@Override
+	public void increaseFailedAttempts(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetFailedAttempts(String email) {
+		// TODO Auto-generated method stub
+		
+	}
 }
