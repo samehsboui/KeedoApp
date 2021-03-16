@@ -18,7 +18,7 @@ import tn.esprit.pi.entities.User;
 @Repository
 public interface ConsultationRepository extends CrudRepository<Consultation, Integer>{
 
-	@Query("select new Consultation(c.dateConsultation, c.time) from Consultation c")
+	@Query("select new Consultation(c.idConsultation, c.dateConsultation, c.time) from Consultation c")
 	List<Consultation> displayAllConsultations();
 	
 	@Query(" select c from Consultation c where c.kid = :kid")

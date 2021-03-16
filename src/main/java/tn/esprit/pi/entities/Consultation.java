@@ -51,6 +51,13 @@ public class Consultation implements Serializable {
 		this.time = time;
 	}
 
+	public Consultation(int idConsultation, Date dateConsultation, Date time) {
+		super();
+		this.idConsultation = idConsultation;
+		this.dateConsultation = dateConsultation;
+		this.time = time;
+	}
+
 	public int getIdConsultation() {
 		return idConsultation;
 	}

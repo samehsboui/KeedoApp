@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -72,8 +73,10 @@ public class User implements Serializable{
 	private Set<Meeting> meetings; 
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
-	private Set<Message> messages;
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "sender")
+	private Set<Message> messagesS;
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "receiver")
+	private Set<Message> messagesR;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Bus> bus;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
@@ -82,10 +85,21 @@ public class User implements Serializable{
 	private Set<Topic> topics;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Consultation> consultations;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch=FetchType.LAZY)
+	private Set<Consultation> chats;
 	
 	public User() {
 		super();
 	}
+
+	
+	public User(int idUser, String firstName, String lastName) {
+		super();
+		this.idUser = idUser;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 
 	public int getIdUser() {
 		return idUser;
@@ -239,12 +253,20 @@ public class User implements Serializable{
 		this.claims = claims;
 	}
 
-	public Set<Message> getMessages() {
-		return messages;
+	public Set<Message> getMessagesS() {
+		return messagesS;
 	}
 
-	public void setMessages(Set<Message> messages) {
-		this.messages = messages;
+	public void setMessagesS(Set<Message> messagesS) {
+		this.messagesS = messagesS;
+	}
+
+	public Set<Message> getMessagesR() {
+		return messagesR;
+	}
+
+	public void setMessagesR(Set<Message> messagesR) {
+		this.messagesR = messagesR;
 	}
 
 	public Set<Bus> getBus() {
@@ -280,15 +302,24 @@ public class User implements Serializable{
 		this.consultations = consultations;
 	}
 
+	public Set<Consultation> getChats() {
+		return chats;
+	}
+
+
+	public void setChats(Set<Consultation> chats) {
+		this.chats = chats;
+	}
+
+
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + ", consultations=" + consultations
-				+ "]";
+				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", bus=" + bus + ", answers="
+				+ answers + ", topics=" + topics + ", consultations=" + consultations + "]";
 	}
 
 }

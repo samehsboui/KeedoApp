@@ -98,7 +98,7 @@ public class GoogleCalService {
 				System.out.printf("Event created: %s\n", event.getHtmlLink());
 
 			}
-			DateTime date1 = new DateTime("2021-02-25T09:00:00.000+01:00");
+			DateTime date1 = new DateTime("2021-03-25T09:00:00.000+01:00");
 			DateTime date2 = new DateTime(new Date());
 
 			eventList = events.list("primary").setTimeMin(date1).setTimeMax(date2).execute();
