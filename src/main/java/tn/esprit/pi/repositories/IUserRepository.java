@@ -1,13 +1,18 @@
 package tn.esprit.pi.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import tn.esprit.pi.entities.User;
 
 import java.util.List;
 
+@Transactional
+@Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
     User findBylogin(String userName);
     List<User> findBylastName(String userName);
@@ -22,4 +27,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT CONCAT(u.firstName,CONCAT(' ',u.lastName)) FROM User u where  u.valid =FALSE")
 	public List<String> getUsersFromDisabled();
 	
+	@Query("UPDATE User u SET u.failedAttempt = ?1 WHERE u.login = ?2")
+    @Modifying
+    public void updateFailedAttempts(int failAttempts, String login);
+	User findUserByresettoken(String login);
 }

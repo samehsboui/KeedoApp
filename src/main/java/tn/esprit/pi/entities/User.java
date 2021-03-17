@@ -55,8 +55,8 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
-	@ManyToOne(cascade= CascadeType.MERGE)
-    @JoinColumn(name = "idRole")
+	@ManyToOne(cascade= CascadeType.DETACH)
+    @JoinColumn(name = "role")
 	private Role role;
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
@@ -98,6 +98,8 @@ public class User implements Serializable{
     private int failedAttempt;
     @Column(name = "lockTime")
     private Date lockTime;
+    @Column(name = "resettoken")
+    private String resettoken;
 	
 	public User() {
 		super();
@@ -319,6 +321,16 @@ public class User implements Serializable{
 
 	public void setLockTime(Date lockTime) {
 		this.lockTime = lockTime;
+	}
+	
+	
+
+	public String getResettoken() {
+		return resettoken;
+	}
+
+	public void setResettoken(String resettoken) {
+		this.resettoken = resettoken;
 	}
 
 	@Override

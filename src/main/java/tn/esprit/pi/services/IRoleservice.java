@@ -2,9 +2,10 @@ package tn.esprit.pi.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import tn.esprit.pi.entities.Role;
-import tn.esprit.pi.entities.User;
 
+@Service
 public interface IRoleservice {
 	public List<Role> getAllRoles();
 	public Role createRole(Role entity) throws Exception;
