@@ -1,12 +1,17 @@
 package tn.esprit.pi.security;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import tn.esprit.pi.security.jwt.AuthEntryPointJwt;
 import tn.esprit.pi.security.jwt.AuthTokenFilter;
+import tn.esprit.pi.security.jwt.SecurityConstants;
 import tn.esprit.pi.security.services.UserDetailsServiceImpl;
 
 @Configuration
@@ -52,12 +58,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
+		http.csrf().ignoringAntMatchers("/resources/**").disable()
 		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.authorizeRequests().antMatchers("/servlet/User/Access/**").permitAll()
+		.authorizeRequests()
 		.antMatchers("/servlet/User/Service/**").permitAll()
+		.antMatchers("/servlet/User/Stats/**").permitAll()
 		.anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().regexMatchers("^(/servlet/User/Access/).*");
+	}
+	
+    @Bean
+    public JavaMailSender javaMailSender() { 
+    	JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    	mailSender.setHost("smtp.gmail.com");
+    	mailSender.setPort(587);
+    	mailSender.setUsername(SecurityConstants.MY_EMAIL);
+    	mailSender.setPassword(SecurityConstants.MY_PASSWORD);
+    	Properties props = mailSender.getJavaMailProperties();
+    	props.put("mail.transport.protocol", "smtp");
+    	props.put("mail.smtp.auth", "true");
+    	props.put("mail.smtp.starttls.enable", "true");
+    	props.put("mail.debug", "true");
+    	return mailSender;
+    }
 }

@@ -23,5 +23,6 @@ public interface IUserservice {
 	boolean unlockWhenTimeExpired(User user);
 	void resetFailedAttempts(String email);
 	void lock(User user);
+	public User findUserByResetToken(String token);
 
 }

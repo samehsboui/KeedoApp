@@ -47,12 +47,7 @@ public class UserDetailsImpl implements UserDetails {
 	
 	@Override
 	public boolean isAccountNonLocked() {
-		try {
-			return user.isAccountNonLocked();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+		return true;
 	}
 	
 	public User getUser () throws Exception {
@@ -102,4 +97,5 @@ public class UserDetailsImpl implements UserDetails {
 	public boolean isAccountNonExpired() {
 		return true;
 	}
+	
 }
