@@ -11,11 +11,11 @@ import tn.esprit.pi.entities.ClaimCategory;
 
 
 public interface IClaimService {
-	Claim addClaim(Claim c, int user,int kindergarden);
+	Claim addClaim(Claim c,int kindergarden) throws Exception;
 	List<Claim> retrieveAllclaims();
 	void deleteClaim(int id);
 	
-	Claim updateClaim(Claim c,int id);
+	Claim updateClaim(Claim c,int id) throws Exception;
 	Claim getClaimById(int id);
 	int CountClaim();
 	List<Claim> getClaimByCategory(ClaimCategory cc);

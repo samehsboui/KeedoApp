@@ -3,6 +3,7 @@ package tn.esprit.pi.services;
 import java.util.List;
 
 import tn.esprit.pi.entities.Kindergarden;
+import tn.esprit.pi.entities.User;
 
 public interface IKindergardenService {
 	

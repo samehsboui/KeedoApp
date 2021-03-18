@@ -1,10 +1,12 @@
 package tn.esprit.pi.services;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Claim;
@@ -14,6 +16,7 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ClaimRepository;
 import tn.esprit.pi.repositories.KindergardenRepository;
 import tn.esprit.pi.repositories.UserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 
 
 
@@ -33,16 +36,19 @@ public class ClaimService implements IClaimService {
 
 	
 	@Override
-	public Claim addClaim(Claim c , int user, int kindergarden) {
+	public Claim addClaim(Claim c , int kindergarden) throws Exception {
 		// TODO Auto-generated method stub
 		
-		User u=ur.findByidUser(user);
+		//User u=ur.findByidUser(user);
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetailsImpl ) {
+			Kindergarden k=kr.findById(kindergarden).get();
 		
 		
-		
-		Kindergarden k=kr.findById(kindergarden).get();
-		
-			c.setUser(u);
+			c.setUser(((UserDetailsImpl) principal).getUser());
+			c.setCreatedAt(LocalDateTime.now());
 			c.setKindergarden(k);
 			/*SimpleMailMessage msg = new SimpleMailMessage();
 			msg.setTo("pfe1sem@gmail.com");
@@ -51,6 +57,7 @@ public class ClaimService implements IClaimService {
 			msg.setText("Hello World \n Spring Boot Email");
 			
 			javaMailSender.send(msg);*/
+		}
 		return cr.save(c) ;
 	}
 
@@ -71,18 +78,23 @@ public class ClaimService implements IClaimService {
 	}
 
 	@Override
-	public Claim updateClaim(Claim c, int id) {
+	public Claim updateClaim(Claim c, int id) throws Exception {
 
-		User u=ur.findByidUser(c.getUser().getIdUser());
-		Kindergarden k=kr.findById(c.getKindergarden().getId()).get();
-		
-		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Claim claim=cr.findById(id).get();
+		Kindergarden k=kr.findById(c.getKindergarden().getId()).get();
+
+		if (principal instanceof UserDetailsImpl ) {
+		
+		
+		
 		claim.setCategory(c.getCategory());
 		claim.setDescription(c.getDescription());
 		claim.setKindergarden(k);
-		claim.setUser(u);
+		claim.setUser(((UserDetailsImpl) principal).getUser());
+		}
 		return cr.save(claim);
+		
 	}
 
 	@Override

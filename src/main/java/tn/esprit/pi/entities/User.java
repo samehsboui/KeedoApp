@@ -54,35 +54,45 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_role")
 	private Role role;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Kid> kids;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Post> posts;
-	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Workshop> workshops;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Event> events;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Meeting> meetings; 
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Message> messages;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Bus> bus;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Answer> answers;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
-	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "follower")
 	private Set<Follow> follower;
-	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "following")
 	private Set<Follow> following;
 	@JsonIgnore

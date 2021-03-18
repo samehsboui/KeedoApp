@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Follow;
@@ -16,6 +17,7 @@ import tn.esprit.pi.entities.followResponse.FollowResponse;
 import tn.esprit.pi.repositories.FollowRepository;
 import tn.esprit.pi.repositories.FollowRequestRepository;
 import tn.esprit.pi.repositories.UserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 
 
 @Service
@@ -32,15 +34,16 @@ public class FollowService implements IFollowService{
 	UserRepository userRepository;
 	
 	@Override
-	public FollowResponse followUser(int userId, int currentUser) {
-		User follower = userRepository.findById(currentUser).get();
+	public FollowResponse followUser(int userId) throws Exception {
         User following = userRepository.findById(userId).get();
         
-   
+        Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (follower instanceof UserDetailsImpl ) {
         if (following.isPrivate()) {
             FollowRequest followRequest = new FollowRequest();
 
-            followRequest.setFollower(follower);
+            followRequest.setFollower(((UserDetailsImpl) follower).getUser());
             followRequest.setFollowing(following);
 
             followRequestRepository.save(followRequest);
@@ -48,22 +51,25 @@ public class FollowService implements IFollowService{
             return new FollowResponse(false);
         }
         Follow followObject = new Follow();
-        followObject.setFollower(follower);
+        followObject.setFollower(((UserDetailsImpl) follower).getUser());
         followObject.setFollowing(following);
         followRepository.save(followObject);
 
-    
+		}
         return new FollowResponse(true);
 	
 	}
 	
 	
 	@Override
-	public FollowResponse isFollowing(int userId, int currentUser) {
-		  User follower = userRepository.findById(currentUser).get();
-	        User following = userRepository.getOne(userId);
-	        Optional<Follow> follow = followRepository.findFollowByFollowerAndFollowing(follower.getIdUser()
-	        		, following.getIdUser());
+	public FollowResponse isFollowing(int userId) throws Exception {
+		
+		 User following = userRepository.getOne(userId);
+	
+		 Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+  
+	        Optional<Follow> follow = followRepository.findFollowByFollowerAndFollowing(((UserDetailsImpl) follower).getUser().getIdUser(),following.getIdUser());
 	        if (follow.isPresent()) {
 	            return new FollowResponse(true);
 	        }
@@ -133,9 +139,11 @@ public class FollowService implements IFollowService{
 
 	
 	@Override
-	public int CountCurrentUserFollows(int currentuser) {
+	public int CountCurrentUserFollows() throws Exception {
 		// TODO Auto-generated method stub
-		List <Follow> follows=(List<Follow>) followRepository.findUserFollows(currentuser);
+		 Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		List <Follow> follows=(List<Follow>) followRepository.findUserFollows(((UserDetailsImpl) principal).getUser().getIdUser());
 		return follows.size();
 	}
 
@@ -144,151 +152,22 @@ public class FollowService implements IFollowService{
 		followRepository.deleteById(idFollow);
 		
 	}
-	
-	
-	
-/*
-	@Override
-	public void followuser(int userid, int current) {
+
+
+	public List<FollowRequest> followRequests() throws Exception {
 		// TODO Auto-generated method stub
 		
-		 User follower = userRepository.findById(userid).get();
-		 User following = userRepository.findById(current).get();
-		 
-	  
-		 Follow followrequest=new Follow();
+		 Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		 followrequest.setFollower(follower);;
-		 followrequest.setFollowing(following);
-		 
-		 followRepository.save(followrequest);
-		  
-	
-		 
-	}
-	@Override
-	public boolean usFollowing(int userid, int current) {
-		 User follower = userRepository.findById(userid).get();
-		 User following = userRepository.findById(current).get();
-		 
-		 
-		 Follow follow =followRepository.findFollowByFollowerAndFollowing(follower, following);
-		 if (follow.getFollower().equals(true))
-			 return true;
-
-		 else
-		 return false;
-	}
-	@Override
-	public List<Follow> getUserFollowers(int userId) {
+				
+			List<FollowRequest> requests=followRequestRepository.findAllByFollowing(((UserDetailsImpl) principal).getUser());
 		
 		
-
-		List <Follow> follows=(List<Follow>) followRepository.findUserFollows(userId);
-
-		return follows;
-	
-	}
-	@Override
-	public boolean isUserFollowedCurrentUser(User current, int userid) {
-		// TODO Auto-generated method stub
-		
-		
-		return false;
-	}
-	@Override
-	public List<Follow> getUserFollowing(int userId) {
-		// TODO Auto-generated method stub
-		 User user = userRepository.findById(userId).get();
-
-	        List<Follow> followingList = (List<Follow>) followRepository.findFollowByFollowerId(user.getIdUser());
-	        List<User> userList = new ArrayList<>();
-	        for (Follow follow : followingList) {
-	        	
-	        	
-	        User following=	userRepository.findById(follow.getFollowing().getIdUser()).get();
-	            userList.add(following);
-	        }
-		return null;
-	}
-	@Override
-	public boolean acceptFollow(int followid) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean declineFollow(int followId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	*/
-	/*
-	@Override
-	public List<Follow> retreiveallfollows() {
-		// TODO Auto-generated method stub
-		
-		List <Follow> follows=(List<Follow>) followRepository.findAll();
-
-		return follows;
-		
-	}
-
-	@Override
-	public void unfollow(int id) {
-		// TODO Auto-generated method stub
-		followRepository.deleteById(id);
-	}
-
-	@Override
-	public Follow getFollowById(int id) {
-		// TODO Auto-generated method stub
-		return followRepository.findById(id).get();
-	}
-
-	
-
-	
-
-	@Override
-	public void followUser(User u, Follow f, String extremity) {
-		  if (extremity.equals("SENDER")) {
-	            List<Follow> follows = u.getSentfollows();
-	            follows.add(f);
-	            u.setSentfollows(follows);
-	        }
-	        else if(extremity.equals("RECEIVER")){
-	            List<Follow> follows = u.getReceivefollows();
-	            follows.add(f);
-	            u.setReceivefollows(follows);
-	        }
-		  userRepository.save(u);
-		
-	}
-
-
-	@Override
-	public List<Follow> getFollowBySender(User sender) {
-		List <Follow> follows=(List<Follow>) followRepository.getFollowBySender(sender);
-
-		return follows;
-	}
-
-	@Override
-	public List<Follow> getFollowByReceiver(User receiver) {
-		List <Follow> follows=(List<Follow>) followRepository.getFollowByReceiver(receiver);
-
-		return follows;
-	}
-	
-	@Override
-	public Follow addFollow(Follow f) {
-		// TODO Auto-generated method stub
-		return followRepository.save(f);
+		return requests;
+			
 	}
 	
 	
-	*/
-	
+
 	
 }

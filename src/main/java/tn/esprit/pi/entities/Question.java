@@ -38,8 +38,8 @@ private static final long serialVersionUID = 1L;
     private QuestionType type;
     
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL,mappedBy="question")
-	private Set<Response>  responses;
+	@OneToOne(cascade= CascadeType.ALL,mappedBy="question")
+	private Response  response;
 	
 	@JsonIgnore
 	@ManyToOne
@@ -68,11 +68,12 @@ private static final long serialVersionUID = 1L;
 	public void setType(QuestionType type) {
 		this.type = type;
 	}
-	public Set<Response> getResponses() {
-		return responses;
+
+	public Response getResponse() {
+		return response;
 	}
-	public void setResponse(Set<Response> responses) {
-		this.responses = responses;
+	public void setResponse(Response response) {
+		this.response = response;
 	}
 	public Feedback getFeedback() {
 		return feedback;
@@ -89,9 +90,7 @@ private static final long serialVersionUID = 1L;
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-	public void setResponses(Set<Response> responses) {
-		this.responses = responses;
-	}
+
 	
 	
 	
@@ -99,7 +98,7 @@ private static final long serialVersionUID = 1L;
 	 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", question=" + question + ", type=" + type + ", responses=" + responses
+		return "Question [id=" + id + ", question=" + question + ", type=" + type + ", response=" + response
 				+  ", createdAt=" + createdAt + "]";
 	}
 	

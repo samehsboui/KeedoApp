@@ -30,7 +30,7 @@ public class UserController {
 	
 	
 	@JsonBackReference("")
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/findall")
 	public List<User> getAllUsers() {
 		return iuserservice.getAllUsers();
