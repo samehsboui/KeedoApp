@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.ClaimService;
 
 @RestController
@@ -71,9 +73,9 @@ public class ClaimController {
 		@PutMapping("/claims/update-claim/{idClaim}")  
 		public String updateClaim(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim) throws Exception   
 		{  
-		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			claimService.updateClaim(claim,idClaim);  
-			return "The claim of "+claim.getKindergarden().getName()+" was successfuly updated by "+claim.getUser().getFirstName()+" On  "+claim.getUpdatedAt();  
+			return "The claim  was successfuly updated by "+((UserDetailsImpl)principal).getUsername();  
 		} 
 		
 		

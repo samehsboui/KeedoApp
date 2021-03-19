@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import tn.esprit.pi.entities.Feedback;
+import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.entities.Meeting;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
@@ -91,6 +92,21 @@ fb.setCreatedAt(LocalDateTime.now());
 		
 
 		return feedbacks;
+	}
+
+	@Override
+	public Feedback updateFeedback(Feedback feedback, int id) {
+		// TODO Auto-generated method stub
+		
+		
+		Feedback f=feedbackrepository.findById(id).get();
+
+		
+		f.setCreatedAt(f.getCreatedAt());
+		f.setMeeting(f.getMeeting());
+		f.setTitle(feedback.getTitle());
+		f.setUpdatedAt(LocalDateTime.now());
+		return null;
 	}
 
 

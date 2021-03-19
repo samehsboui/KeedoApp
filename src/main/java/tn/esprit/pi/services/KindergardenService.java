@@ -58,9 +58,10 @@ public class KindergardenService implements IKindergardenService{
 	
 		Kindergarden k=kindergardenRepository.findById(id).get();
 
-k.setCreatedAt(k.getCreatedAt());
-k.setUpdatedAt(LocalDateTime.now());
-k.setDirector(k.getDirector());
+		k.setName(kindergarden.getName());
+		k.setCreatedAt(k.getCreatedAt());
+		k.setUpdatedAt(LocalDateTime.now());
+		k.setDirector(k.getDirector());
 		return kindergardenRepository.save(k);
 	}
 

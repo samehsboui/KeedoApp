@@ -7,16 +7,20 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.Feedback;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.FeedbackService;
 
 @RestController
@@ -33,6 +37,16 @@ public class FeedbackController {
 		feedbackservice.createFeedback(fb,meeting);
 		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
 	}  
+	
+	@PreAuthorize("hasAuthority('Admin')" )
+
+	@PutMapping("/feedbacks/update-feedaback/{idFeedback}")  
+	public String updateFeedback(@RequestBody Feedback feedback, @PathVariable("idFeedback")int idFeedback) throws Exception   
+	{  
+	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	feedbackservice.updateFeedback(feedback, idFeedback);
+		return "The feedback  was successfuly updated by "+((UserDetailsImpl)principal).getUsername();  
+	} 
 	
 	
 	@PreAuthorize("hasAuthority('Admin')")

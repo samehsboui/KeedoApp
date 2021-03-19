@@ -70,17 +70,17 @@ public class KindergardenController {
 	@PreAuthorize("hasAuthority('KindergardenDirector')" )
 	//@PreAuthorize("permitAll()" )
 	@PutMapping("/update-kindergarten/{idKindergarten}")  
-	public  String updateKindergarten(@RequestBody  Kindergarden  Kindergarten, @PathVariable("idKindergarten") int idKindergarten)   
+	public  String updateKindergarten(@RequestBody  Kindergarden  Kindergarten, @PathVariable("idKindergarten") int idKindergarten) throws Exception   
 	{  
 	
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (principal instanceof UserDetailsImpl && Kindergarten.getDirector()== principal) {
+		//if ( Kindergarten.getDirector().equals(((UserDetailsImpl)principal).getUser()) ) 
 
 		
-		kindergardenService.updateKindergarden(Kindergarten,idKindergarten);  
-		return "The kindergarden account was successfuly updated by her director ";  }else{
-			return "Sorry "+((UserDetailsImpl)principal).getUsername()+", you don't have the permission to modify the content of this kindergarten account because your are not the responsible to it.   ";	}
+			 kindergardenService.updateKindergarden(Kindergarten,idKindergarten);  
+	return "The kindergarden account was successfuly updated by her director ";  //}else{
+			//return "Sorry "+((UserDetailsImpl)principal).getUsername()+", you don't have the permission to modify the content of this kindergarten account because your are not the responsible to it.   ";	}
 	} 
 	
 	

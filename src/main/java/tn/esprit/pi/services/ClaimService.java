@@ -80,19 +80,19 @@ public class ClaimService implements IClaimService {
 	@Override
 	public Claim updateClaim(Claim c, int id) throws Exception {
 
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Claim claim=cr.findById(id).get();
-		Kindergarden k=kr.findById(c.getKindergarden().getId()).get();
+		Kindergarden k=kr.findById(claim.getKindergarden().getId()).get();
 
-		if (principal instanceof UserDetailsImpl ) {
+
 		
 		
 		
 		claim.setCategory(c.getCategory());
 		claim.setDescription(c.getDescription());
+		claim.setCreatedAt(claim.getCreatedAt());
+		claim.setUpdatedAt(LocalDateTime.now());
 		claim.setKindergarden(k);
-		claim.setUser(((UserDetailsImpl) principal).getUser());
-		}
+		claim.setUser(claim.getUser());
 		return cr.save(claim);
 		
 	}
