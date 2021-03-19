@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,14 +26,16 @@ public class FeedbackController {
 	FeedbackService feedbackservice;
 
 
-
+	@PreAuthorize("hasAuthority('Admin')")
 	@PostMapping("/Feedbacks/new-feedback-of/{meeting}")  
-	private String  createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
+	public String  createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
 	{  
 		feedbackservice.createFeedback(fb,meeting);
 		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
 	}  
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/retrieve-all-feedbacks")
 	 @ResponseBody
 
@@ -41,7 +44,7 @@ public class FeedbackController {
 	return "Feedback List : \n"+list;
 	}
 	
-	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/Feedbacks/retrieve-feedback-details/{idFeedback}")
 	 @ResponseBody
 	 
@@ -52,9 +55,11 @@ public class FeedbackController {
 		return "Feedback Details: \n"+feedbackservice.getFeedbackById(idFeedback);
 	}
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
 	@DeleteMapping("/Feedbacks/delete-feedback/{idFeedback}")  
 	 @ResponseBody
-	private String RemoveFeedback(@PathVariable("idFeedback") int idFeedback)   
+	public String RemoveFeedback(@PathVariable("idFeedback") int idFeedback)   
 	{  
 		
 		
@@ -62,6 +67,8 @@ public class FeedbackController {
 		return "The Feedback Of Meeting Passed On"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
 	}  
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/count-feedbacks")
 	 @ResponseBody
 	 public int getnbfeedbacks() {
@@ -70,9 +77,6 @@ public class FeedbackController {
 	}
 	
 	
-	@GetMapping("/chart")
-	public String index() {
-		return "index";
-	}
+
 
 }

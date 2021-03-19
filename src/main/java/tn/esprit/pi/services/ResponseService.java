@@ -2,6 +2,7 @@ package tn.esprit.pi.services;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Feedback;
@@ -16,6 +17,7 @@ import tn.esprit.pi.repositories.MeetingRepository;
 import tn.esprit.pi.repositories.QuestionRepository;
 import tn.esprit.pi.repositories.ResponseRepository;
 import tn.esprit.pi.repositories.UserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 
 @Service
 public class ResponseService implements IResponseService{
@@ -113,6 +115,18 @@ Role role =roleRepository.findRoleByroleType(u.getRole().getRoleType().Parent);
 
 
 		
+	}
+
+
+	@Override
+	public List<Response> getOwnQuestionResponses(int feedback) throws Exception {
+		// TODO Auto-generated method stub
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Feedback f=feedbackrepository.findById(feedback).get();
+
+		List <Response> responses=(List<Response>) responserepository.questionResponses(((UserDetailsImpl) principal).getUser().getIdUser(), f.getIdFeedback());
+		return responses;
 	}
 	
 	

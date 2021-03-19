@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import tn.esprit.pi.entities.Response;
 import tn.esprit.pi.entities.Role;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.ResponseService;
 
 @RestController
@@ -25,8 +28,10 @@ public class ResponseController {
 	@Autowired
 	ResponseService responseservice;
 	
+	
+	@PreAuthorize("hasAuthority('Parent')")
 	@PostMapping("/Responses/responseTo/{question}")  
-	private String addResponse(@RequestBody Response response,@PathVariable("question") int question)   
+	public String addResponse(@RequestBody Response response,@PathVariable("question") int question)   
 	{  
 		
 		response.setCreatedAt(LocalDateTime.now());
@@ -35,7 +40,7 @@ public class ResponseController {
 		return "The answer to question "+question+" of '"+response.getQuestion().getFeedback().getMeeting().getTypeMeeting()+"' Meeting Feedback wich is titled '"+response.getQuestion().getFeedback().getTitle()+"' is well recorded   ";
 	} 
 	
-	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/Responses/retrieve-all-responses_of_feedback/{feedback}")
 	 @ResponseBody
 
@@ -49,13 +54,30 @@ public class ResponseController {
 	}
 	
 	
+	/*
+	@PreAuthorize("hasAuthority('Parent')")
+	@GetMapping("/Responses/retrieve-all-responses_of-feedback/{feedback}")
+	 @ResponseBody
+
+	 public List<Response> getOwnQuestionResponses(int feedback) throws Exception {
+		
+			
+	 List<Response> list = responseservice.getOwnQuestionResponses(feedback);
+			
+	 return list;
+	
+
+	}
+	
+	*/
+	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/Responses/retrieve-all-responses_of/{user}")
 	 @ResponseBody
 
 	 public List<Response> getAllUserResponse(@PathVariable("user") int user) throws Exception {
 		
-			Role r=new Role();
-			//if (r.getRoleType()==RoleType.Parent)
+			
 	 List<Response> list = responseservice.getAllUserResponses(user);
 			
 	 return list;
@@ -65,7 +87,7 @@ public class ResponseController {
 	
 	
 	
-	
+	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/Responses/retrieve-response-of-user/{user}/of-question/{question}")
 	 @ResponseBody
 	 
@@ -78,11 +100,14 @@ public class ResponseController {
 	
 	
 	
-	
+	@PreAuthorize("hasAuthority('Admin')")
 	@DeleteMapping("/Responses/delete-response/{idResponse}")  
-	private void RemoveResponse(@PathVariable("idResponse") int idResponse)   
+	public String RemoveResponse(@PathVariable("idResponse") int idResponse) throws Exception   
 	{  
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		responseservice.removeResponse(idResponse);
+		return "Response was successfuly removed by "+((UserDetailsImpl) principal).getUser().getFirstName();
 	} 
 
 

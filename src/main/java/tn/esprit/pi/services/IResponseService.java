@@ -18,7 +18,7 @@ public interface IResponseService {
 	
 	List<Response> getResponseByFeedbackQuestion(int question);
 	List<Response> getResponseByFeedback(int feedback);
-
+	public List<Response> getOwnQuestionResponses(int question) throws Exception;
 
 	
 	

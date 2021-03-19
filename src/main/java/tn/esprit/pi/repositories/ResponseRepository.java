@@ -11,6 +11,7 @@ import tn.esprit.pi.entities.Feedback;
 import tn.esprit.pi.entities.Question;
 import tn.esprit.pi.entities.Response;
 import tn.esprit.pi.entities.RoleType;
+import tn.esprit.pi.entities.User;
 
 
 @Repository
@@ -29,6 +30,11 @@ public interface ResponseRepository extends JpaRepository<Response,Integer>{
 	@Query("SELECT  r From Response r join r.question q join q.feedback f  WHERE f.id =:feedback ")
 
 	List<Response> findbyFeedback(@Param("feedback")int feedback);
+
+	
+	@Query("SELECT  r From Response r join r.question q join q.feedback f Join f.meeting.users u  WHERE u.idUser =:user and f.idFeedback=:feedback ")
+
+	List<Response> questionResponses(@Param("user") int user,@Param("feedback") int feedback);
 	
 
 	

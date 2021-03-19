@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +23,10 @@ public class QuestionController {
 	@Autowired
 	QuestionService questionservice;
 	
-	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@PostMapping("/Questions/new-question-of/{feedback}")  
-	private String addQuestion(@RequestBody Question question,@PathVariable("feedback") int feedback)   
+	public String addQuestion(@RequestBody Question question,@PathVariable("feedback") int feedback)   
 	{  
 		
 		question.setCreatedAt(LocalDateTime.now());
@@ -35,6 +37,9 @@ public class QuestionController {
 				
 	} 
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@GetMapping("/retrieve-all-questions")
 	 @ResponseBody
 
@@ -47,6 +52,9 @@ public class QuestionController {
 	return list;
 	}
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@GetMapping("/Questions/retrieve-question-details/{idQuestion}")
 	 @ResponseBody
 	 
@@ -57,6 +65,9 @@ public class QuestionController {
 		return questionservice.getQuestionById(idQuestion);
 	}
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@GetMapping("/Questions/retrieve-feedback-questions/{idFeedback}")
 	 @ResponseBody
 	 
@@ -67,6 +78,8 @@ public class QuestionController {
 		return  list;
 	}
 	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@GetMapping("/count-feedback-questions/{idFeedback}")
 	 @ResponseBody
 	 public int CountFeedbackQuestions(@PathVariable("idFeedback") int idFeedback) {
@@ -74,8 +87,11 @@ public class QuestionController {
 	return questionservice.CountFeedbackQuestions(idFeedback);
 	}
 	
+	
+	@PreAuthorize("hasAuthority('Admin')")
+
 	@DeleteMapping("/Questions/delete-question/{idQuestion}")  
-	private String RemoveQuestion(@PathVariable("idQuestion") int idQuestion)   
+	public String RemoveQuestion(@PathVariable("idQuestion") int idQuestion)   
 	{  
 		questionservice.removeQuestion(idQuestion);
 		

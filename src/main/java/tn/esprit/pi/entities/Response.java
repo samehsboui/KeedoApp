@@ -140,12 +140,14 @@ private static final long serialVersionUID = 1L;
 	}
 
 
-	 
 	@Override
 	public String toString() {
 		return "Response [id=" + id + ", createdAt=" + createdAt + ", response=" + response + ", satisfactionDegree="
-				+ satisfactionDegree + ", rating=" + rating + ", question=" + question + "]";
+				+ satisfactionDegree + ", rating=" + rating +  "]";
 	}
+
+
+	
 
  
 
