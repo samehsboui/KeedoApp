@@ -3,7 +3,7 @@ import java.util.List;
 import tn.esprit.pi.entities.Liking;
 public interface ILikingService {
 	
-	public String addLiking(Liking c, int idU, int idP);
+	public Boolean addLiking(Liking c, int idU, int idP);
 	public void deleteLiking(int id);
 	public List<Liking> getAllLikings();
 	public Liking getLikingById(int id);
@@ -12,6 +12,5 @@ public interface ILikingService {
 	public int CountLikingsByUser(int id);
 	public List<Liking> getLikingsByPostId(int id);
 	public int CountLikingsByPost(int id);
-	public List<Liking> getReceivedLikesByUserId(int id);
 	public boolean IsLikeExists(int idu, int idp);
 }

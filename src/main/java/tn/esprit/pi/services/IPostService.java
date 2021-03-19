@@ -3,7 +3,7 @@ import java.util.List;
 import tn.esprit.pi.entities.Post;
 public interface IPostService {
 	
-	public String addPost(Post p, int idU);
+	public String addPost(Post p, int idU) throws Exception;
 	public void deletePost(int id);
 	public Post updatePost(Post p, int id);
 	public List<Post> getAllPosts();
@@ -19,5 +19,5 @@ public interface IPostService {
 	public boolean isReportExists(int idu, int idp);
 	public List<Post> getReportedPosts();
 	void approveReportedPost(int idP);
-	void disapproveReportedPost(int idP);
+	List<String> detect(String photo) throws Exception;
 }

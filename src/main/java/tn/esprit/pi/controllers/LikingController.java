@@ -6,14 +6,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tn.esprit.pi.entities.Comment;
 import tn.esprit.pi.entities.Liking;
-import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.services.LikingServiceImpl;
+import tn.esprit.pi.services.NotificationSNWServiceImpl;
 
 @RestController
 public class LikingController {
@@ -21,12 +18,20 @@ public class LikingController {
 		@Autowired  
 		LikingServiceImpl LikingServiceImpl;
 		
+		@Autowired  
+		NotificationSNWServiceImpl NotifServiceImpl;
+		
 		//URL: http://localhost:9293/SpringMVC/servlet/Liking/add-like/{idU}/{idP}
 				@PostMapping("/Liking/add-like/{idU}/{idP}")  
 				private String addLike(@RequestBody Liking likes, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{    
-					/*likes.getIdLiking()*/
-					return (LikingServiceImpl.addLiking(likes, idU, idP)+ ", number of likes on this post: " +LikingServiceImpl.CountLikingsByPost(idP));  
+					if(LikingServiceImpl.addLiking(likes, idU, idP)){
+						LikingServiceImpl.addLiking(likes, idU, idP);
+						return (NotifServiceImpl.addLikeNotif(likes.getIdLiking()) + ", number of likes on this post: " +LikingServiceImpl.CountLikingsByPost(idP));  						
+					}
+					else{
+						return ("you already liked this post");
+					}
 				} 
 				
 

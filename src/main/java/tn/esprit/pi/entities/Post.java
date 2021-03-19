@@ -43,6 +43,8 @@ public class Post implements Serializable{
 	@Column(name= "modifyDate")
 	private LocalDateTime modifyDate;
 	private int owner;
+	@Column(name= "mediaLink")
+	private String mediaLink;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
     @OrderBy("desc")
@@ -136,12 +138,29 @@ public class Post implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+
+	public String getMediaLink() {
+		return mediaLink;
+	}
+
+	public void setMediaLink(String mediaLink) {
+		this.mediaLink = mediaLink;
+	}
+
+	public Set<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(Set<Report> reports) {
+		this.reports = reports;
+	}
 
 	@Override
 	public String toString() {
 		return "Post [idPost=" + idPost + ", postContent=" + postContent + ", media=" + media + ", createDate="
-				+ createDate + ", modifyDate=" + modifyDate + ", owner=" + owner + ", comments=" + comments + ", likes="
-				+ likes + ", user=" + user + "]";
+				+ createDate + ", modifyDate=" + modifyDate + ", owner=" + owner + ", mediaLink=" + mediaLink
+				+ ", comments=" + comments + ", likes=" + likes + ", reports=" + reports + ", user=" + user + "]";
 	}
 
 }

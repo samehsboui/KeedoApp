@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Comment;
-import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.services.CommentServiceImpl;
+import tn.esprit.pi.services.NotificationSNWServiceImpl;
 
 @RestController
 public class CommentController {
@@ -20,12 +20,15 @@ public class CommentController {
 		@Autowired  
 		CommentServiceImpl CommentServiceImpl;
 		
+		@Autowired  
+		NotificationSNWServiceImpl NotifServiceImpl;
+		
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/add-comment/{idU}/{idP}
 				@PostMapping("/Comment/add-comment/{idU}/{idP}")  
-				private int addComment(@RequestBody Comment Comments, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
+				private String addComment(@RequestBody Comment comments, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{  
-					CommentServiceImpl.addComment(Comments, idU, idP);  
-					return Comments.getIdComment();  
+					CommentServiceImpl.addComment(comments, idU, idP);  
+					return (NotifServiceImpl.addCommentNotif(comments.getIdComment()) + ", number of comments on this post: " +CommentServiceImpl.CountCommentsByPost(idP));  						
 				} 
 				
 

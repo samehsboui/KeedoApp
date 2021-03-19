@@ -1,9 +1,20 @@
 package tn.esprit.pi.services;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.amazonaws.services.rekognition.AmazonRekognition;
+import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
+import com.amazonaws.services.rekognition.model.DetectModerationLabelsRequest;
+import com.amazonaws.services.rekognition.model.DetectModerationLabelsResult;
+import com.amazonaws.services.rekognition.model.Image;
+import com.amazonaws.services.rekognition.model.ModerationLabel;
+import com.amazonaws.util.IOUtils;
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.entities.Report;
 import tn.esprit.pi.entities.ReportPK;
@@ -34,7 +45,7 @@ public class PostServiceImpl implements IPostService{
 	private IUnhealthyWordRepository IUnhealthyWordRepository;
 	
 	@Override
-	public String addPost(Post p, int idU) {
+	public String addPost(Post p, int idU) throws Exception {
 		User user=iUserRepository.findById(idU).get();
 		p.setUser(user);
 	    LocalDateTime creationDate = LocalDateTime.now();
@@ -44,6 +55,11 @@ public class PostServiceImpl implements IPostService{
 		if(p.getPostContent().contains(uwd.getWord())){
 			return ("Sorry, you can't post hate speech or bad words on Keedo");
 		}}
+		if((p.getMedia()).toString().equals("Image") && detect(p.getMediaLink()).isEmpty()==false){
+			return ("The image you're trying to upload is against our community standards. Our system detected: "+
+					detect(p.getMediaLink())+" labels in this image.");
+		}
+
 		IPostRepository.save(p);
 		return ("post added successfully");
 		}
@@ -64,6 +80,7 @@ public class PostServiceImpl implements IPostService{
 		post.setModifyDate(modificationDate);
 		post.setPostContent(p.getPostContent());
 		post.setMedia(p.getMedia());
+		post.setMediaLink(p.getMediaLink());
 
 		IPostRepository.save(post);
 		return getPostById(id);
@@ -122,6 +139,7 @@ public class PostServiceImpl implements IPostService{
 		newp.setUser(user);
 		newp.setPostContent(post.getPostContent());
 		newp.setMedia(post.getMedia());
+		newp.setMediaLink(post.getMediaLink());
 		newp.setOwner(post.getUser().getIdUser());
 	    LocalDateTime creationDate = LocalDateTime.now();
 		newp.setCreateDate(creationDate);
@@ -150,6 +168,43 @@ public class PostServiceImpl implements IPostService{
 		IReportRepository.save(r);
 		return ("post reported successfully");
 		}
+	
+	
+	@Override
+	public List<String> detect(String photo) throws Exception {
+        ByteBuffer imageBytes;
+        try (InputStream inputStream = new FileInputStream(new File(photo))) {
+            imageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+        }
+
+
+        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
+
+        DetectModerationLabelsRequest request = new DetectModerationLabelsRequest()
+                .withImage(new Image()
+                        .withBytes(imageBytes))
+                .withMinConfidence(60F);
+
+
+            DetectModerationLabelsResult result = rekognitionClient.detectModerationLabels(request);
+            List<ModerationLabel> labels = result.getModerationLabels();
+            List<String> forbidden = new ArrayList<String>() ; 
+            System.out.println("Detected labels for " + photo);
+            for (ModerationLabel label : labels)
+            {
+            forbidden.add(label.getName());
+               System.out.println("Label: " + label.getName()
+                + "\n Confidence: " + label.getConfidence().toString() + "%"
+                + "\n Parent:" + label.getParentName());
+           
+           }
+            System.out.println("forbidden labels detected: "+forbidden);
+            return (forbidden);
+           }
+
+        
+
+
 	//admin
 	
 	@Override
@@ -161,11 +216,6 @@ public class PostServiceImpl implements IPostService{
 	public void approveReportedPost(int idP){
 		//IReportRepository.deleteByPost(idP);
 		IReportRepository.deleteReport(idP);
-	}
-	
-	@Override
-	public void disapproveReportedPost(int idP){
-		
 	}
 	
 }

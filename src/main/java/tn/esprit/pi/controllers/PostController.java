@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.services.PostServiceImpl;
 
@@ -46,7 +45,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-post/{idU}
 		@PostMapping("/Post/add-post/{idU}")  
-		private String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU)   
+		private String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU) throws Exception   
 		{  
 			return  (PostServiceImpl.addPost(Posts, idU));  
 			
@@ -123,6 +122,12 @@ public class PostController {
 							
 		} 
 		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/detectimg/?img=
+		@GetMapping("/Post/detectimg/")  
+		private List<String> moderation(@RequestParam("img")String img) throws Exception 
+		{  
+			return PostServiceImpl.detect(img);  
+		}
 		
 //admin 
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/reported

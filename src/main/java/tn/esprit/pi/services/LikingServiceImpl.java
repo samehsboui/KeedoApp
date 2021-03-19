@@ -27,9 +27,9 @@ public class LikingServiceImpl implements ILikingService {
 	private ILikingRepository ILikingRepository;
 	
 	@Override
-	public String addLiking(Liking l, int idU, int idP){
+	public Boolean addLiking(Liking l, int idU, int idP){
 		if (IsLikeExists(idU, idP)){
-			return "you already liked this post";
+			return false;
 		}
 		else{
 		User user=IUserRepository.findById(idU).get();
@@ -39,7 +39,7 @@ public class LikingServiceImpl implements ILikingService {
 	    LocalDateTime creationDate = LocalDateTime.now();
 		l.setLikeDate(creationDate);
 		ILikingRepository.save(l);
-		return "like added successfully";
+		return true;
 	}}
 
 	@Override
@@ -92,18 +92,6 @@ public class LikingServiceImpl implements ILikingService {
 		return likes.size();
 	}
 
-	
-	/*
-	@Override
-	public List<Liking> getReceivedLikesByUserId(int id) {
-		return ILikingRepository.getReceivedLikesByUserId(id);
-
-	}*/
-	@Override
-	public List<Liking> getReceivedLikesByUserId(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	//useful for the add method (a user can't like the same post twice)
 	@Override
