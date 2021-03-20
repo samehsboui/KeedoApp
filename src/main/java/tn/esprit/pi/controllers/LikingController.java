@@ -23,7 +23,7 @@ public class LikingController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Liking/add-like/{idU}/{idP}
 				@PostMapping("/Liking/add-like/{idU}/{idP}")  
-				private String addLike(@RequestBody Liking likes, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
+				public String addLike(@RequestBody Liking likes, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{    
 					if(LikingServiceImpl.addLiking(likes, idU, idP)){
 						LikingServiceImpl.addLiking(likes, idU, idP);
@@ -37,7 +37,7 @@ public class LikingController {
 
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/delete-like/{Likeid}
 				@DeleteMapping("/Liking/delete-like/{Likeid}")  
-				private void deleteLiking(@PathVariable("Likeid") int Likeid)   
+				public void deleteLiking(@PathVariable("Likeid") int Likeid)   
 				{  
 					System.out.println("this is the id"+ Likeid);
 					LikingServiceImpl.deleteLiking(Likeid);  
@@ -46,7 +46,7 @@ public class LikingController {
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/get-all-likes
 				@GetMapping("/Liking/get-all-likes")  
-				private List<Liking> getAllLikes()   
+				public List<Liking> getAllLikes()   
 				{  
 					return LikingServiceImpl.getAllLikings();  
 				}  
@@ -54,7 +54,7 @@ public class LikingController {
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/detail-like/{Likingid}
 				@GetMapping("/Liking/detail-like/{Likingid}")  
-				private Liking getLike(@PathVariable("Likingid") int Likingid)   
+				public Liking getLike(@PathVariable("Likingid") int Likingid)   
 				{  
 					return LikingServiceImpl.getLikingById(Likingid);  
 				}  
@@ -62,14 +62,14 @@ public class LikingController {
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-all-likes
 				@GetMapping("/Liking/count-all-likes")
-				private int getlikescount() {
+				public int getlikescount() {
 				return LikingServiceImpl.CountLikings();
 				}
 				
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-user/{idU}
 				@GetMapping("/Liking/likes-by-user/{idU}")
-				private List<Liking> getLikesByUser(@PathVariable("idU") int idU) {
+				public List<Liking> getLikesByUser(@PathVariable("idU") int idU) {
 					return LikingServiceImpl.getLikingsByUserId(idU);
 
 				}
@@ -77,14 +77,14 @@ public class LikingController {
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-user-likes/{idU}
 				@GetMapping("/Liking/count-user-likes/{idU}")
-				private int getuserlikescount(@PathVariable("idU") int idU) {
+				public int getuserlikescount(@PathVariable("idU") int idU) {
 				return LikingServiceImpl.CountLikingsByUser(idU);
 				}
 				
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-post/{idP}
 				@GetMapping("/Liking/likes-by-post/{idP}")
-				private List<Liking> getLikingsByPost(@PathVariable("idP") int idP) {
+				public List<Liking> getLikingsByPost(@PathVariable("idP") int idP) {
 					return LikingServiceImpl.getLikingsByPostId(idP);
 
 				}
@@ -92,7 +92,7 @@ public class LikingController {
 				
 				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-post-likes/{idP}
 				@GetMapping("/Liking/count-post-likes/{idP}")
-				private int getpostlikescount(@PathVariable("idP") int idP) {
+				public int getpostlikescount(@PathVariable("idP") int idP) {
 				return LikingServiceImpl.CountLikingsByPost(idP);
 				}
 				

@@ -21,7 +21,7 @@ public class WorkshopController {
 
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/get-all-Workshops
 	@GetMapping("/Workshop/get-all-Workshops")  
-	private List<Workshop> getAllWorkshops()   
+	public List<Workshop> getAllWorkshops()   
 	{  
 		return WorkshopServiceImpl.getAllWorkshops();  
 	}  
@@ -29,7 +29,7 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/detail-Workshop/{Workshopid}
 	@GetMapping("/Workshop/detail-Workshop/{Workshopid}")  
-	private Workshop getWorkshop(@PathVariable("Workshopid") int Workshopid)   
+	public Workshop getWorkshop(@PathVariable("Workshopid") int Workshopid)   
 	{  
 		return WorkshopServiceImpl.getWorkshopById(Workshopid);  
 	}  
@@ -37,7 +37,7 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/delete-Workshop/{Workshopid}
 	@DeleteMapping("/Workshop/delete-Workshop/{Workshopid}")  
-	private void deleteWorkshop(@PathVariable("Workshopid") int Workshopid)   
+	public void deleteWorkshop(@PathVariable("Workshopid") int Workshopid)   
 	{  
 		WorkshopServiceImpl.deleteWorkshop(Workshopid);  
 	} 
@@ -45,7 +45,7 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/add-Workshop/{idU}
 	@PostMapping("/Workshop/add-Workshop/{idU}")  
-	private int addWorkshop(@RequestBody Workshop Workshops, @PathVariable("idU")int idU)   
+	public int addWorkshop(@RequestBody Workshop Workshops, @PathVariable("idU")int idU)   
 	{  
 		WorkshopServiceImpl.addWorkshop(Workshops, idU);  
 		return Workshops.getIdWorkshop();  
@@ -54,7 +54,7 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/update-Workshop/{Workshopid}
 	@PutMapping("/Workshop/update-Workshop/{Workshopid}")  
-	private Workshop updateWorkshop(@RequestBody Workshop Workshops, @PathVariable("Workshopid")int Workshopid)   
+	public Workshop updateWorkshop(@RequestBody Workshop Workshops, @PathVariable("Workshopid")int Workshopid)   
 	{  
 		return WorkshopServiceImpl.updateWorkshop(Workshops,Workshopid);  
 		}
@@ -62,14 +62,14 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/count-all-Workshops
 	@GetMapping("/Workshop/count-all-Workshops")
-	private int getWorkshopscount() {
+	public int getWorkshopscount() {
 	return WorkshopServiceImpl.CountWorkshops();
 	}
 	
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/Workshops-by-user/{idU}
 	@GetMapping("/Workshop/Workshops-by-user/{idU}")
-	private List<Workshop> getWorkshopsByUser(@PathVariable("idU") int idU) {
+	public List<Workshop> getWorkshopsByUser(@PathVariable("idU") int idU) {
 		return WorkshopServiceImpl.getWorkshopsByUserId(idU);
 
 	}
@@ -77,14 +77,14 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/count-user-Workshops/{idU}
 	@GetMapping("/Workshop/count-user-Workshops/{idU}")
-	private int getuserWorkshopscount(@PathVariable("idU") int idU) {
+	public int getuserWorkshopscount(@PathVariable("idU") int idU) {
 	return WorkshopServiceImpl.CountWorkshopsByUser(idU);
 	}
 	
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/search/?pattern=
 	@GetMapping("/Workshop/search/")
-	private List<Workshop> WorkshopSearch(@RequestParam("pattern")String pattern){
+	public List<Workshop> WorkshopSearch(@RequestParam("pattern")String pattern){
 	System.out.println(pattern);
 	return WorkshopServiceImpl.searchWorkshops(pattern);
 	
@@ -102,7 +102,7 @@ public class WorkshopController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/Workshops-by-username/?name=
 	@GetMapping("/Workshop/Workshops-by-user")
-	private List<Workshop> getWorkshopsByKindergartenName(@RequestParam("name")String name){
+	public List<Workshop> getWorkshopsByKindergartenName(@RequestParam("name")String name){
 	return WorkshopServiceImpl.getWorkshopsByKindergartenName(name);
 	
 	}

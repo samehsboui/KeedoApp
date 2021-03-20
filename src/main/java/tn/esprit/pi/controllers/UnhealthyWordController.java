@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 public class UnhealthyWordController {
 	@Autowired  
-    private UnhealthyWordsServiceImpl unhealthyWordService;
+    UnhealthyWordsServiceImpl unhealthyWordService;
 
     
 	//URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/add

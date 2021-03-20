@@ -19,28 +19,28 @@ public class NotificationSNWController {
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-notif/{idN}
 	@GetMapping("/Notif/get-notif/{idN}")
-	private NotificationSNW getNotif(@PathVariable("idN") int idN)   
+	public NotificationSNW getNotif(@PathVariable("idN") int idN)   
 	{  
 		return NotifServiceImpl.getNotifById(idN);  
 	}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-all-notif
 	@GetMapping("/Notif/get-all-notif")
-	private List<NotificationSNW> getAllNotif()   
+	public List<NotificationSNW> getAllNotif()   
 	{  
 		return NotifServiceImpl.getAllNotif();  
 	}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-notif-by-user/{idU}
 	@GetMapping("/Notif/get-notif-by-user/{idU}")
-	private List<NotificationSNW> getNotifByUser(@PathVariable("idU") int idU)   
+	public List<NotificationSNW> getNotifByUser(@PathVariable("idU") int idU)   
 	{  
 		return NotifServiceImpl.getNotifByUser(idU);  
 	}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/delete-notif/{idN}
 	@DeleteMapping("/Notif/delete-notif/{idN}")  
-	private void deleteNotif(@PathVariable("idN") int idN)   
+	public void deleteNotif(@PathVariable("idN") int idN)   
 	{  
 		System.out.println("this is the id"+ idN);
 		NotifServiceImpl.deleteNotif(idN);  

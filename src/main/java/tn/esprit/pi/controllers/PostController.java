@@ -2,6 +2,7 @@ package tn.esprit.pi.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +20,11 @@ public class PostController {
 		@Autowired  
 		PostServiceImpl PostServiceImpl;
 
+
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/get-all-posts
+		@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Parent') or hasAuthority('DaycareManager') or hasAuthority('Admin')  or hasAuthority('Doctor') ")
 		@GetMapping("/Post/get-all-posts")  
-		private List<Post> getAllPosts()   
+		public List<Post> getAllPosts()   
 		{  
 			return PostServiceImpl.getAllPosts();  
 		}  
@@ -29,7 +32,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/detail-post/{Postid}
 		@GetMapping("/Post/detail-post/{Postid}")  
-		private Post getPost(@PathVariable("Postid") int Postid)   
+		public Post getPost(@PathVariable("Postid") int Postid)   
 		{  
 			return PostServiceImpl.getPostById(Postid);  
 		}  
@@ -37,7 +40,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/delete-post/{Postid}
 		@DeleteMapping("/Post/delete-post/{Postid}")  
-		private void deletePost(@PathVariable("Postid") int Postid)   
+		public void deletePost(@PathVariable("Postid") int Postid)   
 		{  
 			PostServiceImpl.deletePost(Postid);  
 		} 
@@ -45,7 +48,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-post/{idU}
 		@PostMapping("/Post/add-post/{idU}")  
-		private String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU) throws Exception   
+		public String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU) throws Exception   
 		{  
 			return  (PostServiceImpl.addPost(Posts, idU));  
 			
@@ -54,7 +57,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/update-post/{Postid}
 		@PutMapping("/Post/update-post/{Postid}")  
-		private Post updatePost(@RequestBody Post posts, @PathVariable("Postid")int Postid)   
+		public Post updatePost(@RequestBody Post posts, @PathVariable("Postid")int Postid)   
 		{  
 			return PostServiceImpl.updatePost(posts,Postid);  
 			 
@@ -63,7 +66,7 @@ public class PostController {
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/count-all-posts
 		@GetMapping("/Post/count-all-posts")
-		private int getpostscount() {
+		public int getpostscount() {
 			return PostServiceImpl.CountPosts();
 		}
 		

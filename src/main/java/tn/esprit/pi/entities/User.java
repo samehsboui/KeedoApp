@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name= "user")
@@ -27,7 +31,7 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name= "id")
 	private int idUser;	
 	@Column(name= "firstName")
@@ -51,34 +55,55 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
-	@ManyToOne
-	@JoinColumn(name= "id_role")
+	@ManyToOne(cascade= CascadeType.DETACH)
+    @JoinColumn(name = "role")
 	private Role role;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Kid> kids;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Post> posts;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Follow> follows;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Workshop> workshops;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Event> events;
+	@JsonIgnore
 	@ManyToMany(cascade= CascadeType.ALL)
 	private Set<Meeting> meetings; 
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Claim> claims;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Message> messages;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Bus> bus;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Answer> answers;
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
 	//added by amal (sorry though)
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
 	private Set<Report> reports;
+	boolean valid;
+    @Column(name = "accountLocked", columnDefinition = "boolean default false")
+    private boolean accountNonLocked;
+    @Column(name = "failedAttempt", columnDefinition = "int default 0")
+    private int failedAttempt;
+    @Column(name = "lockTime")
+    private Date lockTime;
+    @Column(name = "resettoken")
+    private String resettoken;
+	
 	public User() {
 		super();
 	}
@@ -266,13 +291,49 @@ public class User implements Serializable{
 	public void setTopics(Set<Topic> topics) {
 		this.topics = topics;
 	}
+	
+	
 
-	public Set<Report> getReports() {
-		return reports;
+	public boolean isValid() {
+		return valid;
 	}
 
-	public void setReports(Set<Report> reports) {
-		this.reports = reports;
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+	
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public int getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(int failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
+	}
+	
+	
+
+	public String getResettoken() {
+		return resettoken;
+	}
+
+	public void setResettoken(String resettoken) {
+		this.resettoken = resettoken;
 	}
 
 	@Override
@@ -282,9 +343,7 @@ public class User implements Serializable{
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
 				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + ", reports=" + reports + "]";
+				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
 	}
-
-
 	
 }
