@@ -51,6 +51,13 @@ public class User implements Serializable{
 	private boolean delegate;
 	@Column(name="logo")
 	private byte[] logo;
+	@Column(name = "accountLocked", columnDefinition = "boolean default false")
+    private boolean accountNonLocked;
+    @Column(name = "failedAttempt", columnDefinition = "int default 0")
+    private int failedAttempt;
+    @Column(name = "lockTime")
+    private Date lockTime;
+    boolean valid;
 	@ManyToOne
 	@JoinColumn(name= "id_role")
 	private Role role;
@@ -76,7 +83,8 @@ public class User implements Serializable{
 	private Set<Answer> answers;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
-	
+	//@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	//private Set<EmpruntBook>empruntBook;
 	public User() {
 		super();
 	}
@@ -265,14 +273,63 @@ public class User implements Serializable{
 		this.topics = topics;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
-				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
+				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo)
+				+ ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt + ", lockTime="
+				+ lockTime + ", valid=" + valid + ", role=" + role + ", kids=" + kids + ", posts=" + posts
+				+ ", follows=" + follows + ", workshops=" + workshops + ", events=" + events + ", meetings=" + meetings
+				+ ", claims=" + claims + ", messages=" + messages + ", bus=" + bus + ", answers=" + answers
+				+ ", topics=" + topics + ", getIdUser()=" + getIdUser() + ", getFirstName()=" + getFirstName()
+				+ ", getLastName()=" + getLastName() + ", getTelNum()=" + getTelNum() + ", getBirthdate()="
+				+ getBirthdate() + ", getAddress()=" + getAddress() + ", getMail()=" + getMail() + ", getLogin()="
+				+ getLogin() + ", getPassword()=" + getPassword() + ", isDelegate()=" + isDelegate() + ", getLogo()="
+				+ Arrays.toString(getLogo()) + ", getRole()=" + getRole() + ", getKids()=" + getKids() + ", getPosts()="
+				+ getPosts() + ", getFollows()=" + getFollows() + ", getWorkshops()=" + getWorkshops()
+				+ ", getEvents()=" + getEvents() + ", getMeetings()=" + getMeetings() + ", getClaims()=" + getClaims()
+				+ ", getMessages()=" + getMessages() + ", getBus()=" + getBus() + ", getAnswers()=" + getAnswers()
+				+ ", getTopics()=" + getTopics() + ", isValid()=" + isValid() + ", isAccountNonLocked()="
+				+ isAccountNonLocked() + ", getFailedAttempt()=" + getFailedAttempt() + ", getLockTime()="
+				+ getLockTime() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
+				+ super.toString() + "]";
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 	
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public int getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(int failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
+	}
+
+
+
 }

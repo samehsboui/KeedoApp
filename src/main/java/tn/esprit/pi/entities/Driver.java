@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name= "chaffeur")
+@Table(name= "Driver")
 public class Driver implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class Driver implements Serializable{
 		super();
 	}
 
-	public long getIdDriver() {
+	public int getIdDriver() {
 		return idDriver;
 	}
 

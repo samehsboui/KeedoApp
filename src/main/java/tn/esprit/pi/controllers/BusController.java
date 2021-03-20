@@ -3,6 +3,7 @@ package tn.esprit.pi.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +26,17 @@ public class BusController {
 	@Autowired
 	private BusService busService;
 	
-
+	
+	//localhost:9293/SpringMVC/servlet/bus/showBus
+	@PreAuthorize("hasAuthority('Admin')")
 	 @GetMapping("/showBus")
 	    public List<Bus> showNewDrivereForm() {
 	        return busService.getAllBus();
 	    }
 	
+	
+	//localhost:9293/SpringMVC/servlet/bus/saveBus/2/1
+	@PreAuthorize("hasAuthority('Admin')")
 	 @PostMapping("/saveBus/{idDriver}/{idU}")
 		public Bus AffectBusDriver(@RequestBody Bus bus, @PathVariable("idDriver")int idDriver,@PathVariable("idU")int idU)   
 		{  
@@ -38,50 +44,23 @@ public class BusController {
 			return busService.AffectBusDriver(bus, idDriver,idU);
 		}
 	 
-	 
-	
-		/*
-		 * @RequestMapping(value = "/add", method = RequestMethod.POST)
-	Bus add(@RequestBody Bus u) {
-		
-		Bus newBus = new Bus();
-		Driver driver = this.typecongeservice.findbyname(u.getCauseConge());
-		newconge.setTypeconge(typeconge);
-		newconge.setCauseRefus(u.getCauseRefus());
-		newconge.setDateDebut(u.getDateDebut());
-
-		newconge.setReponse(u.getReponse());
-		newconge.setNombreJours(u.getNombreJours());
-		UserManager user = this.userservice.find(SecurityContextHolder.getContext().getAuthentication().getName());
-		newconge.setUsermanager(user);
-		 return service.add(newconge);
-		
-		 */
-		
-		
-		 
-	/*	@RequestMapping(value = "/deleteBus/{id}", method = RequestMethod.DELETE)
-		    public void deleteDriver(@PathVariable int id) {
-
-			busService.deleteBusById(id);
-	           
-		}*/
-
+	//localhost:9293/SpringMVC/servlet/bus/deleteBus/1
+	@PreAuthorize("hasAuthority('Admin')")
 		@DeleteMapping("/deleteBus/{id}")
 		public void deleteDriver(@PathVariable("id") int id) {
 			busService.deleteBusById(id);
 		}
-		
-
+	//localhost:9293/SpringMVC/servlet/bus/updateBus/1
+	@PreAuthorize("hasAuthority('Admin')")
 		@PutMapping("/updateBus/{idBus}")  
-		private Bus updateBus(@RequestBody Bus bus, @PathVariable("idBus")int idBus)   
+		public Bus updateBus(@RequestBody Bus bus, @PathVariable("idBus")int idBus)   
 		{  
 		
 			busService.updateBus(bus, idBus) ;
 			return bus;  
 		} 
-		
-		
+	//localhost:9293/SpringMVC/servlet/bus/showBusByDriver/dhekra
+	@PreAuthorize("hasAuthority('Admin')")
 		@GetMapping("/showBusByDriver/{firstName}")
 		public List<Bus> getBusByDriver(@PathVariable String firstName) {
 			 List<Bus> bus = busService.getBusByDriver(firstName);

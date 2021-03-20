@@ -41,16 +41,16 @@ public class DriverService implements IDriverService {
 		
 	}
 	
-    @Override
-	public Driver updateDriver (Driver driver, int idDriver) {
-		// TODO Auto-generated method stub
-    	Driver d =driverRepository.findById(idDriver).get();
-    	d.setAddress(d.getAddress());
-    	d.setFirstName(d.getFirstName());
-    	d.setLastName(d.getLastName());
-    	d.setTelNum(d.getTelNum());
-    	    	
-		return driverRepository.save(d);
-	}
+	  @Override
+		public Driver updateDriver (Driver driver, int idDriver) {
+			// TODO Auto-generated method stub
+	    	Driver drivers =driverRepository.findById(idDriver).get();
+	    	drivers.setAddress(drivers.getAddress());
+	    	drivers.setFirstName(drivers.getFirstName());
+	    	drivers.setLastName(drivers.getLastName());
+	    	drivers.setTelNum(drivers.getTelNum());
+	    	    	
+			return driverRepository.save(drivers);
+		}
  
 }

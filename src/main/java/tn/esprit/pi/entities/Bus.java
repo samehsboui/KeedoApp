@@ -58,7 +58,7 @@ public class Bus implements Serializable{
 		super();
 	}
 
-	public long getIdBus() {
+	public int getIdBus() {
 		return idBus;
 	}
 
