@@ -3,6 +3,7 @@ package tn.esprit.pi.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,7 +50,7 @@ public class Kid implements Serializable{
 	@JoinColumn(name= "id_dacare")
 	private Daycare daycare;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "kid", fetch= FetchType.EAGER)
-	private List<Consultation> consultations;
+	private Set<Consultation> consultations;
 	@ManyToOne
 	@JoinColumn(name= "id_bus")
 	private Bus bus;
@@ -132,11 +133,11 @@ public class Kid implements Serializable{
 		this.daycare = daycare;
 	}
 
-	public List<Consultation> getConsultations() {
+	public Set<Consultation> getConsultations() {
 		return consultations;
 	}
 
-	public void setConsultations(List<Consultation> consultations) {
+	public void setConsultations(Set<Consultation> consultations) {
 		this.consultations = consultations;
 	}
 

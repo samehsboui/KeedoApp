@@ -1,6 +1,7 @@
 package tn.esprit.pi.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import tn.esprit.pi.entities.Consultation;
-import tn.esprit.pi.entities.Kid;
+import tn.esprit.pi.entities.UserAndString;
+import tn.esprit.pi.repositories.ConsultationRepository;
+import tn.esprit.pi.repositories.UserRepository;
 import tn.esprit.pi.services.ConsultationService;
 import tn.esprit.pi.services.GoogleCalService;
 
@@ -29,10 +32,15 @@ public class ConsultationController {
 	ConsultationService consultationService;
 	@Autowired
 	GoogleCalService googleCalService;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	ConsultationRepository consultationRepository;
 
-	@PostMapping("consult/add/{idK}/{idD}")
-	public Kid affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK, @PathVariable("idD") int idD) {
-		return consultationService.affectConsultationToKid(consultation, idK, idD);
+	@PostMapping("consult/add/{idK}/{idA}/{idD}")
+	public UserAndString affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK,
+			@PathVariable("idA") int idA, @PathVariable("idD") int idD) {
+		return consultationService.affectConsultationToKid(consultation, idK, idA, idD);
 	}
 
 	@DeleteMapping("consult/del/{id}")
@@ -49,12 +57,35 @@ public class ConsultationController {
 	public List<Consultation> displayAllConsultations() {
 		return consultationService.displayAllConsultations();
 	}
+	
+	@GetMapping("consult/getAll/ToDay")
+	public List<Consultation> displayConsultationsToDay() {
+		return consultationService.displayConsultationsToDay();
+	}
 
 	@GetMapping("consult/kid/getAll/{idK}")
 	public List<Consultation> displayConsultationsByKid(@PathVariable("idK") int idK) {
 		return consultationService.displayConsultationsByKid(idK);
 	}
 
+	@GetMapping("consult/doctor/getAll/{idD}")
+	public List<Consultation> displayConsultationsByDoctor(@PathVariable("idD") int idD) {
+		return consultationService.displayConsultationsByDoctor(idD);
+	}
+
+	//STATIC
+	
+	@GetMapping("consult/static/doctor")
+	public Map<String, Integer> percentageParticipationByDoctor(){
+		return consultationService.percentageParticipationByDoctor();
+	}
+
+	@GetMapping("consult/static/nbC/{m}")
+	public int getPerMonth(@PathVariable("m") String m){
+		List<Consultation> consult = consultationRepository.findByMatchMonthAndMatchDay("-"+m+"-");
+		return consult.size();
+	}
+	
 	// To login
 	@RequestMapping(value = "/login/google", method = RequestMethod.GET)
 	public RedirectView googleConnectionStatus(HttpServletRequest request) throws Exception {
@@ -62,9 +93,10 @@ public class ConsultationController {
 	}
 
 	// Calando
-	@RequestMapping(value = "/login/google", method = RequestMethod.GET, params ="code")
+	@RequestMapping(value = "/login/google", method = RequestMethod.GET, params = "code")
 	public String authenticateCal(@RequestParam(value = "code") String code) {
 		return googleCalService.addEvent(code);
 	}
-
+	
+	
 }

@@ -35,8 +35,11 @@ public class Consultation implements Serializable {
 	@Column(name="time")
 	private Date  time;
 	@ManyToOne
-	@JoinColumn(name="id_user")
-	private User user;
+	@JoinColumn(name="id_director")
+	private User director;
+	@ManyToOne
+	@JoinColumn(name="id_doctor")
+	private User doctor;
 	@ManyToOne
 	@JoinColumn(name= "id_kid")
 	private Kid kid;
@@ -82,14 +85,20 @@ public class Consultation implements Serializable {
 		this.time = time;
 	}
 
-
-
-	public User getUser() {
-		return user;
+	public User getDirector() {
+		return director;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setDirector(User director) {
+		this.director = director;
+	}
+
+	public User getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(User doctor) {
+		this.doctor = doctor;
 	}
 
 	public Kid getKid() {
@@ -103,7 +112,8 @@ public class Consultation implements Serializable {
 	@Override
 	public String toString() {
 		return "Consultation [idConsultation=" + idConsultation + ", dateConsultation=" + dateConsultation + ", time="
-				+ time + ", user=" + user + ", kid=" + kid + "]";
+				+ time + ", director=" + director + ", doctor=" + doctor + ", kid=" + kid + "]";
 	}
+
 
 }

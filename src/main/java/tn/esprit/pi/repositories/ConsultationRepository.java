@@ -29,6 +29,14 @@ public interface ConsultationRepository extends CrudRepository<Consultation, Int
 	@Query("DELETE from Consultation c where c.id= :id")
 	void deleteConsultById(@Param("id") int id);
 	
-	@Query(" select c from Consultation c where c.user = :user and c.dateConsultation= :dateConsultation and c.time= :time")
-	List<Consultation> findConsultationByDoctor(@Param("user") User user, @Param("dateConsultation") Date dateConsultation, @Param("time") Date  time);
+	@Query(" select c from Consultation c where c.doctor = :doctor and c.dateConsultation= :dateConsultation and c.time= :time")
+	List<Consultation> findDoctorAvailable(@Param("doctor") User doctor, @Param("dateConsultation") Date dateConsultation, @Param("time") Date  time);
+	
+	@Query(" select c from Consultation c where c.doctor = :doctor")
+	List<Consultation> findConsultationByDoctor(@Param("doctor") User doctor);
+	
+	@Query(value = "SELECT * FROM Consultation WHERE date_consultation Like %?1%", nativeQuery = true)
+	List<Consultation> findByMatchMonthAndMatchDay(@Param ("month") String month);
+	
+	List<Consultation> findAllByDateConsultation(Date currentDate);
 }

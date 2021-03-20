@@ -1,6 +1,8 @@
 package tn.esprit.pi.services;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
+
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -62,6 +65,7 @@ public class GoogleCalService {
 		String message;
 		String calendarId = "primary";
 		try {
+	
 			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectURI).execute();
 			credential = flow.createAndStoreCredential(response, "userID");
 			client = new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY, credential)
@@ -71,9 +75,9 @@ public class GoogleCalService {
 
 			// Convert date
 
-			DateTime date = new DateTime("2021-03-01T09:00:00.000+01:00");
-
-			eventList = events.list("primary").setTimeMin(date).setTimeMax(date).execute();
+			DateTime dateA = new DateTime("2021-03-20T09:00:00.000+01:00");
+			DateTime dateF = new DateTime("2021-03-20T10:00:00.000+01:00");
+			eventList = events.list("primary").setTimeMin(dateA).setTimeMax(dateF).execute();
 			System.out.println("Avannnnnt => " + eventList.getItems());
 			if (!eventList.getItems().isEmpty()) {
 				System.out.println("Doctor not avaibale!!");
@@ -84,10 +88,10 @@ public class GoogleCalService {
 
 				SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				
-				EventDateTime start = new EventDateTime().setDateTime(date).setTimeZone("UTC");
+				EventDateTime start = new EventDateTime().setDateTime(dateA).setTimeZone("UTC");
 				event.setStart(start);
 
-				EventDateTime end = new EventDateTime().setDateTime(date).setTimeZone("UTC");
+				EventDateTime end = new EventDateTime().setDateTime(dateA).setTimeZone("UTC");
 				event.setEnd(end);
 
 				// String[] recurrence = new String[] {
@@ -98,10 +102,10 @@ public class GoogleCalService {
 				System.out.printf("Event created: %s\n", event.getHtmlLink());
 
 			}
-			DateTime date1 = new DateTime("2021-03-25T09:00:00.000+01:00");
+			DateTime date1 = new DateTime("2021-03-20T09:00:00.000+01:00");
 			DateTime date2 = new DateTime(new Date());
 
-			eventList = events.list("primary").setTimeMin(date1).setTimeMax(date2).execute();
+			eventList = events.list("primary").setTimeMin(dateA).setTimeMax(dateF).execute();
 			message = eventList.getItems().toString();
 			// System.out.println("My:" + eventList.getItems());
 		} catch (Exception e) {
@@ -116,21 +120,24 @@ public class GoogleCalService {
 	}
 
 	// Authorize
-	public String authorize() throws Exception {
-		AuthorizationCodeRequestUrl authorizationUrl;
-		if (flow == null) {
-			Details web = new Details();
-			web.setClientId(clientId);
-			web.setClientSecret(clientSecret);
-			clientSecrets = new GoogleClientSecrets().setWeb(web);
-			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-			flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
-					Collections.singleton(CalendarScopes.CALENDAR)).build();
+		public String authorize() throws Exception {
+			AuthorizationCodeRequestUrl authorizationUrl;
+			if (flow == null) {
+				Details web = new Details();
+				web.setClientId(clientId);
+				web.setClientSecret(clientSecret);
+				clientSecrets = new GoogleClientSecrets().setWeb(web);
+				httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+				flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
+						Collections.singleton(CalendarScopes.CALENDAR)).build();
+			}
+			authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectURI);
+			System.out.println("cal authorizationUrl->" + authorizationUrl);
+			System.out.println("redirect => " + redirectURI);
+			return authorizationUrl.build();
 		}
-		authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectURI);
-		System.out.println("cal authorizationUrl->" + authorizationUrl);
-		System.out.println("redirect => " + redirectURI);
-		return authorizationUrl.build();
-	}
-
+	// Connect Google Calendar
+	/*public String conncetCal(){
+		
+	}*/
 }

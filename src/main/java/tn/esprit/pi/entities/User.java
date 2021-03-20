@@ -24,82 +24,95 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name= "user")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class User implements Serializable{
-	
-	
+@Table(name = "user")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+public class User implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name= "id")
-	private int idUser;	
-	@Column(name= "firstName")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int idUser;
+	@Column(name = "firstName")
 	private String firstName;
-	@Column(name= "lastName")
+	@Column(name = "lastName")
 	private String lastName;
-	@Column(name="telNum")
+	@Column(name = "telNum")
 	private int telNum;
 	@Temporal(TemporalType.DATE)
-	@Column(name="birthdate")
+	@Column(name = "birthdate")
 	private Date birthdate;
-	@Column(name="address")
+	@Column(name = "address")
 	private String address;
-	@Column(name="mail")
+	@Column(name = "mail")
 	private String mail;
-	@Column(name="login")
+	@Column(name = "login")
 	private String login;
-	@Column(name="password")
+	@Column(name = "password")
 	private String password;
-	@Column(name="delegate")
+	@Column(name = "delegate")
 	private boolean delegate;
-	@Column(name="logo")
+	@Column(name = "logo")
 	private byte[] logo;
 	@ManyToOne
-	@JoinColumn(name= "id_role")
+	@JoinColumn(name = "id_role")
 	private Role role;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Kid> kids;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Post> posts;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Follow> follows;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Workshop> workshops;
-	@ManyToMany(cascade= CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Event> events;
-	@ManyToMany(cascade= CascadeType.ALL)
-	private Set<Meeting> meetings; 
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Meeting> meetings;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Claim> claims;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "sender")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
 	private Set<Message> messagesS;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "receiver")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver", fetch = FetchType.EAGER)
 	private Set<Message> messagesR;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Bus> bus;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Answer> answers;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Topic> topics;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "director", fetch = FetchType.EAGER)
 	private Set<Consultation> consultations;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch=FetchType.LAZY)
-	private Set<Consultation> chats;
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", fetch = FetchType.EAGER)
+	private Set<Consultation> doctorConsultations;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	private Set<Chat> chats;
+
 	public User() {
 		super();
 	}
 
-	
-	public User(int idUser, String firstName, String lastName) {
+	public User(int idUser, String firstName, String lastName, int telNum, Set<Consultation> doctorConsultations) {
 		super();
 		this.idUser = idUser;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.telNum = telNum;
+		this.doctorConsultations = doctorConsultations;
 	}
-
+	
+	/*public User(int idUser, String firstName, String lastName, int telNum, Date birthdate, String address, Role role,
+			Set<Consultation> doctorconsultations) {
+		super();
+		this.idUser = idUser;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.telNum = telNum;
+		this.address = address;
+		this.role = role;
+		Doctorconsultations = doctorconsultations;
+	}*/
 
 	public int getIdUser() {
 		return idUser;
@@ -293,7 +306,6 @@ public class User implements Serializable{
 		this.topics = topics;
 	}
 
-
 	public Set<Consultation> getConsultations() {
 		return consultations;
 	}
@@ -302,15 +314,21 @@ public class User implements Serializable{
 		this.consultations = consultations;
 	}
 
-	public Set<Consultation> getChats() {
+	public Set<Chat> getChats() {
 		return chats;
 	}
 
-
-	public void setChats(Set<Consultation> chats) {
+	public void setChats(Set<Chat> chats) {
 		this.chats = chats;
 	}
 
+	public Set<Consultation> getDoctorConsultations() {
+		return doctorConsultations;
+	}
+
+	public void setDoctorConsultations(Set<Consultation> doctorConsultations) {
+		this.doctorConsultations = doctorConsultations;
+	}
 
 	@Override
 	public String toString() {
@@ -318,8 +336,10 @@ public class User implements Serializable{
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", bus=" + bus + ", answers="
-				+ answers + ", topics=" + topics + ", consultations=" + consultations + "]";
+				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messagesS=" + messagesS
+				+ ", messagesR=" + messagesR + ", bus=" + bus + ", answers=" + answers + ", topics=" + topics
+				+ ", consultations=" + consultations + ", Doctorconsultations=" + doctorConsultations + ", chats="
+				+ chats + "]";
 	}
 
 }
