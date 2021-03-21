@@ -1,62 +1,66 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 @Entity
-@Table(name= "claim")
-public class Claim implements Serializable{
-	
+@Table(name = "claim")
+public class Claim implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name= "id")
-	private int idClaim;
-	@Column(name= "description")
+
+	@EmbeddedId
+	private ClaimPK claimpk;
+	@Column(name = "description")
 	private String description;
-	@Column(name= "category")
+	@Column(name = "category")
 	@Enumerated(EnumType.STRING)
 	private ClaimCategory category;
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name= "id_user")
+	@JoinColumn(name = "idUser", referencedColumnName = "id", insertable = false, updatable = false)
+
 	private User user;
-	@JsonIgnore
+
 	@ManyToOne
-	@JoinColumn(name= "id_kindergarden")
+	@JoinColumn(name = "idKindergarden", referencedColumnName = "id", insertable = false, updatable = false)
 	private Kindergarden kindergarden;
-	
-	@Column(name = "createdAt")
-    private LocalDateTime createdAt;
-	
-	@Column(name = "updatedAt")
-    private LocalDateTime updatedAt;
-	
+
 	public Claim() {
 		super();
 	}
 
-	public int getIdClaim() {
-		return idClaim;
+	public Claim(ClaimPK claimpk, String description, ClaimCategory category, User user, Kindergarden kindergarden) {
+		super();
+		this.claimpk = claimpk;
+		this.description = description;
+		this.category = category;
+		this.user = user;
+		this.kindergarden = kindergarden;
 	}
 
-	public void setIdClaim(int idClaim) {
-		this.idClaim = idClaim;
+	public Claim(ClaimCategory category, String description, Kindergarden kg, User u) {
+		super();
+
+		this.description = description;
+		this.category = category;
+		this.user = u;
+		this.kindergarden = kg;
+	}
+
+	public ClaimPK getClaimpk() {
+		return claimpk;
+	}
+
+	public void setClaimpk(ClaimPK claimpk) {
+		this.claimpk = claimpk;
 	}
 
 	public String getDescription() {
@@ -82,9 +86,6 @@ public class Claim implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
 
 	public Kindergarden getKindergarden() {
 		return kindergarden;
@@ -94,33 +95,10 @@ public class Claim implements Serializable{
 		this.kindergarden = kindergarden;
 	}
 
-	
-	
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
 	@Override
 	public String toString() {
-		return "Claim [idClaim=" + idClaim + ", description=" + description + ", category=" + category + ", user="
-				+ user + ", kindergarden=" + kindergarden + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ "]";
+		return "Claim [claimpk=" + claimpk + ", description=" + description + ", category=" + category + ", user="
+				+ user + ", kindergarden=" + kindergarden + "]";
 	}
 
-	 
-	
-	
-	
 }

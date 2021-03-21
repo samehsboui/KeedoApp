@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name= "follow")
 public class Follow implements Serializable{
@@ -23,18 +21,10 @@ public class Follow implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idFollow;
-	
-	
-	
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name= "following")
-	private User following;
+	@JoinColumn(name= "id_user")
+	private User user;
 	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name= "follower")
-	private User follower;
 	public Follow() {
 		super();
 	}
@@ -47,31 +37,17 @@ public class Follow implements Serializable{
 		this.idFollow = idFollow;
 	}
 
-	public User getFollowing() {
-		return following;
+	public User getUser() {
+		return user;
 	}
 
-	public void setFollowing(User following) {
-		this.following = following;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public User getFollower() {
-		return follower;
+	@Override
+	public String toString() {
+		return "Follow [idFollow=" + idFollow + ", user=" + user + "]";
 	}
-
-	public void setFollower(User follower) {
-		this.follower = follower;
-	}
-
-
-	
-
-	
-
-	
-
-	
-	
-	
 	
 }
