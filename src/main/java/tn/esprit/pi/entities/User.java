@@ -91,6 +91,9 @@ public class User implements Serializable{
 	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
 	private Set<Topic> topics;
+	//added by amal
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private Set<Report> reports;
 	boolean valid;
     @Column(name = "accountLocked", columnDefinition = "boolean default false")
     private boolean accountNonLocked;
@@ -333,6 +336,14 @@ public class User implements Serializable{
 		this.resettoken = resettoken;
 	}
 
+	public Set<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(Set<Report> reports) {
+		this.reports = reports;
+	}
+
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
@@ -340,7 +351,11 @@ public class User implements Serializable{
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
 				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + "]";
+				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + ", reports=" + reports + ", valid="
+				+ valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt + ", lockTime="
+				+ lockTime + ", resettoken=" + resettoken + "]";
 	}
+
+
 	
 }

@@ -1,18 +1,18 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name= "workshop")
@@ -24,16 +24,17 @@ public class Workshop implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idWorkshop;
-	@Column(name="")
-	private String category;
 	@Column(name="content")
 	private String content;
-	@Temporal(TemporalType.DATE)
-	@Column(name="createDate")
-	private Date createDate;
-	@Temporal(TemporalType.DATE)
-	@Column(name="modifyDate")
-	private Date modifyDate;
+	@Column(name="pdffile")
+	private String pdffile;
+	@Column(name= "createDate")
+	private LocalDateTime createDate;
+	@Column(name= "modifyDate")
+	private LocalDateTime modifyDate;
+	@Enumerated(EnumType.STRING)              
+	private WorkshopCategory category;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
@@ -50,14 +51,6 @@ public class Workshop implements Serializable{
 		this.idWorkshop = idWorkshop;
 	}
 
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
 	public String getContent() {
 		return content;
 	}
@@ -66,20 +59,36 @@ public class Workshop implements Serializable{
 		this.content = content;
 	}
 
-	public Date getCreateDate() {
+	public String getPdffile() {
+		return pdffile;
+	}
+
+	public void setPdffile(String pdffile) {
+		this.pdffile = pdffile;
+	}
+
+	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
 
-	public Date getModifyDate() {
+	public LocalDateTime getModifyDate() {
 		return modifyDate;
 	}
 
-	public void setModifyDate(Date modifyDate) {
+	public void setModifyDate(LocalDateTime modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+
+	public WorkshopCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(WorkshopCategory category) {
+		this.category = category;
 	}
 
 	public User getUser() {
@@ -87,13 +96,13 @@ public class Workshop implements Serializable{
 	}
 
 	public void setUser(User user) {
-		this.user= user;
+		this.user = user;
 	}
 
 	@Override
 	public String toString() {
-		return "Workshop [idWorkshop=" + idWorkshop + ", category=" + category + ", content=" + content
-				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", user=" + user + "]";
+		return "Workshop [idWorkshop=" + idWorkshop + ", content=" + content + ", pdffile=" + pdffile + ", createDate="
+				+ createDate + ", modifyDate=" + modifyDate + ", category=" + category + ", user=" + user + "]";
 	}
-	
+
 }
