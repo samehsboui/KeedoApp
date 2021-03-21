@@ -14,38 +14,48 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name= "follow")
-public class Follow implements Serializable{
+@Table(name= "follow_requests")
+public class FollowRequest  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
-	private int idFollow;
+	private int idFollowRequest;
 	
 	
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name= "following")
+	@JoinColumn(name= "following",nullable = false)
 	private User following;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name= "follower")
+	@JoinColumn(name= "follower",nullable = false)
 	private User follower;
-	public Follow() {
+	
+	
+	
+
+	public FollowRequest() {
 		super();
 	}
 
-	public int getIdFollow() {
-		return idFollow;
+	
+
+	public int getIdFollowRequest() {
+		return idFollowRequest;
 	}
 
-	public void setIdFollow(int idFollow) {
-		this.idFollow = idFollow;
+
+
+	public void setIdFollowRequest(int idFollowRequest) {
+		this.idFollowRequest = idFollowRequest;
 	}
+
+
 
 	public User getFollowing() {
 		return following;
@@ -64,14 +74,15 @@ public class Follow implements Serializable{
 	}
 
 
-	
+
+
 
 	
 
-	
+
 
 	
 	
 	
-	
+
 }

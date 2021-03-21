@@ -88,7 +88,15 @@
     <groupId>com.amazonaws</groupId>
     <artifactId>aws-java-sdk-rekognition</artifactId>
     <version>1.11.974</version>
-</dependency>		
+</dependency>
+
+<dependency>
+   <groupId>com.twilio.sdk</groupId>
+   <artifactId>twilio</artifactId>
+   <version>7.16.1</version>
+</dependency>
+	</dependencies>
+		
 	</dependencies>
 
 	<build>
