@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Daycare;
+import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.repositories.DaycareRepository;
 import tn.esprit.pi.repositories.UserRepository;
 
@@ -16,27 +17,34 @@ public class DaycareService implements IDaycareService {
 	UserRepository userRepository;
 	@Autowired
 	DaycareRepository daycareRepository;
-	
+
 	@Override
-	public Daycare addDaycare(Daycare daycare) {
-		// Set periode
-		long period = Math.round((daycare.getDateEnd().getTime()-daycare.getDateBegin().getTime()) / (double) 86400000);
-		daycare.setPeriode(period);
-		// Set total price
-		if(period < 30){
-			daycare.setPrice_T(daycare.getPrice_M());
-		} else if (period> 30 && period<60){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.05));
-		} else if (period> 60 && period<90){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.1));
-		} else if (period> 90 && period<120){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.15));
+	public Retour<Daycare> addDaycare(Daycare daycare) {
+		Retour<Daycare> rt = new Retour<>();
+		if (daycare.getDateEnd().before(daycare.getDateBegin())) {
+			rt.setStringValue("Can't add daycare because date begin is after the date end");
 		} else {
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.15));
+			// Set periode
+			long period = Math
+					.round((daycare.getDateEnd().getTime() - daycare.getDateBegin().getTime()) / (double) 86400000);
+			daycare.setPeriode(period);
+			// Set total price
+			if (period < 30) {
+				daycare.setPrice_T(daycare.getPrice_M());
+			} else if (period > 30 && period < 60) {
+				daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.05));
+			} else if (period > 60 && period < 90) {
+				daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.1));
+			} else if (period > 90 && period < 120) {
+				daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.15));
+			} else {
+				daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.15));
+			}
+			daycareRepository.save(daycare);
+			rt.setStringValue("Daycare added successfully");
+			rt.getObjectValue().add(daycare);
 		}
-		
-		daycareRepository.save(daycare);
-		return daycare;
+		return rt;
 	}
 
 	@Override
@@ -53,21 +61,22 @@ public class DaycareService implements IDaycareService {
 		d.setPrice_M(daycare.getPrice_M());
 		d.setNbInscrit(daycare.getNbInscrit());
 		// Set periode
-		long period = Math.round((daycare.getDateEnd().getTime()-daycare.getDateBegin().getTime()) / (double) 86400000);
+		long period = Math
+				.round((daycare.getDateEnd().getTime() - daycare.getDateBegin().getTime()) / (double) 86400000);
 		d.setPeriode(period);
 		// Set total price
-		if(period < 30){
+		if (period < 30) {
 			daycare.setPrice_T(daycare.getPrice_M());
-		} else if (period> 30 && period<60){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.05));
-		} else if (period> 60 && period<90){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.1));
-		} else if (period> 90 && period<120){
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.15));
+		} else if (period > 30 && period < 60) {
+			daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.05));
+		} else if (period > 60 && period < 90) {
+			daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.1));
+		} else if (period > 90 && period < 120) {
+			daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.15));
 		} else {
-			daycare.setPrice_T(daycare.getPrice_M()-(daycare.getPrice_M()*0.15));
+			daycare.setPrice_T(daycare.getPrice_M() - (daycare.getPrice_M() * 0.15));
 		}
-		
+
 		daycareRepository.save(d);
 		return d;
 	}
@@ -97,4 +106,14 @@ public class DaycareService implements IDaycareService {
 		return daycareRepository.displayDaycareByDate();
 	}
 
+	@Override
+	public Double daycareRevenuePerYear(String year) {
+		Double total = 0.0;
+		List<Daycare> list = daycareRepository.daycareRevenuePerYear(year);
+
+		for (Daycare daycare : list) {
+			total += daycare.getNbInscrit() * daycare.getPrice_T();
+		}
+		return total;
+	}
 }

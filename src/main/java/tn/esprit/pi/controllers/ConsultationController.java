@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import tn.esprit.pi.entities.Consultation;
-import tn.esprit.pi.entities.UserAndString;
+import tn.esprit.pi.entities.Retour;
+import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.UserRepository;
 import tn.esprit.pi.services.ConsultationService;
@@ -38,7 +39,7 @@ public class ConsultationController {
 	ConsultationRepository consultationRepository;
 
 	@PostMapping("consult/add/{idK}/{idA}/{idD}")
-	public UserAndString affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK,
+	public Retour<User> affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK,
 			@PathVariable("idA") int idA, @PathVariable("idD") int idD) {
 		return consultationService.affectConsultationToKid(consultation, idK, idA, idD);
 	}
@@ -57,7 +58,7 @@ public class ConsultationController {
 	public List<Consultation> displayAllConsultations() {
 		return consultationService.displayAllConsultations();
 	}
-	
+
 	@GetMapping("consult/getAll/ToDay")
 	public List<Consultation> displayConsultationsToDay() {
 		return consultationService.displayConsultationsToDay();
@@ -73,19 +74,19 @@ public class ConsultationController {
 		return consultationService.displayConsultationsByDoctor(idD);
 	}
 
-	//STATIC
-	
+	// STATIC
+
 	@GetMapping("consult/static/doctor")
-	public Map<String, Integer> percentageParticipationByDoctor(){
+	public Map<String, Integer> percentageParticipationByDoctor() {
 		return consultationService.percentageParticipationByDoctor();
 	}
 
 	@GetMapping("consult/static/nbC/{m}")
-	public int getPerMonth(@PathVariable("m") String m){
-		List<Consultation> consult = consultationRepository.findByMatchMonthAndMatchDay("-"+m+"-");
+	public int getPerMonth(@PathVariable("m") String m) {
+		List<Consultation> consult = consultationRepository.findByMatchMonthAndMatchDay("-" + m + "-");
 		return consult.size();
 	}
-	
+
 	// To login
 	@RequestMapping(value = "/login/google", method = RequestMethod.GET)
 	public RedirectView googleConnectionStatus(HttpServletRequest request) throws Exception {
@@ -97,6 +98,5 @@ public class ConsultationController {
 	public String authenticateCal(@RequestParam(value = "code") String code) {
 		return googleCalService.addEvent(code);
 	}
-	
-	
+
 }

@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tn.esprit.pi.entities.Role;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 

@@ -14,12 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Daycare implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -32,7 +30,7 @@ public class Daycare implements Serializable{
 	private Double price_M;
 	@Column(name= "price_T")
 	private Double price_T;
-	@Column(name= "periode")
+	@Transient
 	private long periode;
 	@Temporal(TemporalType.DATE)
 	@Column(name= "dateBegin")

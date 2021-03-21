@@ -28,4 +28,8 @@ public interface KidRepository extends CrudRepository<Kid, Integer> {
 	@Modifying
 	@Query("DELETE from Kid k where k.id= :id")
 	void deleteKidById(@Param("id") int id);
+	
+	/*@Query(value="SELECT k.birth_date, COUNT(k.birth_date) FROM Kid k GROUP BY k.birth_date ORDER BY COUNT(e.label) DESC", nativeQuery= true)
+	int nbrKidPerAge();*/
+	
 }

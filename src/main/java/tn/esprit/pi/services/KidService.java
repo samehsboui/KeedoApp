@@ -21,7 +21,7 @@ public class KidService implements IKidService {
 	UserRepository userRepository;
 	@Autowired
 	DaycareRepository daycarRepository;
-	
+
 	@Override
 	public Kid addKid(Kid kid, int idU) {
 		User user = userRepository.findById(idU).get();
@@ -72,21 +72,21 @@ public class KidService implements IKidService {
 	public Kid affectKidToDaycare(int idK, int idD) {
 		Daycare daycare = daycarRepository.findById(idD).get();
 		Kid kid = kidRepository.findById(idK).get();
-		//Test if kid has already a daycare
+		// Test if kid has already a daycare
 		Daycare d = kid.getDaycare();
-		if(d != null){
-			d.setNbInscrit(d.getNbInscrit()-1);
+		if (d != null) {
+			d.setNbInscrit(d.getNbInscrit() - 1);
 			daycarRepository.save(d);
 		}
-		if(daycare.getNbInscrit() < daycare.getCapacity()){
+		if (daycare.getNbInscrit() < daycare.getCapacity()) {
 			kid.setDaycare(daycare);
-			daycare.setNbInscrit(daycare.getNbInscrit()+1);
+			daycare.setNbInscrit(daycare.getNbInscrit() + 1);
 			kidRepository.save(kid);
 			daycarRepository.save(daycare);
-		}else{
+		} else {
 			System.out.println("Daycare saturée");
 		}
-		
+
 		return kid;
 	}
 
@@ -95,12 +95,16 @@ public class KidService implements IKidService {
 		Daycare daycare = daycarRepository.findById(idD).get();
 		Kid kid = kidRepository.findById(idK).get();
 		kid.setDaycare(null);
-		daycare.setNbInscrit(daycare.getNbInscrit()-1);
+		daycare.setNbInscrit(daycare.getNbInscrit() - 1);
 		kidRepository.save(kid);
 		daycarRepository.save(daycare);
-		
+
 		return kid;
 	}
-	
+
+	@Override
+	public int nbrKid() {
+		return (int) kidRepository.count();
+	}
 
 }

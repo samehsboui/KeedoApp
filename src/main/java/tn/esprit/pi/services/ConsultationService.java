@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Consultation;
 import tn.esprit.pi.entities.Kid;
+import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
-import tn.esprit.pi.entities.UserAndString;
 import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.KidRepository;
 import tn.esprit.pi.repositories.UserRepository;
@@ -29,15 +29,13 @@ public class ConsultationService implements IConsultationService {
 	UserRepository userRepository;
 
 	public List<User> getAllUsers() {
-		UserAndString ret = new UserAndString();
 		List<User> users = (List<User>) userRepository.findAll();
-		ret.setUserValue(users);
 		return users;
 	}
 
 	@Override
-	public UserAndString affectConsultationToKid(Consultation consultation, int idK, int idA, int idD) {
-		UserAndString ret = new UserAndString();
+	public Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idA, int idD) {
+		Retour<User> ret = new Retour<User>();
 		if (consultation.getDateConsultation().before(new Date(System.currentTimeMillis()))) {
 			ret.setStringValue("Wrong date!!!");
 		} else {
@@ -55,8 +53,8 @@ public class ConsultationService implements IConsultationService {
 			if (consults.isEmpty()) {
 				consultation.setDoctor(doctor);
 				consultationRepository.save(consultation);
-				ret.setStringValue(
-						"Consultation added succefullt to doctor " + doctor.getFirstName()+" " + doctor.getLastName());
+				ret.setStringValue("Consultation added successfully to doctor " + doctor.getFirstName() + " "
+						+ doctor.getLastName());
 			} else {
 				List<User> users = getAllUsers();
 				for (User user : users) {
@@ -75,8 +73,8 @@ public class ConsultationService implements IConsultationService {
 						}
 					}
 				}
-				ret.setStringValue("Here are the availables doctors!");
-				ret.setUserValue(doctors);
+				ret.setStringValue("Sorry the doctor is not available!! Here are the availables doctors!");
+				ret.setObjectValue(doctors);
 			}
 		}
 		return ret;
