@@ -24,5 +24,11 @@ public interface IUserservice {
 	void resetFailedAttempts(String email);
 	void lock(User user);
 	public User findUserByResetToken(String token);
+	//dhekra
+	User findById(int id);
+
+	User findBymail(String mail);
+
+	List<User> findAllByOrderByIdAsc();
 
 }

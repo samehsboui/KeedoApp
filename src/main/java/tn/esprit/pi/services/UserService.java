@@ -142,4 +142,25 @@ public class UserService implements IUserservice {
 		// TODO Auto-generated method stub
 		return userRepository.findUserByresettoken(login);
 	}
+	
+	
+	
+	//dhekra
+		@Override
+		public User findById(int id) {
+			return userRepository.findById(id).get();
+		}
+
+		@Override
+		public User findBymail(String mail) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public List<User> findAllByOrderByIdAsc() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	
 }
