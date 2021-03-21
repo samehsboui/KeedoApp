@@ -1,13 +1,19 @@
 package tn.esprit.pi.controllers;
 
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +22,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import tn.esprit.pi.entities.Book;
 import tn.esprit.pi.entities.EmpruntBook;
 import tn.esprit.pi.entities.EmpruntCreation;
+import tn.esprit.pi.entities.EmpruntPK;
+import tn.esprit.pi.entities.Reservation;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.BookRepository;
 import tn.esprit.pi.repositories.EmpruntBookRepository;
 import tn.esprit.pi.repositories.UserRepository;
+
+
 import tn.esprit.pi.services.EmpruntBookService;
 import tn.esprit.pi.services.UserService;
 
@@ -42,8 +53,6 @@ public class EmpruntController {
 
 	@Autowired
 	private BookRepository bookRepository;
-
-	
 
 	@Autowired
 	private EmpruntBookService empruntBookService;
@@ -185,7 +194,31 @@ public class EmpruntController {
 		}
 		return livreRendu;
 	}
+
 	
+	// http://localhost:9293/SpringMVC/servlet/emprunt/api/prolongerEmprunt/2
+	@PreAuthorize("hasAuthority('Parent')")
+	@RequestMapping(value = "/prolongEmprunt/{id}", method = RequestMethod.GET)
+	public EmpruntBook prolongerEmprunt(@PathVariable int id) {
+
+		EmpruntBook empruntAProlonger = empruntBookService.findById(id);
+		
+
+
+		empruntAProlonger.setProlonge(true);
+		// ajout de 28 jours à dateFin
+		Date dateFin = empruntAProlonger.getFinDate();
+		Calendar c = Calendar.getInstance();
+		c.setTime(dateFin);
+		c.add(Calendar.DATE, 28);
+		Date dateFinBis = c.getTime();
+
+		empruntAProlonger.setFinDate(dateFinBis);
+		empruntBookRepository.save(empruntAProlonger);
+		logger.info("[REST] L'emprunt n° " + empruntAProlonger.getIdEmprunt() + " a bien été prolongé !");
+		return empruntAProlonger;
+
+	}
 
 	@PreAuthorize("hasAuthority('Admin')")
 	// batch qui va nettoyer les emprnts échues :
