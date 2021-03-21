@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 
 import java.util.List;
@@ -31,6 +32,13 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     @Modifying
     public void updateFailedAttempts(int failAttempts, String login);
 	User findUserByresettoken(String login);
+	
+	// YASMIN
+	@Query("SELECT u FROM User u where u.idUser= :id ")
+	User findForChatById(@Param("id") int id);
+	
+	@Query("Select u FROM User u where u.role.roleType= :role")
+	List<User> findAllByRole(@Param("role") RoleType role);
 }
 
 

@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name= "message")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Message implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -23,14 +25,23 @@ public class Message implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idMessage;
-	@Column(name= "type")
-	@Enumerated(EnumType.STRING)
-	private MessageType type;
-	@Column(name= "content")
-    private String content;
+	
+	//@Column(name= "type")
+	//@Enumerated(EnumType.STRING)
+	//private MessageType type;
+	//@Column(name= "content")
+    //private String content;
+	@Column(name= "message")
+	private String message;
+	@Column(name= "fromLogin")
+    private String fromLogin;
+    
 	@ManyToOne
-	@JoinColumn(name= "id_user")
-	private User user;
+	@JoinColumn(name= "id_sender")
+	private User sender;
+	@ManyToOne
+	@JoinColumn(name= "id_receiver")
+	private User receiver;
 	
 	public Message() {
 		super();
@@ -44,7 +55,7 @@ public class Message implements Serializable{
 		this.idMessage = idMessage;
 	}
 
-	public MessageType getType() {
+	/*public MessageType getType() {
 		return type;
 	}
 
@@ -58,19 +69,39 @@ public class Message implements Serializable{
 
 	public void setContent(String content) {
 		this.content = content;
+	}*/
+
+	
+	public User getSender() {
+		return sender;
 	}
 
-	public User getUser() {
-		return user;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	@Override
-	public String toString() {
-		return "Message [idMessage=" + idMessage + ", type=" + type + ", content=" + content + ", user=" + user + "]";
+	public String getFromLogin() {
+		return fromLogin;
+	}
+
+	public void setFromLogin(String fromLogin) {
+		this.fromLogin = fromLogin;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	public User getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 	
 }

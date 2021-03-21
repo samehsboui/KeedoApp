@@ -1,26 +1,29 @@
-2021-02-20 00:34:17.928  INFO 14404 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_60 on DESKTOP-BU9ET8T with PID 14404 (C:\Products\workspace-sts\KeedoApp\target\classes started by User in C:\Products\workspace-sts\KeedoApp)
-2021-02-20 00:34:17.981  INFO 14404 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
-2021-02-20 00:34:26.984  INFO 14404 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-02-20 00:34:26.988  INFO 14404 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
-2021-02-20 00:34:27.424  INFO 14404 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
-2021-02-20 00:34:28.997  INFO 14404 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2021-02-20 00:34:29.675  INFO 14404 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
-2021-02-20 00:34:32.011  INFO 14404 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2021-02-20 00:34:35.454  INFO 14404 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2021-02-20 00:36:44.530  INFO 14404 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2021-02-20 00:36:45.730  WARN 14404 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2021-02-20 00:37:15.215  INFO 14404 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 180.792 seconds (JVM running for 188.438)
-2021-02-20 19:04:44.769  INFO 3260 --- [main] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_60 on DESKTOP-BU9ET8T with PID 3260 (C:\Products\workspace-sts\KeedoApp\target\classes started by User in C:\Products\workspace-sts\KeedoApp)
-2021-02-20 19:04:44.772  INFO 3260 --- [main] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
-2021-02-20 19:04:51.623  INFO 3260 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-02-20 19:04:51.624  INFO 3260 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
-2021-02-20 19:04:52.022  INFO 3260 --- [main] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
-2021-02-20 19:04:53.667  INFO 3260 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2021-02-20 19:04:54.367  INFO 3260 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
-2021-02-20 19:04:55.984  INFO 3260 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2021-02-20 19:04:58.777  INFO 3260 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-2021-02-20 19:05:06.077  WARN 3260 --- [main] org.hibernate.mapping.RootClass          : HHH000038: Composite-id class does not override equals(): tn.esprit.pi.entities.ClaimPK
-2021-02-20 19:05:06.080  WARN 3260 --- [main] org.hibernate.mapping.RootClass          : HHH000039: Composite-id class does not override hashCode(): tn.esprit.pi.entities.ClaimPK
-2021-02-20 19:05:28.934  INFO 3260 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2021-02-20 19:05:29.206  WARN 3260 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2021-02-20 19:05:33.371  INFO 3260 --- [main] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 51.583 seconds (JVM running for 60.292)
+2021-03-22 00:00:00.565  INFO 16324 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 00:00:00.577  INFO 16324 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-22 00:00:00.931  INFO 16324 --- [restartedMain] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-22 00:00:01.413  WARN 16324 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 00:00:02.174  INFO 16324 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 00:00:02.288  INFO 16324 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-22 00:00:02.688  INFO 16324 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 00:00:03.515  INFO 16324 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-22 00:00:04.867  WARN 16324 --- [restartedMain] org.hibernate.mapping.RootClass          : HHH000038: Composite-id class does not override equals(): tn.esprit.pi.entities.ClaimPK
+2021-03-22 00:00:04.868  WARN 16324 --- [restartedMain] org.hibernate.mapping.RootClass          : HHH000039: Composite-id class does not override hashCode(): tn.esprit.pi.entities.ClaimPK
+2021-03-22 00:00:07.092  INFO 16324 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 00:00:15.104  INFO 16324 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 19.953 seconds (JVM running for 21.41)
+2021-03-22 00:00:23.556  INFO 16324 --- [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 00:00:23.932 ERROR 16324 --- [http-nio-8080-exec-2] t.e.pi.security.jwt.AuthEntryPointJwt    : Unauthorized error: Full authentication is required to access this resource
+2021-03-22 00:04:26.530  INFO 18172 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_60 on DESKTOP-BU9ET8T with PID 18172 (C:\Products\workspace-sts\KeedoApp\target\classes started by User in C:\Products\workspace-sts\KeedoApp)
+2021-03-22 00:04:26.535  INFO 18172 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-22 00:04:30.152  INFO 18172 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 00:04:30.153  INFO 18172 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-22 00:04:30.375  INFO 18172 --- [restartedMain] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-22 00:04:30.584  WARN 18172 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 00:04:30.926  INFO 18172 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 00:04:31.049  INFO 18172 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-22 00:04:31.321  INFO 18172 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 00:04:31.927  INFO 18172 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-22 00:04:32.659  WARN 18172 --- [restartedMain] org.hibernate.mapping.RootClass          : HHH000038: Composite-id class does not override equals(): tn.esprit.pi.entities.ClaimPK
+2021-03-22 00:04:32.659  WARN 18172 --- [restartedMain] org.hibernate.mapping.RootClass          : HHH000039: Composite-id class does not override hashCode(): tn.esprit.pi.entities.ClaimPK
+2021-03-22 00:04:33.891  INFO 18172 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 00:04:37.926  INFO 18172 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 12.114 seconds (JVM running for 13.728)
+2021-03-22 00:04:54.542  INFO 18172 --- [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'

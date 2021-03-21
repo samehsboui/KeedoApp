@@ -3,8 +3,11 @@ package tn.esprit.pi.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import tn.esprit.pi.entities.User;
+import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.services.IUserservice;
+import tn.esprit.pi.storage.UserStorage;
 
 @RestController
 @RequestMapping("/User/Service")
+@CrossOrigin
 public class UserController {
 
 	@Autowired
@@ -28,6 +34,9 @@ public class UserController {
 	@Autowired
 	PasswordEncoder encoder;
 
+	@Autowired
+	IUserRepository iuserRepository;
+	
 	@JsonBackReference("")
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@GetMapping("/findall")
@@ -99,4 +108,24 @@ public class UserController {
 	public List<String> findUserDisabled() throws Exception {
 		return iuserservice.getUsersFromDisabled();
 	}
+	
+	//YASMIN BEGIN
+	@GetMapping("/registration/{idU}")
+    public ResponseEntity<String> register(@PathVariable int idU) {
+		User user = iuserRepository.findForChatById(idU);
+        System.out.println("handling register user request: " + user);
+        try {
+            UserStorage.getInstance().setUser(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("user connected: "+user);
+    }
+
+    @GetMapping("/fetchAllUsers")
+    public List<User> fetchAll() {
+        return UserStorage.getInstance().getUsers();
+    }
+    // YASMIN END
 }

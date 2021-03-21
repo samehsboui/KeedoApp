@@ -2,22 +2,24 @@ package tn.esprit.pi.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name= "Consultation")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Consultation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,14 +33,32 @@ public class Consultation implements Serializable {
 	private Date dateConsultation;
 	@Temporal(TemporalType.TIME)
 	@Column(name="time")
-	private Date time;
-	@Column(name="doctorName")
-	private String doctorName;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "consultation", fetch= FetchType.EAGER)
-	private Set<Kid> kids;
+	private Date  time;
+	@ManyToOne
+	@JoinColumn(name="id_director")
+	private User director;
+	@ManyToOne
+	@JoinColumn(name="id_doctor")
+	private User doctor;
+	@ManyToOne
+	@JoinColumn(name= "id_kid")
+	private Kid kid;
 	
 	public Consultation() {
 		super();
+	}
+
+	public Consultation(Date dateConsultation, Date time) {
+		super();
+		this.dateConsultation = dateConsultation;
+		this.time = time;
+	}
+
+	public Consultation(int idConsultation, Date dateConsultation, Date time) {
+		super();
+		this.idConsultation = idConsultation;
+		this.dateConsultation = dateConsultation;
+		this.time = time;
 	}
 
 	public int getIdConsultation() {
@@ -61,30 +81,39 @@ public class Consultation implements Serializable {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(Date  time) {
 		this.time = time;
 	}
 
-	public String getDoctorName() {
-		return doctorName;
+	public User getDirector() {
+		return director;
 	}
 
-	public void setDoctorName(String doctorName) {
-		this.doctorName = doctorName;
+	public void setDirector(User director) {
+		this.director = director;
 	}
 
-	public Set<Kid> getKids() {
-		return kids;
+	public User getDoctor() {
+		return doctor;
 	}
 
-	public void setKids(Set<Kid> kids) {
-		this.kids = kids;
+	public void setDoctor(User doctor) {
+		this.doctor = doctor;
+	}
+
+	public Kid getKid() {
+		return kid;
+	}
+
+	public void setKid(Kid kid) {
+		this.kid = kid;
 	}
 
 	@Override
 	public String toString() {
 		return "Consultation [idConsultation=" + idConsultation + ", dateConsultation=" + dateConsultation + ", time="
-				+ time + ", doctorName=" + doctorName + ", kids=" + kids + "]";
+				+ time + ", director=" + director + ", doctor=" + doctor + ", kid=" + kid + "]";
 	}
-	
+
+
 }

@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import tn.esprit.pi.entities.Role;
-import tn.esprit.pi.entities.User;
 import tn.esprit.pi.services.IRoleservice;
-import tn.esprit.pi.services.IUserservice;
 
 @RestController
 public class RoleController {
@@ -30,13 +28,13 @@ public class RoleController {
 	public List<Role> getAllUsers() {
 		return iroleservice.getAllRoles();
 	}
-	
+
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@GetMapping("/Role/rolebyid/{idRole}")
 	public Role getUserById(@PathVariable("idRole") int idRole) throws Exception {
 		return iroleservice.findRoleById(idRole);
 	}
-	
+
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@PostMapping("/Role/createRole")
 	@ResponseBody
@@ -50,7 +48,7 @@ public class RoleController {
 	public Role updateUser(@RequestBody Role role) throws Exception {
 		return iroleservice.updateRole(role);
 	}
-	
+
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@DeleteMapping("/Role/deleteRoleById/{roleId}")
 	public void deleteRoleById(@PathVariable("roleId") int roleId) throws Exception {

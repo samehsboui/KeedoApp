@@ -95,7 +95,34 @@
    <artifactId>twilio</artifactId>
    <version>7.16.1</version>
 </dependency>
-	</dependencies>
+	<!-- YASMIN BEGIN -->
+		<!-- Websocket -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<!-- Search -->
+
+		<!-- RabbitMQ Starter Dependency (Not required if you're using the simple 
+			in-memory broker for STOMP) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+		<!-- Following dependency is required for Full Featured STOMP Broker Relay -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+	<!-- YASMIN END -->
 		
 	</dependencies>
 

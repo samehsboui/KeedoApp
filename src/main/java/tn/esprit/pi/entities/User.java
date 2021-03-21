@@ -19,93 +19,104 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name= "user")
-public class User implements Serializable{
-	
-	
+@Table(name = "user")
+public class User implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
-	@Column(name= "id")
-	private int idUser;	
-	@Column(name= "firstName")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private int idUser;
+	@Column(name = "firstName")
 	private String firstName;
-	@Column(name= "lastName")
+	@Column(name = "lastName")
 	private String lastName;
-	@Column(name="telNum")
+	@Column(name = "telNum")
 	private int telNum;
 	@Temporal(TemporalType.DATE)
-	@Column(name="birthdate")
+	@Column(name = "birthdate")
 	private Date birthdate;
-	@Column(name="address")
+	@Column(name = "address")
 	private String address;
-	@Column(name="mail")
+	@Column(name = "mail")
 	private String mail;
-	@Column(name="login")
+	@Column(name = "login")
 	private String login;
-	@Column(name="password")
+	@Column(name = "password")
 	private String password;
-	@Column(name="delegate")
+	@Column(name = "delegate")
 	private boolean delegate;
-	@Column(name="logo")
+	@Column(name = "logo")
 	private byte[] logo;
-	@ManyToOne(cascade= CascadeType.DETACH)
-    @JoinColumn(name = "role")
+	@ManyToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "role")
 	private Role role;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Kid> kids;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Post> posts;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Follow> follows;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Workshop> workshops;
 	@JsonIgnore
-	@ManyToMany(cascade= CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Event> events;
 	@JsonIgnore
-	@ManyToMany(cascade= CascadeType.ALL)
-	private Set<Meeting> meetings; 
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<Meeting> meetings;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Claim> claims;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
-	private Set<Message> messages;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
+	private Set<Message> messagesS;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver", fetch = FetchType.EAGER)
+	private Set<Message> messagesR;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Bus> bus;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Answer> answers;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Topic> topics;
-	//added by amal
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "director", fetch = FetchType.EAGER)
+	private Set<Consultation> consultations;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", fetch = FetchType.EAGER)
+	private Set<Consultation> doctorConsultations;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	private Set<Chat> chats;
+
+	// added by amal
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Report> reports;
 	boolean valid;
-    @Column(name = "accountLocked", columnDefinition = "boolean default false")
-    private boolean accountNonLocked;
-    @Column(name = "failedAttempt", columnDefinition = "int default 0")
-    private int failedAttempt;
-    @Column(name = "lockTime")
-    private Date lockTime;
-    @Column(name = "resettoken")
-    private String resettoken;
-	
+	@Column(name = "accountLocked", columnDefinition = "boolean default false")
+	private boolean accountNonLocked;
+	@Column(name = "failedAttempt", columnDefinition = "int default 0")
+	private int failedAttempt;
+	@Column(name = "lockTime")
+	private Date lockTime;
+	@Column(name = "resettoken")
+	private String resettoken;
+
 	public User() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getIdUser() {
@@ -260,12 +271,20 @@ public class User implements Serializable{
 		this.claims = claims;
 	}
 
-	public Set<Message> getMessages() {
-		return messages;
+	public Set<Message> getMessagesS() {
+		return messagesS;
 	}
 
-	public void setMessages(Set<Message> messages) {
-		this.messages = messages;
+	public void setMessagesS(Set<Message> messagesS) {
+		this.messagesS = messagesS;
+	}
+
+	public Set<Message> getMessagesR() {
+		return messagesR;
+	}
+
+	public void setMessagesR(Set<Message> messagesR) {
+		this.messagesR = messagesR;
 	}
 
 	public Set<Bus> getBus() {
@@ -291,8 +310,38 @@ public class User implements Serializable{
 	public void setTopics(Set<Topic> topics) {
 		this.topics = topics;
 	}
-	
-	
+
+	public Set<Consultation> getConsultations() {
+		return consultations;
+	}
+
+	public void setConsultations(Set<Consultation> consultations) {
+		this.consultations = consultations;
+	}
+
+	public Set<Consultation> getDoctorConsultations() {
+		return doctorConsultations;
+	}
+
+	public void setDoctorConsultations(Set<Consultation> doctorConsultations) {
+		this.doctorConsultations = doctorConsultations;
+	}
+
+	public Set<Chat> getChats() {
+		return chats;
+	}
+
+	public void setChats(Set<Chat> chats) {
+		this.chats = chats;
+	}
+
+	public Set<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(Set<Report> reports) {
+		this.reports = reports;
+	}
 
 	public boolean isValid() {
 		return valid;
@@ -301,7 +350,7 @@ public class User implements Serializable{
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
-	
+
 	public boolean isAccountNonLocked() {
 		return accountNonLocked;
 	}
@@ -325,8 +374,6 @@ public class User implements Serializable{
 	public void setLockTime(Date lockTime) {
 		this.lockTime = lockTime;
 	}
-	
-	
 
 	public String getResettoken() {
 		return resettoken;
@@ -336,26 +383,17 @@ public class User implements Serializable{
 		this.resettoken = resettoken;
 	}
 
-	public Set<Report> getReports() {
-		return reports;
-	}
-
-	public void setReports(Set<Report> reports) {
-		this.reports = reports;
-	}
-
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
 				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messages=" + messages
-				+ ", bus=" + bus + ", answers=" + answers + ", topics=" + topics + ", reports=" + reports + ", valid="
-				+ valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt + ", lockTime="
-				+ lockTime + ", resettoken=" + resettoken + "]";
+				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messagesS=" + messagesS
+				+ ", messagesR=" + messagesR + ", bus=" + bus + ", answers=" + answers + ", topics=" + topics
+				+ ", consultations=" + consultations + ", doctorConsultations=" + doctorConsultations + ", chats="
+				+ chats + ", reports=" + reports + ", valid=" + valid + ", accountNonLocked=" + accountNonLocked
+				+ ", failedAttempt=" + failedAttempt + ", lockTime=" + lockTime + ", resettoken=" + resettoken + "]";
 	}
 
-
-	
 }
