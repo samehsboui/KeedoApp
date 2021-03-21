@@ -25,33 +25,33 @@ public class RoleController {
 	IRoleservice iroleservice;
 
 	@JsonBackReference("")
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@GetMapping("/Role/findall")
 	public List<Role> getAllUsers() {
 		return iroleservice.getAllRoles();
 	}
 	
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@GetMapping("/Role/rolebyid/{idRole}")
 	public Role getUserById(@PathVariable("idRole") int idRole) throws Exception {
 		return iroleservice.findRoleById(idRole);
 	}
 	
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@PostMapping("/Role/createRole")
 	@ResponseBody
 	public Role createUser(@RequestBody Role user) throws Exception {
 		return iroleservice.createRole(user);
 	}
 
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@PutMapping("/Role/updateRole")
 	@ResponseBody
 	public Role updateUser(@RequestBody Role role) throws Exception {
 		return iroleservice.updateRole(role);
 	}
 	
-	@PreAuthorize("hasAuthority('Doctor')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@DeleteMapping("/Role/deleteRoleById/{roleId}")
 	public void deleteRoleById(@PathVariable("roleId") int roleId) throws Exception {
 		iroleservice.deleteRoleById(roleId);
