@@ -32,3 +32,6 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     public void updateFailedAttempts(int failAttempts, String login);
 	User findUserByresettoken(String login);
 }
+
+
+

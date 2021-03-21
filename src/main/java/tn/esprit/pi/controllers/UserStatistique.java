@@ -49,7 +49,7 @@ public class UserStatistique {
 		List<User> users = iuserservice.getAllUsers();
 		int valide = 0;
 		for (User user : users) {
-			if (user.getRole().getRoleType().name().equals(RoleType.KindergardenDirector)) {
+			if (user.getRole().getRoleType().name().equals(RoleType.KindergardenDirector.toString())) {
 				valide++;
 			}
 		}
@@ -61,7 +61,7 @@ public class UserStatistique {
 		List<User> users = iuserservice.getAllUsers();
 		int valide = 0;
 		for (User user : users) {
-			if (user.getRole().getRoleType().name().equals(RoleType.Doctor)) {
+			if (user.getRole().getRoleType().name().equals(RoleType.Doctor.toString())) {
 				valide++;
 			}
 		}
@@ -73,7 +73,7 @@ public class UserStatistique {
 		List<User> users = iuserservice.getAllUsers();
 		int valide = 0;
 		for (User user : users) {
-			if (user.getRole().getRoleType().name().equals(RoleType.DaycareManager)) {
+			if (user.getRole().getRoleType().name().equals(RoleType.DaycareManager.toString())) {
 				valide++;
 			}
 		}
@@ -85,7 +85,7 @@ public class UserStatistique {
 		List<User> users = iuserservice.getAllUsers();
 		int valide = 0;
 		for (User user : users) {
-			if (user.getRole().getRoleType().name().equals(RoleType.Parent)) {
+			if (user.getRole().getRoleType().name().equals(RoleType.Parent.toString())) {
 				valide++;
 			}
 		}
@@ -97,7 +97,7 @@ public class UserStatistique {
 		List<User> users = iuserservice.getAllUsers();
 		int valide = 0;
 		for (User user : users) {
-			if (user.getRole().getRoleType().name().equals(RoleType.visitor)) {
+			if (user.getRole().getRoleType().name().equals(RoleType.visitor.toString())) {
 				valide++;
 			}
 		}
