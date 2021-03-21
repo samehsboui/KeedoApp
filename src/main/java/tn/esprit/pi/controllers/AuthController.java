@@ -145,7 +145,7 @@ public class AuthController {
 			SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
 			passwordResetEmail.setTo(user.getMail());
 			passwordResetEmail.setSubject("Password Reset Request");
-			passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl + "servlet/User/Access/reset/"
+			passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl + "/servlet/User/Access/reset/"
 					+ user.getResettoken());
 
 			emailService.sendEmail(passwordResetEmail);

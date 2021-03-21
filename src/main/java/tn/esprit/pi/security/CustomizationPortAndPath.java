@@ -12,5 +12,6 @@ public class CustomizationPortAndPath implements WebServerFactoryCustomizer<Conf
         server.setPort(9293);
         server.setContextPath("/SpringMVC");
     }
+
  
 }

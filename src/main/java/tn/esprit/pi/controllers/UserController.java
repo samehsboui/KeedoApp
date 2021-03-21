@@ -29,19 +29,19 @@ public class UserController {
 	PasswordEncoder encoder;
 
 	@JsonBackReference("")
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor') or hasAuthority('DaycareManager') or hasAuthority('Parent')")
 	@GetMapping("/findall")
 	public List<User> getAllUsers() {
 		return iuserservice.getAllUsers();
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/userbyid/{idUser}")
 	public User getUserById(@PathVariable("idUser") int idUser) throws Exception {
 		return iuserservice.getUserById(idUser);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@PutMapping("/UpdateUser")
 	@ResponseBody
 	public User updateUser(@RequestBody User user) throws Exception {
@@ -52,49 +52,49 @@ public class UserController {
 		return iuserservice.updateUser(user);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@DeleteMapping("/deleteUserById/{userId}")
 	public void deleteUserById(@PathVariable("userId") Integer userId) throws Exception {
 		iuserservice.deleteUserById(userId);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@PutMapping("/activateUser")
 	public User activateUser(@RequestBody User user) throws Exception {
 		return iuserservice.activateUser(user);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@PutMapping("/desactivateUser")
 	public User desactivateUser(@RequestBody User user) throws Exception {
 		return iuserservice.desactivateUser(user);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/findUserLastName/{username}")
 	public List<User> findUserLastName(@PathVariable("username") String username) throws Exception {
 		return iuserservice.findUserLastName(username);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/findUserBylogin/{username}")
 	public User findUserBylogin(@PathVariable("username") String username) throws Exception {
 		return iuserservice.findUserBylogin(username);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/findUserRole/{IdUser}")
 	public String findUserRole(@PathVariable("IdUser") int IdUser) throws Exception {
 		return iuserservice.getUserRoleDescription(IdUser);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/findActivatedUser/")
 	public List<String> findUserActivated() throws Exception {
 		return iuserservice.findUsersActivated();
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("/findDisabledUser/")
 	public List<String> findUserDisabled() throws Exception {
 		return iuserservice.getUsersFromDisabled();
