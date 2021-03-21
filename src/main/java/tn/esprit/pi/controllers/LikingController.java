@@ -2,6 +2,7 @@ package tn.esprit.pi.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ public class LikingController {
 		NotificationSNWServiceImpl NotifServiceImpl;
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Liking/add-like/{idU}/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@PostMapping("/Liking/add-like/{idU}/{idP}")  
 				public String addLike(@RequestBody Liking likes, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{    
@@ -35,16 +37,18 @@ public class LikingController {
 				} 
 				
 
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/delete-like/{Likeid}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/delete-like/{Likeid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@DeleteMapping("/Liking/delete-like/{Likeid}")  
 				public void deleteLiking(@PathVariable("Likeid") int Likeid)   
 				{  
-					System.out.println("this is the id"+ Likeid);
+					//System.out.println("this is the id"+ Likeid);
 					LikingServiceImpl.deleteLiking(Likeid);  
 				} 
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/get-all-likes
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/get-all-likes
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Liking/get-all-likes")  
 				public List<Liking> getAllLikes()   
 				{  
@@ -52,7 +56,8 @@ public class LikingController {
 				}  
 		
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/detail-like/{Likingid}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/detail-like/{Likingid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Liking/detail-like/{Likingid}")  
 				public Liking getLike(@PathVariable("Likingid") int Likingid)   
 				{  
@@ -60,47 +65,50 @@ public class LikingController {
 				}  
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-all-likes
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-all-likes
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Liking/count-all-likes")
 				public int getlikescount() {
-				return LikingServiceImpl.CountLikings();
+					return LikingServiceImpl.CountLikings();
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-user/{idU}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-user/{idU}
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Liking/likes-by-user/{idU}")
 				public List<Liking> getLikesByUser(@PathVariable("idU") int idU) {
 					return LikingServiceImpl.getLikingsByUserId(idU);
-
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-user-likes/{idU}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-user-likes/{idU}
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Liking/count-user-likes/{idU}")
 				public int getuserlikescount(@PathVariable("idU") int idU) {
-				return LikingServiceImpl.CountLikingsByUser(idU);
+					return LikingServiceImpl.CountLikingsByUser(idU);
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-post/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/likes-by-post/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Liking/likes-by-post/{idP}")
 				public List<Liking> getLikingsByPost(@PathVariable("idP") int idP) {
 					return LikingServiceImpl.getLikingsByPostId(idP);
-
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-post-likes/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/count-post-likes/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Liking/count-post-likes/{idP}")
 				public int getpostlikescount(@PathVariable("idP") int idP) {
-				return LikingServiceImpl.CountLikingsByPost(idP);
+					return LikingServiceImpl.CountLikingsByPost(idP);
 				}
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Liking/exists-user-post/{idU}/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/exists-user-post/{idU}/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Liking/exists-user-post/{idU}/{idP}")
 				public boolean existsByUserAndPost(@PathVariable("idU")int idU, @PathVariable("idP")int idP ) {
 					return LikingServiceImpl.IsLikeExists(idU, idP);
-
 				}
 }
 

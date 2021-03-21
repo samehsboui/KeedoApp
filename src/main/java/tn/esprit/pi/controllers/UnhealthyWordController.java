@@ -3,6 +3,7 @@ package tn.esprit.pi.controllers;
 import tn.esprit.pi.services.UnhealthyWordsServiceImpl;
 import tn.esprit.pi.entities.UnhealthyWord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -13,26 +14,29 @@ public class UnhealthyWordController {
 
     
 	//URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/add
-    @PostMapping("UnhealthyWords/add")
-    public String addWord(@RequestBody UnhealthyWord word) {
-      if (unhealthyWordService.wordExists(word.getWord())){
-          return ("this word is already added");
+	@PreAuthorize("hasAuthority('Admin')")	
+		@PostMapping("UnhealthyWords/add")
+		public String addWord(@RequestBody UnhealthyWord word) {
+			if (unhealthyWordService.wordExists(word.getWord())){
+				return ("this word is already added");
+			}
+			unhealthyWordService.addWord(word);
+			return ("added successfully");   
+		}
 
-      }
-        unhealthyWordService.addWord(word);
-        return ("added successfully");
-        
-    }
-
+	
     //URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/delete/?word=
-    @DeleteMapping("UnhealthyWords/delete")
-    public void deleteUnhealthyWord(@RequestParam("word")String word) {
-        unhealthyWordService.deleteWord(word);
+	@PreAuthorize("hasAuthority('Admin')")	
+		@DeleteMapping("UnhealthyWords/delete")
+		public void deleteUnhealthyWord(@RequestParam("word")String word) {
+			unhealthyWordService.deleteWord(word);
     }
 
+	
     //URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/get-all-unhealthy
-    @GetMapping("UnhealthyWords/get-all-unhealthy")
-    public List<UnhealthyWord> unhealthyWordList() {
-        return (unhealthyWordService.getUnhealthyWordList());
-    }
+	@PreAuthorize("hasAuthority('Admin')")	
+		@GetMapping("UnhealthyWords/get-all-unhealthy")
+    	public List<UnhealthyWord> unhealthyWordList() {
+        	return (unhealthyWordService.getUnhealthyWordList());
+    	}
 }

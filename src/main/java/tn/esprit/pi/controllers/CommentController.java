@@ -25,7 +25,7 @@ public class CommentController {
 		NotificationSNWServiceImpl NotifServiceImpl;
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/add-comment/{idU}/{idP}
-		@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Parent') or hasAuthority('DaycareManager') or hasAuthority('Admin')  or hasAuthority('Doctor') ")
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@PostMapping("/Comment/add-comment/{idU}/{idP}")  
 				public String addComment(@RequestBody Comment comments, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
 				{  
@@ -34,25 +34,27 @@ public class CommentController {
 				} 
 				
 
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/delete-comment/{Commentid}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/delete-comment/{Commentid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@DeleteMapping("/Comment/delete-comment/{Commentid}")  
 				public void deleteComment(@PathVariable("Commentid") int Commentid)   
 				{  
-					System.out.println("this is the id"+ Commentid);
+					//System.out.println("this is the id"+ Commentid);
 					CommentServiceImpl.deleteComment(Commentid);  
 				} 
 
 
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/update-comment/{Commentid}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/update-comment/{Commentid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@PutMapping("/Comment/update-comment/{Commentid}")  
 				public Comment updateComment(@RequestBody Comment comments, @PathVariable("Commentid")int Commentid)   
 				{  
-					return CommentServiceImpl.updateComment(comments,Commentid);  
-						  
-					}
+					return CommentServiceImpl.updateComment(comments,Commentid);  			  
+				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/get-all-comments
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/get-all-comments
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/get-all-comments")  
 				public List<Comment> getAllComments()   
 				{  
@@ -60,7 +62,8 @@ public class CommentController {
 				}  
 		
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/detail-comment/{Commentid}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/detail-comment/{Commentid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/detail-comment/{Commentid}")  
 				public Comment getComment(@PathVariable("Commentid") int Commentid)   
 				{  
@@ -68,29 +71,32 @@ public class CommentController {
 				}  
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-all-comments
-				@GetMapping("/Comment/count-all-comments")
-				public int getcommentscount() {
-				return CommentServiceImpl.CountComments();
-				}
 				
-				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/comments-by-user/{idU}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/comments-by-user/{idU}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/comments-by-user/{idU}")
 				public List<Comment> getCommentsByUser(@PathVariable("idU") int idU) {
 					return CommentServiceImpl.getCommentsByUserId(idU);
 
 				}
 				
-				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-user-comments/{idU}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-all-comments
+		@PreAuthorize("hasAuthority('Admin')")
+				@GetMapping("/Comment/count-all-comments")
+				public int getcommentscount() {
+					return CommentServiceImpl.CountComments();
+				}
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-user-comments/{idU}
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Comment/count-user-comments/{idU}")
 				public int getusercommentscount(@PathVariable("idU") int idU) {
-				return CommentServiceImpl.CountCommentsByUser(idU);
+					return CommentServiceImpl.CountCommentsByUser(idU);
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/comments-by-post/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/comments-by-post/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/comments-by-post/{idP}")
 				public List<Comment> getCommentsByPost(@PathVariable("idP") int idP) {
 					return CommentServiceImpl.getCommentsByPostId(idP);
@@ -98,22 +104,22 @@ public class CommentController {
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-post-comments/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-post-comments/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/count-post-comments/{idP}")
 				public int getpostcommentscount(@PathVariable("idP") int idP) {
-				return CommentServiceImpl.CountCommentsByPost(idP);
+					return CommentServiceImpl.CountCommentsByPost(idP);
 				}
 				
 				
-				//URL: http://localhost:9293/SpringMVC/servlet/Comment/search/?pattern=
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/search/?pattern=
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/search/")
 				public List<Comment> commentSearch(@RequestParam("pattern")String pattern){
-				System.out.println(pattern);
-				return CommentServiceImpl.searchComments(pattern);
+					//System.out.println(pattern);
+					return CommentServiceImpl.searchComments(pattern);
 				
 				}
-				
-				
-				
+						
 				
 	}
