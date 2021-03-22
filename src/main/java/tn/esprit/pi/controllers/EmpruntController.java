@@ -1,4 +1,4 @@
-package tn.esprit.pi.controllers;
+﻿package tn.esprit.pi.controllers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -35,6 +35,10 @@ import tn.esprit.pi.repositories.IUserRepository;
 
 import tn.esprit.pi.services.EmpruntBookService;
 import tn.esprit.pi.services.UserService;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 
 @RestController
 @RequestMapping("/emprunt")
@@ -98,11 +102,16 @@ public class EmpruntController {
 		return listeEmprunts;
 	}
 
+
+
+           private final static String ACCOUNT_SID = "AC6c88a113ac98865b4e25b8ba4f939311";
+	   private final static String AUTH_ID =         "5133e0f9d4248599b1d9b4e12dfcce7a";
+
 	// http://localhost:9293/SpringMVC/servlet/emprunt/creerEmprunt
 	@PreAuthorize("hasAuthority('Parent')")
 	@PostMapping(value = "/creerEmprunt")
 	public String creerEmprunt(@RequestBody EmpruntCreation creationEmprunt) {
-
+               Twilio.init(ACCOUNT_SID, AUTH_ID);
 		System.out.println("dataJSON = " + creationEmprunt);
 		int userId = Integer.parseInt(creationEmprunt.getUserId());
 		int bookId = Integer.parseInt(creationEmprunt.getBookId());
@@ -138,6 +147,10 @@ public class EmpruntController {
 			nouvelEmprunt.setUser(user);
 
 			empruntBookRepository.save(nouvelEmprunt);
+
+                         empruntBookRepository.save(nouvelEmprunt);
+			Message.creator(new PhoneNumber(user.getTelNum()), new PhoneNumber("+14086101434"),
+			  "congratulations you have to borrow your choice:  "+nouvelEmprunt.getUser().getFirstName() + "\n #BOOK = " + nouvelEmprunt.getBook().getTitre()).create();
 
 			// l'emprunt est validé, on sauvegarde le livre en diminuant son
 			// stock de 1

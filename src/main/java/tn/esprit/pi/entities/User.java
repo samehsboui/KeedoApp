@@ -39,7 +39,7 @@ public class User implements Serializable {
 	@Column(name = "lastName")
 	private String lastName;
 	@Column(name = "telNum")
-	private int telNum;
+	private String telNum;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "birthdate")
 	private Date birthdate;
@@ -179,11 +179,13 @@ public class User implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public int getTelNum() {
+	
+
+	public String getTelNum() {
 		return telNum;
 	}
 
-	public void setTelNum(int telNum) {
+	public void setTelNum(String telNum) {
 		this.telNum = telNum;
 	}
 
