@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -64,9 +65,6 @@ public class User implements Serializable {
 	private Set<Post> posts;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Follow> follows;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Workshop> workshops;
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -74,9 +72,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Meeting> meetings;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Claim> claims;
+
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
 	private Set<Message> messagesS;
@@ -113,6 +109,29 @@ public class User implements Serializable {
 	private Date lockTime;
 	@Column(name = "resettoken")
 	private String resettoken;
+
+
+
+/**** Roua******/
+	
+	
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Claim> claims;
+	
+	@JsonIgnore
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "follower")
+	private Set<Follow> follower;
+	@JsonIgnore
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "following")
+	private Set<Follow> following;
+	@JsonIgnore
+	@OneToOne(mappedBy="director")
+	private Kindergarden  kindergarden;
+
+	 private boolean isPrivate;
+
+
 
 	public User() {
 		super();
@@ -231,13 +250,6 @@ public class User implements Serializable {
 		this.posts = posts;
 	}
 
-	public Set<Follow> getFollows() {
-		return follows;
-	}
-
-	public void setFollows(Set<Follow> follows) {
-		this.follows = follows;
-	}
 
 	public Set<Workshop> getWorkshops() {
 		return workshops;
@@ -383,17 +395,61 @@ public class User implements Serializable {
 		this.resettoken = resettoken;
 	}
 
+/***** Roua ********/
+	public Set<Follow> getFollower() {
+		return follower;
+	}
+
+	public void setFollower(Set<Follow> follower) {
+		this.follower = follower;
+	}
+
+	public Set<Follow> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<Follow> following) {
+		this.following = following;
+	}
+
+	public Kindergarden getKindergarden() {
+		return kindergarden;
+	}
+
+	public void setKindergarden(Kindergarden kindergarden) {
+		this.kindergarden = kindergarden;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+
+	
+	
+	/************************/
+	
+	
+	
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", follows=" + follows + ", workshops=" + workshops
-				+ ", events=" + events + ", meetings=" + meetings + ", claims=" + claims + ", messagesS=" + messagesS
-				+ ", messagesR=" + messagesR + ", bus=" + bus + ", answers=" + answers + ", topics=" + topics
-				+ ", consultations=" + consultations + ", doctorConsultations=" + doctorConsultations + ", chats="
-				+ chats + ", reports=" + reports + ", valid=" + valid + ", accountNonLocked=" + accountNonLocked
-				+ ", failedAttempt=" + failedAttempt + ", lockTime=" + lockTime + ", resettoken=" + resettoken + "]";
+				+ role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops + ", events=" + events
+				+ ", meetings=" + meetings + ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus
+				+ ", answers=" + answers + ", topics=" + topics + ", consultations=" + consultations
+				+ ", doctorConsultations=" + doctorConsultations + ", chats=" + chats + ", reports=" + reports
+				+ ", valid=" + valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt
+				+ ", lockTime=" + lockTime + ", resettoken=" + resettoken + ", claims=" + claims + ", follower="
+				+ follower + ", following=" + following + ", kindergarden=" + kindergarden + ", isPrivate=" + isPrivate
+				+ "]";
 	}
+
+	
+
 
 }

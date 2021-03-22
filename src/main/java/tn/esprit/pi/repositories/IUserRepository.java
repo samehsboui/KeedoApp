@@ -39,6 +39,15 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 	
 	@Query("Select u FROM User u where u.role.roleType= :role")
 	List<User> findAllByRole(@Param("role") RoleType role);
+
+
+
+/******Roua*******/
+	
+	@Query("SELECT  u From User u join u.meetings m  WHERE u.role.roleType=:role and  m.id=:meeting  ")
+
+	User findDirector(@Param("role") RoleType role,@Param("meeting") int meeting);
+
 }
 
 

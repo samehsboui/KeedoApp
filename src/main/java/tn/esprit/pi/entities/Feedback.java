@@ -1,7 +1,10 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name= "feedback")
@@ -21,10 +29,28 @@ public class Feedback implements Serializable{
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idFeedback;
-	@Column(name= "question")
-	private String question;
-	@Column(name= "response")
-	private String response;
+	
+	
+	@Column(name= "title")
+	private String title;
+	
+	
+	@Column(name= "CreatedAt")
+	private LocalDateTime createdAt;
+	
+	@Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
+	
+	
+	
+	@JsonIgnore
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "feedback")
+	private Set<Question> questions;
+
+
+
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_meeting")
 	private Meeting meeting;
@@ -41,20 +67,13 @@ public class Feedback implements Serializable{
 		this.idFeedback = idFeedback;
 	}
 
-	public String getQuestion() {
-		return question;
+
+	public Set<Question> getQuestions() {
+		return questions;
 	}
 
-	public void setQuestion(String question) {
-		this.question = question;
-	}
-
-	public String getResponse() {
-		return response;
-	}
-
-	public void setResponse(String response) {
-		this.response = response;
+	public void setQuestions(Set<Question> questions) {
+		this.questions = questions;
 	}
 
 	public Meeting getMeeting() {
@@ -65,10 +84,51 @@ public class Feedback implements Serializable{
 		this.meeting = meeting;
 	}
 
+	
+	
+	
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	
+	
+	
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+  
+	
+	
+	
+	 
+
 	@Override
 	public String toString() {
-		return "Feedback [idFeedback=" + idFeedback + ", question=" + question + ", response=" + response + ", meeting="
-				+ meeting + "]";
+		return "Feedback [idFeedback=" + idFeedback + ", title=" + title + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", questions=" + questions +  "]";
 	}
+
+	
+
+	
 	
 }
