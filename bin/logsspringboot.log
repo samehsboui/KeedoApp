@@ -27,3 +27,72 @@
 2021-03-22 00:04:33.891  INFO 18172 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
 2021-03-22 00:04:37.926  INFO 18172 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 12.114 seconds (JVM running for 13.728)
 2021-03-22 00:04:54.542  INFO 18172 --- [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 12:24:18.816  INFO 14476 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Starting KeedoAppApplication using Java 1.8.0_281 on DESKTOP-79DD2BC with PID 14476 (C:\Users\Lenovo\Documents\GitHub\KeedoApp\target\classes started by Lenovo in C:\Users\Lenovo\Documents\GitHub\KeedoApp)
+2021-03-22 12:24:18.816  INFO 14476 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : No active profile set, falling back to default profiles: default
+2021-03-22 12:24:21.800  INFO 14476 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 12:24:21.811  INFO 14476 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-03-22 12:24:21.972  INFO 14476 --- [restartedMain] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring embedded WebApplicationContext
+2021-03-22 12:24:22.144  WARN 14476 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 12:24:22.498  INFO 14476 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 12:24:22.607  INFO 14476 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-22 12:24:22.876  INFO 14476 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 12:24:23.550  INFO 14476 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-03-22 12:24:25.601  INFO 14476 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 12:24:29.748  INFO 14476 --- [restartedMain] tn.esprit.pi.KeedoAppApplication         : Started KeedoAppApplication in 11.541 seconds (JVM running for 12.803)
+2021-03-22 12:25:18.160  INFO 14476 --- [http-nio-8082-exec-2] o.a.c.c.C.[.[localhost].[/SpringMVC]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 12:25:18.450 ERROR 14476 --- [http-nio-8082-exec-2] t.e.pi.security.jwt.AuthTokenFilter      : Cannot set user authentication: {}
+
+java.lang.NullPointerException: null
+	at tn.esprit.pi.security.services.UserDetailsImpl.build(UserDetailsImpl.java:37) ~[classes/:na]
+	at tn.esprit.pi.security.services.UserDetailsServiceImpl.loadUserByUsername(UserDetailsServiceImpl.java:27) ~[classes/:na]
+	at tn.esprit.pi.security.services.UserDetailsServiceImpl$$FastClassBySpringCGLIB$$34381a36.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:779) ~[spring-aop-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750) ~[spring-aop-5.3.4.jar:5.3.4]
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123) ~[spring-tx-5.3.4.jar:5.3.4]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388) ~[spring-tx-5.3.4.jar:5.3.4]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750) ~[spring-aop-5.3.4.jar:5.3.4]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692) ~[spring-aop-5.3.4.jar:5.3.4]
+	at tn.esprit.pi.security.services.UserDetailsServiceImpl$$EnhancerBySpringCGLIB$$b3f22acc.loadUserByUsername(<generated>) ~[classes/:na]
+	at tn.esprit.pi.security.jwt.AuthTokenFilter.doFilterInternal(AuthTokenFilter.java:38) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.3.4.jar:5.3.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:204) [spring-security-web-5.4.5.jar:5.4.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183) [spring-security-web-5.4.5.jar:5.4.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358) [spring-web-5.3.4.jar:5.3.4]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271) [spring-web-5.3.4.jar:5.3.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.3.4.jar:5.3.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.3.4.jar:5.3.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.3.4.jar:5.3.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.3.4.jar:5.3.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.3.4.jar:5.3.4]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.3.4.jar:5.3.4]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:143) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:346) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:374) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:887) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1684) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_281]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_281]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.43.jar:9.0.43]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_281]
+

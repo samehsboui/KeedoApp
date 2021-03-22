@@ -3,6 +3,7 @@ package tn.esprit.pi.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +35,11 @@ public class Notification implements Serializable{
 	@Temporal(TemporalType.TIME)
 	@Column(name= "time")
 	private Date time;
+	
+	private String status;
+	
+	@ManyToOne
+	private User user;
 	@ManyToOne
 	@JoinColumn(name= "id_event")
 	private Event event;
@@ -42,6 +48,9 @@ public class Notification implements Serializable{
 		super();
 	}
 
+	
+	
+	
 	public int getIdNotif() {
 		return idNotif;
 	}
@@ -90,10 +99,30 @@ public class Notification implements Serializable{
 		this.event = event;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+
+
 	@Override
 	public String toString() {
 		return "Notification [idNotif=" + idNotif + ", subject=" + subject + ", description=" + description + ", date="
-				+ date + ", time=" + time + ", event=" + event + "]";
+				+ date + ", time=" + time + ", status=" + status + ", user=" + user + ", event=" + event + "]";
 	}
-	
+
+
 }

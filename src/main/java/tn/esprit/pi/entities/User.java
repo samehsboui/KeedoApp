@@ -3,6 +3,7 @@ package tn.esprit.pi.entities;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -54,6 +55,9 @@ public class User implements Serializable {
 	private boolean delegate;
 	@Column(name = "logo")
 	private byte[] logo;
+	
+
+	
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "role")
 	private Role role;
@@ -66,12 +70,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Workshop> workshops;
-	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Event> events;
-	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<Meeting> meetings;
+
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
@@ -130,8 +129,26 @@ public class User implements Serializable {
 	private Kindergarden  kindergarden;
 
 	 private boolean isPrivate;
-
-
+		//added by chedi 
+		@Column(name="acc_balance")
+		private float accBalance;
+	 
+		/*@JsonIgnore
+		@ManyToMany(cascade= CascadeType.ALL)
+		private Set<Meeting> meetings; 
+		*/
+		//New 
+		  @OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
+		    private List<Meeting> meetings;
+		  
+			@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+			private List<Notification> notifciations;
+			//
+			@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+			private Set<Participation> participations;
+			
+			@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+			private List<Donation> donations;
 
 	public User() {
 		super();
@@ -259,21 +276,6 @@ public class User implements Serializable {
 		this.workshops = workshops;
 	}
 
-	public Set<Event> getEvents() {
-		return events;
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
-	}
-
-	public Set<Meeting> getMeetings() {
-		return meetings;
-	}
-
-	public void setMeetings(Set<Meeting> meetings) {
-		this.meetings = meetings;
-	}
 
 	public Set<Claim> getClaims() {
 		return claims;
@@ -430,24 +432,66 @@ public class User implements Serializable {
 
 	
 	
-	/************************/
-	
-	
-	
+	public float getAccBalance() {
+		return accBalance;
+	}
+
+	public void setAccBalance(float accBalance) {
+		this.accBalance = accBalance;
+	}
+
+	public List<Meeting> getMeetings() {
+		return meetings;
+	}
+
+	public void setMeetings(List<Meeting> meeting) {
+		this.meetings = meeting;
+	}
+
+	public List<Notification> getNotifciations() {
+		return notifciations;
+	}
+
+	public void setNotifciations(List<Notification> notifciations) {
+		this.notifciations = notifciations;
+	}
+
+
+
+	public List<Donation> getDonations() {
+		return donations;
+	}
+
+	public void setDonations(List<Donation> donations) {
+		this.donations = donations;
+	}
+
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
-				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", role="
-				+ role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops + ", events=" + events
-				+ ", meetings=" + meetings + ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus
+				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo)
+				+ ", accBalance=" + accBalance + ", role=" + role + ", kids=" + kids + ", posts=" + posts
+				+ ", workshops=" + workshops + ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus
 				+ ", answers=" + answers + ", topics=" + topics + ", consultations=" + consultations
 				+ ", doctorConsultations=" + doctorConsultations + ", chats=" + chats + ", reports=" + reports
 				+ ", valid=" + valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt
 				+ ", lockTime=" + lockTime + ", resettoken=" + resettoken + ", claims=" + claims + ", follower="
 				+ follower + ", following=" + following + ", kindergarden=" + kindergarden + ", isPrivate=" + isPrivate
-				+ "]";
+				+ ", meetings=" + meetings + ", notifciations=" + notifciations + ", participations=" + participations
+				+ ", donations=" + donations + "]";
 	}
+
+
+	
+
+
+
+	/************************/
+	
+	
+	
+
 
 	
 

@@ -124,6 +124,14 @@
 
 	<!-- YASMIN END -->
 		
+		
+		<!--  CHADI START -->
+		<dependency>
+    		<groupId>com.stripe</groupId>
+    		<artifactId>stripe-java</artifactId>
+    		<version>18.12.0</version>
+		</dependency>
+		<!-- CHADI END -->
 	</dependencies>
 
 	<build>

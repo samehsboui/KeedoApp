@@ -72,6 +72,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/servlet/chat/**").permitAll()
 		.antMatchers("/servlet/consult/**").permitAll()
 		.antMatchers("/servlet/daycare/**").permitAll()
+		.antMatchers("/servlet/Comment/**").permitAll()
+		.antMatchers("/servlet/Liking/**").permitAll()
+		.antMatchers("/servlet/Notif/**").permitAll()
+		.antMatchers("/servlet/Post/**").permitAll()
+		.antMatchers("/servlet/UnhealthyWords/**").permitAll()
+		.antMatchers("/servlet/Workshop/**").permitAll()
+		.antMatchers("/servlet/event/**").permitAll()
+		.antMatchers("/servlet/advertisement/**").permitAll()
+		.antMatchers("/servlet/payment/**").permitAll()
+		.antMatchers("/servlet/donation/**").permitAll()
+		.antMatchers("/servlet/meetings/**").permitAll()
+
+		
 		.anyRequest().authenticated();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
