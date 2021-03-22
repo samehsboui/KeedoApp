@@ -9,7 +9,7 @@ public class CustomizationPortAndPath implements WebServerFactoryCustomizer<Conf
  
     @Override
     public void customize(ConfigurableServletWebServerFactory server) {
-        server.setPort(8082);
+        server.setPort(9293);
         server.setContextPath("/SpringMVC");
     }
 
