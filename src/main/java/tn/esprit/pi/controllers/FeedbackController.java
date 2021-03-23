@@ -27,7 +27,7 @@ import tn.esprit.pi.services.FeedbackService;
 public class FeedbackController {
 	
 	@Autowired
-	FeedbackService feedbackservice;
+	private FeedbackService feedbackservice;
 
 
 	@PreAuthorize("hasAuthority('Admin')")

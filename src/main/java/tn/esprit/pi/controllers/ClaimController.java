@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
+import tn.esprit.pi.entities.ClaimStatus;
+import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.ClaimService;
 
@@ -78,7 +80,19 @@ public class ClaimController {
 			return "The claim  was successfuly updated by "+((UserDetailsImpl)principal).getUsername();  
 		} 
 		
+	@PreAuthorize("hasAuthority('KindergardenDirector')" )
+
+	@PutMapping("/claims/process-claim/{idClaim}")  
+	public String processClaim(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim) throws Exception   
+	{  
+	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		claimService.processClaim(claim, idClaim);
 		
+		if (claim.getStatus()==ClaimStatus.Resolved){
+			claimService.deleteClaim( idClaim);
+		}
+		return "This claim  was successfuly processed by "+((UserDetailsImpl)principal).getUsername();  
+	} 
 		
 	@PreAuthorize("hasAuthority('Admin')" )
 
@@ -118,7 +132,36 @@ public class ClaimController {
 				return claimService.CountClaimByKindergarden(name);
 			}
 		
+	
+	@PreAuthorize("hasAuthority('Admin')" )
+
+	@PostMapping("/claims/block-subscription/{name}")
+	 @ResponseBody
+	public void blockSubscription(@PathVariable String name) {
+	
+		claimService.blockSubscription(name);
 		
+		 		}
+	
+	
+	
+	@PreAuthorize("hasAuthority('Admin')" )
+
+	@GetMapping("/claims/kindergarden-skiped-claims/{name}")
+	 @ResponseBody
+	public int CountSkipedClaimByKindergarden(@PathVariable String name) {
+		 
+			return claimService.CountSkipedClaimByKindergarden(name);
+		}
 		
+	
+	@PreAuthorize("hasAuthority('Admin')" )
+
+	@GetMapping("/claims/kindergarden-processing-claims/{name}")
+	 @ResponseBody
+	public int CountProcessingClaimByKindergarden(@PathVariable String name) {
+		 
+			return claimService.CountProcessingClaimByKindergarden(name);
+		}
 		
 }

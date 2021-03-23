@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
+import tn.esprit.pi.entities.ClaimStatus;
 
 
 @Repository
@@ -24,5 +25,9 @@ public interface ClaimRepository extends CrudRepository<Claim,Integer> {
 	
 	@Query("SELECT c FROM Claim c WHERE c.kindergarden.name =:name")
 	public List<Claim> getClaimByKindergarden(@Param("name")String k);
+
+
+	@Query("SELECT c FROM Claim c WHERE c.kindergarden.name =:name and c.status=:status")
+	public List<Claim> getClaimByKindergardenAndStatus(@Param("name")String name,@Param("status")ClaimStatus status);
 
 }

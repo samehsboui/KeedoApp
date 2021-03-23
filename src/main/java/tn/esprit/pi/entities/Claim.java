@@ -47,6 +47,13 @@ public class Claim implements Serializable{
 	@Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 	
+	
+	@Column(name= "status")
+	@Enumerated(EnumType.STRING)
+	private ClaimStatus status;
+	@Column(name= "checkedAt")
+	private LocalDateTime checkedAt;
+	
 	public Claim() {
 		super();
 	}
@@ -112,13 +119,32 @@ public class Claim implements Serializable{
 		this.updatedAt = updatedAt;
 	}
 
+	public ClaimStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ClaimStatus status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getCheckedAt() {
+		return checkedAt;
+	}
+
+	public void setCheckedAt(LocalDateTime checkedAt) {
+		this.checkedAt = checkedAt;
+	}
+
 	@Override
 	public String toString() {
 		return "Claim [idClaim=" + idClaim + ", description=" + description + ", category=" + category + ", user="
 				+ user + ", kindergarden=" + kindergarden + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ "]";
+				+ ", status=" + status + ", checkedAt=" + checkedAt + "]";
 	}
 
+	
+	
+	
 	 
 	
 	

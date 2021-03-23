@@ -95,7 +95,7 @@ private static final long serialVersionUID = 1L;
 	
 	
 	
-	 
+	@JsonIgnore 
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", question=" + question + ", type=" + type + ", response=" + response

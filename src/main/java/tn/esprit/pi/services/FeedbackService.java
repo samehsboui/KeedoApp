@@ -13,6 +13,7 @@ import tn.esprit.pi.entities.Meeting;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FeedbackRepository;
+import tn.esprit.pi.repositories.IMeetingRepository;
 //import tn.esprit.pi.repositories.MeetingRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 
@@ -26,14 +27,15 @@ public class FeedbackService implements IFeedbackService{
 	
 	@Autowired
 	FeedbackRepository feedbackrepository;
-	/*@Autowired
-	MeetingRepository meetingrepository;
-	*/
+
+	@Autowired
+	IMeetingRepository meetingrepository;
+	
 	@Autowired
 	IUserRepository userrepository;
 	
 	  private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "68df987c25226884c27d5a26def9e0aa";
+	   private final static String AUTH_ID = "3563f93eadf67b4335078edd7ce849c1";
 
 	 
 	
@@ -42,22 +44,22 @@ public class FeedbackService implements IFeedbackService{
 	public Feedback createFeedback(Feedback fb, int meeting) {
 		//Twilio.init(ACCOUNT_SID, AUTH_ID);
 		
-		/*
-		Meeting m=meetingrepository.findById(meeting).get();
 		
+		
+		Meeting m=meetingrepository.findMeeting(meeting);
+		System.out.println(" m = "+m.getUsers());
+		
+	  
 		User u=userrepository.findDirector(RoleType.Parent, m.getIdMeeting());
+	
+			
 		
-		
-
 		
 		fb.setMeeting(m);
-fb.setCreatedAt(LocalDateTime.now());
-
+		fb.setCreatedAt(LocalDateTime.now());
 		//Message.creator(new PhoneNumber(u.getTelNum()), new PhoneNumber("+14435012866"),
 				  // "Please check our application to give you feedback according to the meeting passed on "+m.getDate()+" at "+m.getTime()).create();
-				   * 
-				   * 
-				   */
+		
 		return feedbackrepository.save(fb);
 		
 		

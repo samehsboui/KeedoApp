@@ -74,7 +74,7 @@ public class Role implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Role [idRole=" + idRole + ", description=" + description + ", roleType=" + roleType + ", user=" + user
+		return "Role [idRole=" + idRole + ", description=" + description + ", roleType=" + roleType 
 				+ "]";
 	}
 }

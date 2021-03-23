@@ -5,6 +5,7 @@ import java.util.List;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.ClaimCategory;
+import tn.esprit.pi.entities.ClaimStatus;
 
 
 
@@ -21,5 +22,9 @@ public interface IClaimService {
 	List<Claim> getClaimByCategory(ClaimCategory cc);
 	List<Claim> getClaimByKindergarden(String k);
 	int CountClaimByKindergarden(String k);
+	Claim processClaim(Claim c, int id);
+	int CountSkipedClaimByKindergarden(String name);
+	int CountProcessingClaimByKindergarden(String name);
+	void blockSubscription(String kindergarden);
 
 }

@@ -128,6 +128,8 @@ public class User implements Serializable {
 	@OneToOne(mappedBy="director")
 	private Kindergarden  kindergarden;
 
+	
+	private boolean isBlocked;
 	 private boolean isPrivate;
 		//added by chedi 
 		@Column(name="acc_balance")
@@ -424,6 +426,16 @@ public class User implements Serializable {
 		this.kindergarden = kindergarden;
 	}
 
+
+
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	public void setBlocked(boolean isBlocked) {
+		this.isBlocked = isBlocked;
+	}
+
 	public boolean isPrivate() {
 		return isPrivate;
 	}
@@ -480,7 +492,7 @@ public class User implements Serializable {
 				+ ", valid=" + valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt
 				+ ", lockTime=" + lockTime + ", resettoken=" + resettoken + ", claims=" + claims + ", follower="
 				+ follower + ", following=" + following + ", kindergarden=" + kindergarden + ", isPrivate=" + isPrivate
-				+ ", meetings=" + meetings + ", notifciations=" + notifciations + ", participations=" + participations
+				+ ", notifciations=" + notifciations + ", participations=" + participations
 				+ ", donations=" + donations + "]";
 	}
 

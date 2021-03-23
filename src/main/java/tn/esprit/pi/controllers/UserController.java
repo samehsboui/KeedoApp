@@ -50,7 +50,8 @@ public class UserController {
 		return iuserservice.getUserById(idUser);
 	}
 
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
+	@PreAuthorize("hasAuthority('Admin')")
+	//@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')")
 	@PutMapping("/UpdateUser")
 	@ResponseBody
 	public User updateUser(@RequestBody User user) throws Exception {
