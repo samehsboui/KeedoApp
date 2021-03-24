@@ -24,6 +24,7 @@ public class KidService implements IKidService {
 
 	@Override
 	public Kid addKid(Kid kid, int idU) {
+		System.out.println("iddddd=> "+idU);
 		User user = userRepository.findById(idU).get();
 		kid.setUser(user);
 		kidRepository.save(kid);

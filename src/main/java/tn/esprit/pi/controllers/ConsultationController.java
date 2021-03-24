@@ -20,6 +20,8 @@ import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.services.ConsultationService;
 
+//import static tn.esprit.pi.security.CustomLoginSuccessHandler.idCurrent;
+
 @RestController
 public class ConsultationController {
 
@@ -68,8 +70,8 @@ public class ConsultationController {
 	}
 
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Doctor')")
-	@GetMapping("consult/doctor/getAll/{idD}")
-	public List<Consultation> displayConsultationsByDoctor(@PathVariable("idD") int idD) {
+	@GetMapping("consult/doctor/getAll")
+	public List<Consultation> displayConsultationsByDoctor(int idD) {
 		return consultationService.displayConsultationsByDoctor(idD);
 	}
 

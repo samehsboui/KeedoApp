@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -55,9 +54,10 @@ public class User implements Serializable {
 	private boolean delegate;
 	@Column(name = "logo")
 	private byte[] logo;
-	
 
-	
+	@Column(name = "status")
+	private boolean status;
+
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "role")
 	private Role role;
@@ -70,7 +70,6 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Workshop> workshops;
-
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
@@ -95,6 +94,12 @@ public class User implements Serializable {
 	private Set<Consultation> doctorConsultations;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Chat> chats;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userSend", fetch = FetchType.EAGER)
+	private Set<NotificationMsg> notifSend;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userReceive", fetch = FetchType.EAGER)
+	private Set<NotificationMsg> notifReceive;
 
 	// added by amal
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -109,48 +114,45 @@ public class User implements Serializable {
 	@Column(name = "resettoken")
 	private String resettoken;
 
+	/**** Roua ******/
 
-
-/**** Roua******/
-	
-	
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Claim> claims;
-	
+
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "follower")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "follower")
 	private Set<Follow> follower;
 	@JsonIgnore
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "following")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "following")
 	private Set<Follow> following;
 	@JsonIgnore
-	@OneToOne(mappedBy="director")
-	private Kindergarden  kindergarden;
+	@OneToOne(mappedBy = "director")
+	private Kindergarden kindergarden;
 
-	
 	private boolean isBlocked;
-	 private boolean isPrivate;
-		//added by chedi 
-		@Column(name="acc_balance")
-		private float accBalance;
-	 
-		/*@JsonIgnore
-		@ManyToMany(cascade= CascadeType.ALL)
-		private Set<Meeting> meetings; 
-		*/
-		//New 
-		  @OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
-		    private List<Meeting> meetings;
-		  
-			@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-			private List<Notification> notifciations;
-			//
-			@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
-			private Set<Participation> participations;
-			
-			@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
-			private List<Donation> donations;
+	private boolean isPrivate;
+	// added by chedi
+	@Column(name = "acc_balance")
+	private float accBalance;
+
+	/*
+	 * @JsonIgnore
+	 * 
+	 * @ManyToMany(cascade= CascadeType.ALL) private Set<Meeting> meetings;
+	 */
+	// New
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+	private List<Meeting> meetings;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Notification> notifciations;
+	//
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Participation> participations;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Donation> donations;
 
 	public User() {
 		super();
@@ -180,8 +182,6 @@ public class User implements Serializable {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-	
 
 	public String getTelNum() {
 		return telNum;
@@ -271,7 +271,6 @@ public class User implements Serializable {
 		this.posts = posts;
 	}
 
-
 	public Set<Workshop> getWorkshops() {
 		return workshops;
 	}
@@ -279,7 +278,6 @@ public class User implements Serializable {
 	public void setWorkshops(Set<Workshop> workshops) {
 		this.workshops = workshops;
 	}
-
 
 	public Set<Claim> getClaims() {
 		return claims;
@@ -303,6 +301,14 @@ public class User implements Serializable {
 
 	public void setMessagesR(Set<Message> messagesR) {
 		this.messagesR = messagesR;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public Set<Bus> getBus() {
@@ -353,6 +359,22 @@ public class User implements Serializable {
 		this.chats = chats;
 	}
 
+	public Set<NotificationMsg> getNotifSend() {
+		return notifSend;
+	}
+
+	public void setNotifSend(Set<NotificationMsg> notifSend) {
+		this.notifSend = notifSend;
+	}
+
+	public Set<NotificationMsg> getNotifReceive() {
+		return notifReceive;
+	}
+
+	public void setNotifReceive(Set<NotificationMsg> notifReceive) {
+		this.notifReceive = notifReceive;
+	}
+
 	public Set<Report> getReports() {
 		return reports;
 	}
@@ -401,7 +423,7 @@ public class User implements Serializable {
 		this.resettoken = resettoken;
 	}
 
-/***** Roua ********/
+	/***** Roua ********/
 	public Set<Follow> getFollower() {
 		return follower;
 	}
@@ -426,8 +448,6 @@ public class User implements Serializable {
 		this.kindergarden = kindergarden;
 	}
 
-
-
 	public boolean isBlocked() {
 		return isBlocked;
 	}
@@ -444,8 +464,6 @@ public class User implements Serializable {
 		this.isPrivate = isPrivate;
 	}
 
-	
-	
 	public float getAccBalance() {
 		return accBalance;
 	}
@@ -470,8 +488,6 @@ public class User implements Serializable {
 		this.notifciations = notifciations;
 	}
 
-
-
 	public List<Donation> getDonations() {
 		return donations;
 	}
@@ -484,30 +500,19 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [idUser=" + idUser + ", firstName=" + firstName + ", lastName=" + lastName + ", telNum=" + telNum
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
-				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo)
-				+ ", accBalance=" + accBalance + ", role=" + role + ", kids=" + kids + ", posts=" + posts
-				+ ", workshops=" + workshops + ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus
-				+ ", answers=" + answers + ", topics=" + topics + ", consultations=" + consultations
-				+ ", doctorConsultations=" + doctorConsultations + ", chats=" + chats + ", reports=" + reports
-				+ ", valid=" + valid + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt
-				+ ", lockTime=" + lockTime + ", resettoken=" + resettoken + ", claims=" + claims + ", follower="
-				+ follower + ", following=" + following + ", kindergarden=" + kindergarden + ", isPrivate=" + isPrivate
-				+ ", notifciations=" + notifciations + ", participations=" + participations
+				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", status="
+				+ status + ", role=" + role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops
+				+ ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus + ", answers=" + answers
+				+ ", topics=" + topics + ", consultations=" + consultations + ", doctorConsultations="
+				+ doctorConsultations + ", chats=" + chats + ", notifSend=" + notifSend + ", notifReceive="
+				+ notifReceive + ", reports=" + reports + ", valid=" + valid + ", accountNonLocked=" + accountNonLocked
+				+ ", failedAttempt=" + failedAttempt + ", lockTime=" + lockTime + ", resettoken=" + resettoken
+				+ ", claims=" + claims + ", follower=" + follower + ", following=" + following + ", kindergarden="
+				+ kindergarden + ", isBlocked=" + isBlocked + ", isPrivate=" + isPrivate + ", accBalance=" + accBalance
+				+ ", meetings=" + meetings + ", notifciations=" + notifciations + ", participations=" + participations
 				+ ", donations=" + donations + "]";
 	}
 
-
-	
-
-
-
 	/************************/
-	
-	
-	
-
-
-	
-
 
 }

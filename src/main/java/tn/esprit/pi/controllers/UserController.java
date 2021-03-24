@@ -109,24 +109,5 @@ public class UserController {
 	public List<String> findUserDisabled() throws Exception {
 		return iuserservice.getUsersFromDisabled();
 	}
-	
-	//YASMIN BEGIN
-	@GetMapping("/registration/{idU}")
-    public ResponseEntity<String> register(@PathVariable int idU) {
-		User user = iuserRepository.findForChatById(idU);
-        System.out.println("handling register user request: " + user);
-        try {
-            UserStorage.getInstance().setUser(user);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("user connected: "+user);
-    }
 
-    @GetMapping("/fetchAllUsers")
-    public List<User> fetchAll() {
-        return UserStorage.getInstance().getUsers();
-    }
-    // YASMIN END
 }

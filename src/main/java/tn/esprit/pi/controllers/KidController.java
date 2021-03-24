@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Kid;
+//import static tn.esprit.pi.security.CustomLoginSuccessHandler.idCurrent;
 import tn.esprit.pi.services.KidService;
 
 @RestController
@@ -24,8 +25,8 @@ public class KidController {
 	KidService kidService;
 	
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
-	@PostMapping("add/{idU}")
-	public Kid addKid(@RequestBody Kid kid, @PathVariable("idU") int idU) {
+	@PostMapping("add")
+	public Kid addKid(@RequestBody Kid kid, @RequestBody int idU) {
 		return kidService.addKid(kid, idU);
 	}
 
