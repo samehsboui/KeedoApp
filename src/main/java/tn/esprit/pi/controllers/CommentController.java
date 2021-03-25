@@ -13,61 +13,64 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Comment;
 import tn.esprit.pi.services.CommentServiceImpl;
-import tn.esprit.pi.services.NotificationSNWServiceImpl;
 
 @RestController
 public class CommentController {
 	
 		@Autowired  
-		CommentServiceImpl CommentServiceImpl;
+		CommentServiceImpl commentServiceImpl;
 		
-		@Autowired  
-		NotificationSNWServiceImpl NotifServiceImpl;
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Comment/add-comment/{idU}/{idP}
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/add-comment/{idP}
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-				@PostMapping("/Comment/add-comment/{idU}/{idP}")  
-				public String addComment(@RequestBody Comment comments, @PathVariable("idU")int idU, @PathVariable("idP")int idP )   
+				@PostMapping("/Comment/add-comment/{idP}")  
+				public String addComment(@RequestBody Comment comments, @PathVariable("idP")int idP ) throws Exception   
 				{  
-					CommentServiceImpl.addComment(comments, idU, idP);  
-					return (NotifServiceImpl.addCommentNotif(comments.getIdComment()) + ", number of comments on this post: " +CommentServiceImpl.CountCommentsByPost(idP));  						
+					return (commentServiceImpl.addComment(comments, idP));  						
 				} 
 				
 
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/delete-comment/{Commentid}
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@DeleteMapping("/Comment/delete-comment/{Commentid}")  
-				public void deleteComment(@PathVariable("Commentid") int Commentid)   
+				public void deleteComment(@PathVariable("Commentid") int Commentid) throws Exception   
 				{  
-					//System.out.println("this is the id"+ Commentid);
-					CommentServiceImpl.deleteComment(Commentid);  
+					commentServiceImpl.deleteComment(Commentid);  
 				} 
 
 
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/update-comment/{Commentid}
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@PutMapping("/Comment/update-comment/{Commentid}")  
-				public Comment updateComment(@RequestBody Comment comments, @PathVariable("Commentid")int Commentid)   
+				public String updateComment(@RequestBody Comment comments, @PathVariable("Commentid")int Commentid) throws Exception   
 				{  
-					return CommentServiceImpl.updateComment(comments,Commentid);  			  
+					return commentServiceImpl.updateComment(comments,Commentid);  			  
 				}
 				
 				
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/get-all-comments
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Comment/get-all-comments")  
 				public List<Comment> getAllComments()   
 				{  
-					return CommentServiceImpl.getAllComments();  
+					return commentServiceImpl.getAllComments();  
 				}  
 		
 				
+		//URL: http://localhost:9293/SpringMVC/servlet/Comment/get-my-comments
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Comment/get-my-comments")  
+			public List<Comment> getMyComments() throws Exception   
+			{  
+				return commentServiceImpl.getMyComments();  
+			}
+		
+		
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/detail-comment/{Commentid}
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/detail-comment/{Commentid}")  
 				public Comment getComment(@PathVariable("Commentid") int Commentid)   
 				{  
-					return CommentServiceImpl.getCommentById(Commentid);  
+					return commentServiceImpl.getCommentById(Commentid);  
 				}  
 				
 				
@@ -76,7 +79,7 @@ public class CommentController {
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/comments-by-user/{idU}")
 				public List<Comment> getCommentsByUser(@PathVariable("idU") int idU) {
-					return CommentServiceImpl.getCommentsByUserId(idU);
+					return commentServiceImpl.getCommentsByUserId(idU);
 
 				}
 				
@@ -84,14 +87,14 @@ public class CommentController {
 		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Comment/count-all-comments")
 				public int getcommentscount() {
-					return CommentServiceImpl.CountComments();
+					return commentServiceImpl.CountComments();
 				}
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Comment/count-user-comments/{idU}
 		@PreAuthorize("hasAuthority('Admin')")
 				@GetMapping("/Comment/count-user-comments/{idU}")
 				public int getusercommentscount(@PathVariable("idU") int idU) {
-					return CommentServiceImpl.CountCommentsByUser(idU);
+					return commentServiceImpl.CountCommentsByUser(idU);
 				}
 				
 				
@@ -99,7 +102,7 @@ public class CommentController {
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/comments-by-post/{idP}")
 				public List<Comment> getCommentsByPost(@PathVariable("idP") int idP) {
-					return CommentServiceImpl.getCommentsByPostId(idP);
+					return commentServiceImpl.getCommentsByPostId(idP);
 
 				}
 				
@@ -108,7 +111,7 @@ public class CommentController {
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 				@GetMapping("/Comment/count-post-comments/{idP}")
 				public int getpostcommentscount(@PathVariable("idP") int idP) {
-					return CommentServiceImpl.CountCommentsByPost(idP);
+					return commentServiceImpl.CountCommentsByPost(idP);
 				}
 				
 				
@@ -117,7 +120,7 @@ public class CommentController {
 				@GetMapping("/Comment/search/")
 				public List<Comment> commentSearch(@RequestParam("pattern")String pattern){
 					//System.out.println(pattern);
-					return CommentServiceImpl.searchComments(pattern);
+					return commentServiceImpl.searchComments(pattern);
 				
 				}
 						

@@ -18,14 +18,14 @@ import tn.esprit.pi.services.WorkshopServiceImpl;
 @RestController
 public class WorkshopController {
 	@Autowired  
-	WorkshopServiceImpl WorkshopServiceImpl;
+	WorkshopServiceImpl workshopServiceImpl;
 
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/get-all-Workshops
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 		@GetMapping("/Workshop/get-all-Workshops")  
 		public List<Workshop> getAllWorkshops()   
 		{  
-			return WorkshopServiceImpl.getAllWorkshops();  
+			return workshopServiceImpl.getAllWorkshops();  
 		}  
 	
 	
@@ -34,35 +34,35 @@ public class WorkshopController {
 		@GetMapping("/Workshop/detail-Workshop/{Workshopid}")  
 		public Workshop getWorkshop(@PathVariable("Workshopid") int Workshopid)   
 		{  
-			return WorkshopServiceImpl.getWorkshopById(Workshopid);  
+			return workshopServiceImpl.getWorkshopById(Workshopid);  
 		}  
 	
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/delete-Workshop/{Workshopid}
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 		@DeleteMapping("/Workshop/delete-Workshop/{Workshopid}")  
-		public void deleteWorkshop(@PathVariable("Workshopid") int Workshopid)   
+		public String deleteWorkshop(@PathVariable("Workshopid") int Workshopid) throws Exception   
 		{  
-			WorkshopServiceImpl.deleteWorkshop(Workshopid);  
+			return(workshopServiceImpl.deleteWorkshop(Workshopid));  
 		} 
 
 	
-	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/add-Workshop/{idU}
+	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/add-Workshop
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
-		@PostMapping("/Workshop/add-Workshop/{idU}")  
-		public int addWorkshop(@RequestBody Workshop Workshops, @PathVariable("idU")int idU)   
+		@PostMapping("/Workshop/add-Workshop")  
+		public String addWorkshop(@RequestBody Workshop Workshops) throws Exception   
 		{  
-			WorkshopServiceImpl.addWorkshop(Workshops, idU);  
-			return Workshops.getIdWorkshop();  
+		return(workshopServiceImpl.addWorkshop(Workshops));  
+			  
 		}  
 	
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/update-Workshop/{Workshopid}
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 		@PutMapping("/Workshop/update-Workshop/{Workshopid}")  
-		public Workshop updateWorkshop(@RequestBody Workshop Workshops, @PathVariable("Workshopid")int Workshopid)   
+		public String updateWorkshop(@RequestBody Workshop Workshops, @PathVariable("Workshopid")int Workshopid) throws Exception   
 		{  
-			return WorkshopServiceImpl.updateWorkshop(Workshops,Workshopid);  
+			return (workshopServiceImpl.updateWorkshop(Workshops,Workshopid));  
 		}
 	
 	
@@ -70,7 +70,7 @@ public class WorkshopController {
 	@PreAuthorize("hasAuthority('Admin')")	
 		@GetMapping("/Workshop/count-all-Workshops")
 		public int getWorkshopscount() {
-			return WorkshopServiceImpl.CountWorkshops();
+			return workshopServiceImpl.CountWorkshops();
 		}
 	
 	
@@ -78,7 +78,7 @@ public class WorkshopController {
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 		@GetMapping("/Workshop/Workshops-by-user/{idU}")
 		public List<Workshop> getWorkshopsByUser(@PathVariable("idU") int idU) {
-			return WorkshopServiceImpl.getWorkshopsByUserId(idU);
+			return workshopServiceImpl.getWorkshopsByUserId(idU);
 		}
 	
 	
@@ -86,7 +86,7 @@ public class WorkshopController {
 	@PreAuthorize("hasAuthority('Admin')")		
 		@GetMapping("/Workshop/count-user-Workshops/{idU}")
 		public int getuserWorkshopscount(@PathVariable("idU") int idU) {
-			return WorkshopServiceImpl.CountWorkshopsByUser(idU);
+			return workshopServiceImpl.CountWorkshopsByUser(idU);
 		}
 	
 	
@@ -94,8 +94,7 @@ public class WorkshopController {
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")	
 		@GetMapping("/Workshop/search/")
 		public List<Workshop> WorkshopSearch(@RequestParam("pattern")String pattern){
-			//System.out.println(pattern);
-			return WorkshopServiceImpl.searchWorkshops(pattern);
+			return workshopServiceImpl.searchWorkshops(pattern);
 		}
 	
 	
@@ -103,18 +102,17 @@ public class WorkshopController {
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 		@GetMapping("/Workshop/get-by-category/{category}")
 		public List<Workshop> getWorkshopByCategory(@PathVariable WorkshopCategory category) {
-			List<Workshop> w = WorkshopServiceImpl.filterWorkshop(category);
+			List<Workshop> w = workshopServiceImpl.filterWorkshop(category);
 			return w;
 		}
+
 	
-	//needs fixing
-	
-	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/Workshops-by-username/?name=
+	//URL: http://localhost:9293/SpringMVC/servlet/Workshop/get-all-following-workshops
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-		@GetMapping("/Workshop/Workshops-by-user")
-		public List<Workshop> getWorkshopsByKindergartenName(@RequestParam("name")String name){
-		return WorkshopServiceImpl.getWorkshopsByKindergartenName(name);
-	
-		}
+		@GetMapping("/Workshop/get-all-following-workshops")  
+		public List<Workshop> getAllFollowingWorkshops() throws Exception
+		{  
+			return workshopServiceImpl.getFollowingWorkshops();  
+		}	
 	
 }

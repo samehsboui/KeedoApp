@@ -1,7 +1,6 @@
 package tn.esprit.pi.services;
 
 import tn.esprit.pi.entities.Report;
-import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.repositories.IReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public void addReport(Report r) {
-reportRepository.save(r);		
+		reportRepository.save(r);		
 	}
 
 }

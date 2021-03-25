@@ -1,14 +1,19 @@
 package tn.esprit.pi.services;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.entities.Workshop;
 import tn.esprit.pi.entities.WorkshopCategory;
 import tn.esprit.pi.repositories.IWorkshopRepository;
-import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
+import tn.esprit.pi.repositories.FollowRepository;
+import tn.esprit.pi.repositories.IUnhealthyWordRepository;
 
 
 @Service
@@ -16,93 +21,132 @@ public class WorkshopServiceImpl implements IWorkshopService{
 
 	
 	@Autowired 
-	IWorkshopRepository IWorkshopRepository;
+	IWorkshopRepository iWorkshopRepository;
 	
 	@Autowired 
-	private IUserRepository iUserRepository;
+	private IUnhealthyWordRepository iUnhealthyWordRepository;
+	
+	@Autowired 
+	private FollowRepository followRepository;
 	
 	@Override
-	public Workshop addWorkshop(Workshop w, int idU) {
-		User user=iUserRepository.findById(idU).get();
-		w.setUser(user);
-		LocalDateTime creationDate = LocalDateTime.now();
-		w.setCreateDate(creationDate);
-		IWorkshopRepository.save(w);
-		return w;
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
 	}
 	
 	
 	@Override
-	public void deleteWorkshop(int id) {
-		Workshop w = IWorkshopRepository.findById(id).get();
-		IWorkshopRepository.delete(w);							
+	public String addWorkshop(Workshop w) throws Exception {
+		w.setUser(currentUser());
+		w.setCreateDate(LocalDateTime.now());
+		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+			if(w.getContent().contains(uwd.getWord())){
+				return("Sorry, you can't post a workshop that contains hate speech or bad words on Keedo.");
+			}
+		}
+		iWorkshopRepository.save(w);
+		return ("workshop added successfully");
 	}
 	
 	
 	@Override
-	public Workshop updateWorkshop(Workshop w, int id) {
-		Workshop workshop = IWorkshopRepository.findById(id).get();
-		LocalDateTime modificationDate = LocalDateTime.now();
-		workshop.setModifyDate(modificationDate);
+	public String deleteWorkshop(int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		String roleuser = currentUser().getRole().getRoleType().name();
+		Workshop w = iWorkshopRepository.findById(id).get();
+		if ((iduser==w.getUser().getIdUser()) || roleuser=="Admin"){
+			iWorkshopRepository.delete(w);							
+			return "Workshop deleted successfully";
+		}
+		else{
+			return "You are not allowed to delete this workshop";
+		}
+	}
+	
+	
+	@Override
+	public String updateWorkshop(Workshop w, int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		String roleuser = currentUser().getRole().getRoleType().name();
+		Workshop workshop = iWorkshopRepository.findById(id).get();
+		if (!((iduser==workshop.getUser().getIdUser())) && !(roleuser=="Admin")){
+			System.out.println("wesletchi hne?");
+
+			return("You are not allowed to update this workshop");
+	
+		}
+		else{
+		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+			if(w.getContent().contains(uwd.getWord())){
+				return("Sorry, you can't post a workshop that contains hate speech or bad words on Keedo.");
+			}}
+		workshop.setModifyDate(LocalDateTime.now());
 		workshop.setContent(w.getContent());
 		workshop.setPdffile(w.getPdffile());
 		workshop.setCategory(w.getCategory());
 
-		IWorkshopRepository.save(workshop);
-		return getWorkshopById(id);
+		iWorkshopRepository.save(workshop);
+		return ("Workshop updated successfully");
+		}
 	}
 	
 	
 	@Override
 	public List<Workshop> getAllWorkshops() {
 		List<Workshop>workshops = new ArrayList<Workshop>();
-		IWorkshopRepository.findAll().forEach(e ->workshops.add(e));
+		iWorkshopRepository.findAll().forEach(e ->workshops.add(e));
 		return workshops;
 	}
 	
 	
 	@Override
 	public Workshop getWorkshopById(int id) {
-		return IWorkshopRepository.findById(id).get();  
+		return iWorkshopRepository.findById(id).get();  
 	}
 	
 	
 	@Override
 	public int CountWorkshops() {
-		List <Workshop> workshops=(List<Workshop>) IWorkshopRepository.findAll();
+		List <Workshop> workshops=(List<Workshop>) iWorkshopRepository.findAll();
 		return workshops.size();
 	}
 	
 	
 	@Override
 	public List<Workshop> getWorkshopsByUserId(int id) {
-		return IWorkshopRepository.getWorkshopByUserId(id);
-	}
-	
-	//needs fixing
-	
-	@Override
-	public List<Workshop> getWorkshopsByKindergartenName(String name) {
-		return IWorkshopRepository.getWorkshopByKindergartenName(name);
+		return iWorkshopRepository.getWorkshopByUserId(id);
 	}
 	
 	
 	@Override
 	public int CountWorkshopsByUser(int id) {
-		List <Workshop> workshops=(List<Workshop>) IWorkshopRepository.getWorkshopByUserId(id);
+		List <Workshop> workshops=(List<Workshop>) iWorkshopRepository.getWorkshopByUserId(id);
 		return workshops.size();
 	}
 	
 	
 	@Override
 	public List<Workshop> searchWorkshops(String text) {
-        return IWorkshopRepository.findWorkshopsByTextContaining(text);
+        return iWorkshopRepository.findWorkshopsByTextContaining(text);
 
 	}
 	
+	
 	@Override	
 	public List<Workshop> filterWorkshop(WorkshopCategory category) {
-		return IWorkshopRepository.getByCategory(category);
+		return iWorkshopRepository.getByCategory(category);
 	}
-
+	
+	
+	@Override
+	public List<Workshop> getFollowingWorkshops() throws Exception {
+		List<User> followings = followRepository.listFollowing(currentUser());
+		List<Workshop> workshops = new ArrayList<Workshop>();
+		for(Workshop w: iWorkshopRepository.findAll()){
+			if (followings.contains(w.getUser())){
+			workshops.add(w);
+		}}
+		return workshops;
+	}
 }

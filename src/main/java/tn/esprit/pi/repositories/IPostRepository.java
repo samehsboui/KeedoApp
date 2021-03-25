@@ -1,18 +1,16 @@
 package tn.esprit.pi.repositories;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tn.esprit.pi.entities.Post;
-import tn.esprit.pi.entities.Report;
 
 @Repository
 public interface IPostRepository  extends CrudRepository<Post,Integer >{
 	
-	@Query("SELECT p FROM Post p WHERE p.postContent LIKE %?1% OR p.user.firstName LIKE %?1% order by p.createDate desc")
+	@Query("SELECT p FROM Post p WHERE p.postContent LIKE %?1% OR p.user.login LIKE %?1% order by p.createDate desc")
 	List<Post> findPostsByTextContaining(String pattern);
 	
 	@Query("SELECT p FROM Post p WHERE p.user.id =:id order by p.createDate desc") 

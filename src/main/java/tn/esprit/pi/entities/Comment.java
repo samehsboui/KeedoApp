@@ -2,7 +2,6 @@ package tn.esprit.pi.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,13 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name= "Comment")
+@Table(name= "comment")
 public class Comment implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -39,6 +38,10 @@ public class Comment implements Serializable{
 	@ManyToOne
 	@JoinColumn(name= "id_user")
 	private User user;
+	@JsonIgnore
+	@OneToOne(cascade= CascadeType.PERSIST)
+	@JoinColumn(name= "notificationsnw_id")
+	private NotificationSNW notificationsnw;
 	
 	public Comment() {
 		super();
@@ -92,10 +95,26 @@ public class Comment implements Serializable{
 		this.user = user;
 	}
 
+	
+
+
+	public NotificationSNW getNotificationsnw() {
+		return notificationsnw;
+	}
+
+	public void setNotificationsnw(NotificationSNW notificationsnw) {
+		this.notificationsnw = notificationsnw;
+	}
+
 	@Override
 	public String toString() {
 		return "Comment [idComment=" + idComment + ", commentContent=" + commentContent + ", createDate=" + createDate
-				+ ", modifyDate=" + modifyDate + ", post=" + post + ", user=" + user + "]";
+				+ ", modifyDate=" + modifyDate + ", post=" + post + ", user=" + user + ", notificationsnw="
+				+ notificationsnw + "]";
 	}
+
+
+
+
 
 }

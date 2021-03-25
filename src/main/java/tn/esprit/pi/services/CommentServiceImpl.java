@@ -3,103 +3,164 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import tn.esprit.pi.entities.Comment;
+import tn.esprit.pi.entities.NotificationSNW;
 import tn.esprit.pi.entities.Post;
+import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ICommentRepository;
+import tn.esprit.pi.repositories.INotificationSNWRepository;
 import tn.esprit.pi.repositories.IPostRepository;
-import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.repositories.IUnhealthyWordRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 
 
 @Service
 public class CommentServiceImpl implements ICommentService{
 	
 	@Autowired 
-	IPostRepository IPostRepository;
-
-	@Autowired 
-	private IUserRepository IUserRepository;
+	IPostRepository iPostRepository;
 	
 	@Autowired 
-	private ICommentRepository ICommentRepository;
-
+	private ICommentRepository iCommentRepository;
+	
+	@Autowired 
+	private IUnhealthyWordRepository iUnhealthyWordRepository;
+	
+	@Autowired 
+	private INotificationSNWRepository iNotificationSNWRepository;
+	
 	@Override
-	public Comment addComment(Comment c, int idU, int idP) {
-		User user=IUserRepository.findById(idU).get();
-		Post post=IPostRepository.findById(idP).get();
-		c.setUser(user);
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
+	}
+	
+	
+	@Override
+	public String addComment(Comment c, int idP) throws Exception {
+		Post post=iPostRepository.findById(idP).get();
+		c.setUser(currentUser());
 		c.setPost(post);
-	    LocalDateTime creationDate = LocalDateTime.now();
-		c.setCreateDate(creationDate);
-		ICommentRepository.save(c);
-		return c;
+		c.setCreateDate(LocalDateTime.now());
+		//comment text approval
+		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+			if(c.getCommentContent().contains(uwd.getWord())){
+				return("Sorry, you can't add comments that contain hate speech or bad words on Keedo.");
+			}}
+		c.setNotificationsnw(addCommentNotif(c));
+		iCommentRepository.save(c);
+		return ("comment notification sent from " +c.getUser().getLogin() +" to " +c.getPost().getUser().getLogin()+ " successfully, number of comments on this post: " + CountCommentsByPost(idP));  						
 	}
 
+	@Override	
+	  public NotificationSNW addCommentNotif (Comment c) {
+		NotificationSNW notif = new NotificationSNW();
+		notif.setSubject(c.getUser().getLogin()+" commented on your post");
+		notif.setDate(LocalDateTime.now());
+		notif.setSender(c.getUser().getIdUser());
+		notif.setReceiver(c.getPost().getUser().getIdUser());
+		iNotificationSNWRepository.save(notif);
+		return (notif);}
+	
 	
 	@Override
-	public void deleteComment(int id) {
-		ICommentRepository.deleteById(id);
+	public String deleteComment(int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		Comment c = iCommentRepository.findById(id).get();
+		if (iduser==c.getUser().getIdUser()){
+			iCommentRepository.deleteById(id);
+			iNotificationSNWRepository.deleteById(c.getNotificationsnw().getIdNotificationsnw());
+		return ("Comment deleted successfully");
+		}
+		else{
+		return ("You are not allowed to delete this comment");	
+		}
 	}
 
 	@Override
-	public Comment updateComment(Comment c, int id) {
-		Comment comment = ICommentRepository.findById(id).get();
-		LocalDateTime modificationDate = LocalDateTime.now();
-		comment.setModifyDate(modificationDate);
-		comment.setCommentContent(c.getCommentContent());
+	public String updateComment(Comment c, int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		String roleuser = currentUser().getRole().getRoleType().name();
+		Comment comment = iCommentRepository.findById(id).get();
+		//only the owner of the comment or the admin can update it
+		if (!((iduser==comment.getUser().getIdUser())) && !(roleuser=="Admin")){
+			return("You are not allowed to update this comment");}
+		else{
 
-		ICommentRepository.save(comment);
-		return getCommentById(id);		
+		comment.setModifyDate(LocalDateTime.now());
+		//comment text approval
+		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+			if(c.getCommentContent().contains(uwd.getWord())){
+				return("Sorry, you can't comment hate speech or bad words on Keedo.");
+			}}
+		iCommentRepository.save(comment);
+		return ("Comment updated successfully");	}	
 	}
 
 
 	@Override
 	public List<Comment> getAllComments() {
 		List<Comment>Comments = new ArrayList<Comment>();
-		ICommentRepository.findAll().forEach(e ->Comments.add(e));
+		iCommentRepository.findAll().forEach(e ->Comments.add(e));
 		return Comments;
 	}
 
+	
+	@Override
+	public List<Comment> getMyComments() throws Exception {
+		return iCommentRepository.getCommentsByUserId(currentUser().getIdUser());
+	}
+	
+	
 	@Override
 	public Comment getCommentById(int id) {
-		return ICommentRepository.findById(id).get();  
+		return iCommentRepository.findById(id).get();  
 	}
 
-	@Override
-	public int CountComments() {
-		List <Comment> comments=(List<Comment>) ICommentRepository.findAll();
-		return comments.size();
-	}
 
 	@Override
 	public List<Comment> getCommentsByUserId(int id) {
-		return ICommentRepository.getCommentsByUserId(id);
+		return iCommentRepository.getCommentsByUserId(id);
 
 	}
+
+	
+	@Override
+	public List<Comment> getCommentsByPostId(int id) {
+		return iCommentRepository.getCommentsByPostId(id);
+	}
+
+	
+	@Override
+	public int CountComments() {
+		List <Comment> comments=(List<Comment>) iCommentRepository.findAll();
+		return comments.size();
+	}
+	
 
 	@Override
 	public int CountCommentsByUser(int id) {
-		List <Comment> comments=(List<Comment>) ICommentRepository.getCommentsByUserId(id);
+		List <Comment> comments=(List<Comment>) iCommentRepository.getCommentsByUserId(id);
 		return comments.size();
 	}
 
-	@Override
-	public List<Comment> getCommentsByPostId(int id) {
-		return ICommentRepository.getCommentsByPostId(id);
-	}
 
 	@Override
 	public int CountCommentsByPost(int id) {
-		List <Comment> comments=(List<Comment>) ICommentRepository.getCommentsByPostId(id);
+		List <Comment> comments=(List<Comment>) iCommentRepository.getCommentsByPostId(id);
 		return comments.size();
 	}
 
 	@Override
 	public List<Comment> searchComments(String pattern) {
-        return ICommentRepository.findCommentsByTextContaining(pattern);
+        return iCommentRepository.findCommentsByTextContaining(pattern);
 	}
+
+
+
 
 
 }

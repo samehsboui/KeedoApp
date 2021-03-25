@@ -3,92 +3,121 @@ package tn.esprit.pi.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import tn.esprit.pi.entities.Comment;
 import tn.esprit.pi.entities.Liking;
+import tn.esprit.pi.entities.NotificationSNW;
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.IPostRepository;
-import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.repositories.ILikingRepository;
+import tn.esprit.pi.repositories.INotificationSNWRepository;
 
 @Service
 public class LikingServiceImpl implements ILikingService {
 	@Autowired 
-	IPostRepository IPostRepository;
-
-	@Autowired 
-	private IUserRepository IUserRepository;
+	IPostRepository iPostRepository;
 	
 	@Autowired 
-	private ILikingRepository ILikingRepository;
+	private ILikingRepository iLikingRepository;
+	
+	@Autowired 
+	private INotificationSNWRepository iNotificationSNWRepository;
 	
 	@Override
-	public Boolean addLiking(Liking l, int idU, int idP){
-		if (IsLikeExists(idU, idP)){
-			return false;
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
+	}
+	
+	
+	@Override
+	public String addLiking(int idP) throws Exception{
+		int iduser = currentUser().getIdUser();
+		Liking l = new Liking();
+		if (IsLikeExists(iduser, idP)){
+			return ("You already liked this post");
 		}
 		else{
-		User user=IUserRepository.findById(idU).get();
-		Post post=IPostRepository.findById(idP).get();
-		l.setUser(user);
+		Post post=iPostRepository.findById(idP).get();
+		l.setUser(currentUser());
 		l.setPost(post);
-	    LocalDateTime creationDate = LocalDateTime.now();
-		l.setLikeDate(creationDate);
-		ILikingRepository.save(l);
-		return true;
+		l.setLikeDate(LocalDateTime.now());
+		l.setNotificationsnw(addLikeNotif(l));
+		iLikingRepository.save(l);
+		return ("like notification sent from " +l.getUser().getLogin() +" to " +l.getPost().getUser().getLogin()+ " successfully, number of likes on this post: " + CountLikingsByPost(idP));  						
 	}}
+	
+	@Override
+    public NotificationSNW addLikeNotif (Liking l) {
+		NotificationSNW notif = new NotificationSNW();
+		notif.setSubject(l.getUser().getLogin()+" liked your post");
+		notif.setDate(LocalDateTime.now());
+		notif.setSender(l.getUser().getIdUser());
+		notif.setReceiver(l.getPost().getUser().getIdUser());
+		iNotificationSNWRepository.save(notif);
+        return (notif);
+    }
+	
 
 	@Override
-	public void deleteLiking(int id) {
-		ILikingRepository.deleteById(id);
+	public String deleteLiking(int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		Liking l = iLikingRepository.findById(id).get();
+		if (iduser==l.getUser().getIdUser()){
+		iLikingRepository.deleteById(id);
+		iNotificationSNWRepository.deleteById(l.getNotificationsnw().getIdNotificationsnw());
+		return ("Like deleted successfully");
+		}
+		else{
+		return ("You are not allowed to delete this like");	
+		}
 		
 	}
 
 	@Override
 	public List<Liking> getAllLikings() {
 		List<Liking>Likes = new ArrayList<Liking>();
-		ILikingRepository.findAll().forEach(e ->Likes.add(e));
+		iLikingRepository.findAll().forEach(e ->Likes.add(e));
 		return Likes;
 	}
 	
 
 	@Override
 	public Liking getLikingById(int id) {
-		return ILikingRepository.findById(id).get();  
+		return iLikingRepository.findById(id).get();  
 
 	}
 
 	@Override
 	public int CountLikings() {
-		List <Liking> likes=(List<Liking>) ILikingRepository.findAll();
+		List <Liking> likes=(List<Liking>) iLikingRepository.findAll();
 		return likes.size();
 	}
 
 	@Override
 	public List<Liking> getLikingsByUserId(int id) {
-		return ILikingRepository.getLikesByUserId(id);
+		return iLikingRepository.getLikesByUserId(id);
 	}
 
 	@Override
 	public int CountLikingsByUser(int id) {
-		List <Liking> likes=(List<Liking>) ILikingRepository.getLikesByUserId(id);
+		List <Liking> likes=(List<Liking>) iLikingRepository.getLikesByUserId(id);
 		return likes.size();
 	}
 
 	@Override
 	public List<Liking> getLikingsByPostId(int id) {
-		return ILikingRepository.getLikesByPostId(id);
+		return iLikingRepository.getLikesByPostId(id);
 
 	}
 	
 
 	@Override
 	public int CountLikingsByPost(int id) {
-		List <Liking> likes=(List<Liking>) ILikingRepository.getLikesByPostId(id);
+		List <Liking> likes=(List<Liking>) iLikingRepository.getLikesByPostId(id);
 		return likes.size();
 	}
 
@@ -96,7 +125,7 @@ public class LikingServiceImpl implements ILikingService {
 	//useful for the add method (a user can't like the same post twice)
 	@Override
 	public boolean IsLikeExists(int idu, int idp) {
-	 int count =ILikingRepository.isLikeExists(idu, idp);
+	 int count =iLikingRepository.isLikeExists(idu, idp);
 	 if (count==0){
 		return false;
 	}

@@ -28,8 +28,9 @@ public class UnhealthyWordController {
     //URL: http://localhost:9293/SpringMVC/servlet/UnhealthyWords/delete/?word=
 	@PreAuthorize("hasAuthority('Admin')")	
 		@DeleteMapping("UnhealthyWords/delete")
-		public void deleteUnhealthyWord(@RequestParam("word")String word) {
+		public String deleteUnhealthyWord(@RequestParam("word")String word) {
 			unhealthyWordService.deleteWord(word);
+			return ("deleted successfully");
     }
 
 	

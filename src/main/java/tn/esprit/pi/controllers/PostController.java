@@ -12,145 +12,171 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Post;
+import tn.esprit.pi.services.FollowService;
 import tn.esprit.pi.services.PostServiceImpl;
 
 @RestController
 public class PostController {
 	
 		@Autowired  
-		PostServiceImpl PostServiceImpl;
+		PostServiceImpl postServiceImpl;
 
-
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/get-all-posts
+		@Autowired  
+		FollowService followservice;
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-post
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@PostMapping("/Post/add-post")  
+			public String addPost(@RequestBody Post Posts) throws Exception   
+			{  
+				return  (postServiceImpl.addPost(Posts));  
+			}  
+
+
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/update-post/{Postid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@PutMapping("/Post/update-post/{Postid}")  
+			public String updatePost(@RequestBody Post posts, @PathVariable("Postid")int Postid) throws Exception   
+			{  
+				return postServiceImpl.updatePost(posts,Postid);   
+			}
+
+
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/delete-post/{Postid}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@DeleteMapping("/Post/delete-post/{Postid}")  
+			public String deletePost(@PathVariable("Postid") int Postid) throws Exception   
+			{  
+				return (postServiceImpl.deletePost(Postid));  
+			} 		
+
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/get-my-posts
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Post/get-my-posts")  
+			public List<Post> getMyPosts() throws Exception   
+			{  
+				return postServiceImpl.getMyPosts();  
+			}
+		
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/get-all-posts
+		@PreAuthorize("hasAuthority('Admin')")		
 			@GetMapping("/Post/get-all-posts")  
 			public List<Post> getAllPosts()   
 			{  
-				return PostServiceImpl.getAllPosts();  
+				return postServiceImpl.getAllPosts();  
 			}  
 		
+			
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/get-all-following-posts
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Post/get-all-following-posts")  
+			public List<Post> getAllFollowingPosts() throws Exception
+			{  
+				return postServiceImpl.getFollowingPosts();  
+			}		
+
 		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-by-user/{idU}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Post/posts-by-user/{idU}")
+			public List<Post> getPostsByUser(@PathVariable("idU") int idU) {
+				return postServiceImpl.getPostsByUserId(idU);
+			}
+
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/detail-post/{Postid}
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 			@GetMapping("/Post/detail-post/{Postid}")  
 			public Post getPost(@PathVariable("Postid") int Postid)   
 			{  
-				return PostServiceImpl.getPostById(Postid);  
-			}  
+				return postServiceImpl.getPostById(Postid);  
+			}  		
 		
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/delete-post/{Postid}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@DeleteMapping("/Post/delete-post/{Postid}")  
-			public void deletePost(@PathVariable("Postid") int Postid)   
-			{  
-				PostServiceImpl.deletePost(Postid);  
-			} 
-	
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/add-post/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@PostMapping("/Post/add-post/{idU}")  
-			public String addPost(@RequestBody Post Posts, @PathVariable("idU")int idU) throws Exception   
-			{  
-				return  (PostServiceImpl.addPost(Posts, idU));  
-			}  
-		
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/update-post/{Postid}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@PutMapping("/Post/update-post/{Postid}")  
-			public Post updatePost(@RequestBody Post posts, @PathVariable("Postid")int Postid)   
-			{  
-				return PostServiceImpl.updatePost(posts,Postid);   
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/search/?pattern=
+		@PreAuthorize("hasAuthority('Admin')")
+			@GetMapping("/Post/search/")
+			public List<Post> postSearch(@RequestParam("pattern")String pattern){
+				return postServiceImpl.searchPosts(pattern);
 			}
 		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/share-post/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@PostMapping("/Post/share-post/{idP}")  
+			public String sharePost(@PathVariable("idP")int idP) throws Exception   
+			{  
+				return  postServiceImpl.sharePost(idP);  			
+			}  
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/report-post/{idP}
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@PostMapping("/Post/report-post/{idP}")  
+			public String reportPost(@PathVariable("idP")int idP) throws Exception   
+			{  
+				return (postServiceImpl.reportPost(idP));
+			}
+			
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/reported
+		@PreAuthorize("hasAuthority('Admin')")	
+			@GetMapping("/Post/reported")
+			public List<Post> getReportedPosts() {
+				return postServiceImpl.getReportedPosts();
+			}
+
+		
+//the admin has the choice to approve the reported post (so deletes all the reports on this post) or delete the post using deletePost method 		
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/approve-reported/{Postid}
+		@PreAuthorize("hasAuthority('Admin')")	
+			@DeleteMapping("/Post/approve-reported/{Postid}")  
+			public void approveReportedPost(@PathVariable("Postid") int Postid)   
+			{  
+				postServiceImpl.approveReportedPost(Postid);  
+			}
+
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/count-all-posts
 		@PreAuthorize("hasAuthority('Admin')")	
 			@GetMapping("/Post/count-all-posts")
 			public int getpostscount() {
-				return PostServiceImpl.CountPosts();
+				return postServiceImpl.CountPosts();
 			}
-		
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-by-user/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@GetMapping("/Post/posts-by-user/{idU}")
-			private List<Post> getPostsByUser(@PathVariable("idU") int idU) {
-				return PostServiceImpl.getPostsByUserId(idU);
-			}
-		
+
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/count-user-posts/{idU}
 		@PreAuthorize("hasAuthority('Admin')")	
 			@GetMapping("/Post/count-user-posts/{idU}")
-			private int getuserpostscount(@PathVariable("idU") int idU) {
-				return PostServiceImpl.CountPostsByUser(idU);
+			public int getuserpostscount(@PathVariable("idU") int idU) {
+				return postServiceImpl.CountPostsByUser(idU);
 			}
 		
 		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/search/?pattern=
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@GetMapping("/Post/search/")
-			private List<Post> postSearch(@RequestParam("pattern")String pattern){
-				//System.out.println(pattern);
-				return PostServiceImpl.searchPosts(pattern);
-			}
 		
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-commented-by-user/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@GetMapping("/Post/posts-commented-by-user/{idU}")
-			private List<Post> getPostsCommentedByUser(@PathVariable("idU") int idU) {
-				return PostServiceImpl.getPostsCommentedByUser(idU);
-			}
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-liked-by-user/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@GetMapping("/Post/posts-liked-by-user/{idU}")
-			private List<Post> getPostsLikedByUser(@PathVariable("idU") int idU) {
-				return PostServiceImpl.getPostsLikedByUser(idU);
-			}
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/share-post/{idP}/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@PostMapping("/Post/share-post/{idP}/{idU}")  
-			private String sharePost(@PathVariable("idP")int idP, @PathVariable("idU")int idU)   
-			{  
-				return  (PostServiceImpl.sharePost(idP, idU));  			
-			}  
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/report-post/{idP}/{idU}
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
-			@PostMapping("/Post/report-post/{idP}/{idU}")  
-			private String reportPost(@PathVariable("idP")int idP, @PathVariable("idU")int idU)   
-			{  
-				return  (PostServiceImpl.reportPost(idP, idU));  					
-			} 
-		
+		/**********testing Aws moderation******************/ 
+
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/detectimg/?img=
 		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 			@GetMapping("/Post/detectimg/")  
-			private List<String> moderation(@RequestParam("img")String img) throws Exception 
+			public List<String> moderation(@RequestParam("img")String img) throws Exception 
 			{  
-				return PostServiceImpl.detect(img);  
-			}
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/reported
-		@PreAuthorize("hasAuthority('Admin')")	
-			@GetMapping("/Post/reported")
-			private List<Post> getReportedPosts() {
-				return PostServiceImpl.getReportedPosts();
-			}
-		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/approve-reported/{Postid}
-		@PreAuthorize("hasAuthority('Admin')")	
-			@DeleteMapping("/Post/approve-reported/{Postid}")  
-			private void approveReportedPost(@PathVariable("Postid") int Postid)   
-			{  
-				PostServiceImpl.approveReportedPost(Postid);  
+				return postServiceImpl.detect(img);  
 			}
 
-		
+
+
+/*	
+//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-commented-by-user/{idU}
+@PreAuthorize("hasAuthority('Admin')")
+	@GetMapping("/Post/posts-commented-by-user/{idU}")
+	public List<Post> getPostsCommentedByUser(@PathVariable("idU") int idU) {
+		return postServiceImpl.getPostsCommentedByUser(idU);
+	}
+	
+//URL: http://localhost:9293/SpringMVC/servlet/Post/posts-liked-by-user/{idU}
+@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+	@GetMapping("/Post/posts-liked-by-user/{idU}")
+	public List<Post> getPostsLikedByUser(@PathVariable("idU") int idU) {
+		return postServiceImpl.getPostsLikedByUser(idU);
+	}*/
 	}

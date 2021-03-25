@@ -1,4 +1,5 @@
 package tn.esprit.pi.services;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
@@ -20,9 +22,10 @@ import tn.esprit.pi.entities.Report;
 import tn.esprit.pi.entities.ReportPK;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.entities.UnhealthyWord;
+import tn.esprit.pi.repositories.FollowRepository;
 import tn.esprit.pi.repositories.IPostRepository;
 import tn.esprit.pi.repositories.IReportRepository;
-import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.repositories.IUnhealthyWordRepository;
 
 
@@ -32,142 +35,206 @@ public class PostServiceImpl implements IPostService{
 
 	
 	@Autowired 
-	IPostRepository IPostRepository;
+	IPostRepository iPostRepository;
 	
 	@Autowired 
-	IReportRepository IReportRepository;
+	IReportRepository iReportRepository;
 	
 	@Autowired 
-	private IUserRepository iUserRepository;
-	
+	private IUnhealthyWordRepository iUnhealthyWordRepository;
 
 	@Autowired 
-	private IUnhealthyWordRepository IUnhealthyWordRepository;
+	private FollowRepository followRepository;
 	
 	@Override
-	public String addPost(Post p, int idU) throws Exception {
-		User user=iUserRepository.findById(idU).get();
-		p.setUser(user);
-	    LocalDateTime creationDate = LocalDateTime.now();
-		p.setCreateDate(creationDate);
-		System.out.println("this is the content "+p.getPostContent());
-		for(UnhealthyWord uwd : IUnhealthyWordRepository.findAll()) {
-		if(p.getPostContent().contains(uwd.getWord())){
-			return ("Sorry, you can't post hate speech or bad words on Keedo");
-		}}
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
+	}
+	
+	
+	@Override
+	public String addPost(Post p) throws Exception {
+		boolean approved=true;
+		String msg="";
+		p.setUser(currentUser());
+		p.setCreateDate(LocalDateTime.now());
+		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+		//text content approval
+			if(p.getPostContent().contains(uwd.getWord())){
+				approved=false;
+				msg+="Sorry, you can't post hate speech or bad words on Keedo.";
+			}
+		}
+		
+		//media (of type image) approval
 		if((p.getMedia()).toString().equals("Image") && detect(p.getMediaLink()).isEmpty()==false){
-			return ("The image you're trying to upload is against our community standards. Our system detected: "+
-					detect(p.getMediaLink())+" labels in this image.");
+			approved=false;
+			msg+=" The image you're trying to upload is against our community standards. Our system detected: "+
+					detect(p.getMediaLink())+" labels in this image.";
 		}
-
-		IPostRepository.save(p);
-		return ("post added successfully");
+		
+		if(approved==false){
+			return (msg);
 		}
+		else{
+			iPostRepository.save(p);
+			return ("post added successfully");
+		}
+	}
 	
-
 	@Override
-	public void deletePost(int id) {
-		//IPostRepository.deleteById(id);
-		Post p = IPostRepository.findById(id).get();
-		IPostRepository.delete(p);
-		
+	public String updatePost(Post p, int id) throws Exception {
+		boolean approved=true;
+		String msg="";		
+		int iduser = currentUser().getIdUser();
+		String roleuser = currentUser().getRole().getRoleType().name();
+		Post post = iPostRepository.findById(id).get();
+		//only the owner of the post or the admin can update it
+		if (!((iduser==post.getUser().getIdUser())) && !(roleuser=="Admin")){
+			return("You are not allowed to update this post");}
+		else{
+			for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
+				if(p.getPostContent().contains(uwd.getWord())){
+					approved=false;
+					msg+="Sorry, you can't post hate speech or bad words on Keedo.";
+				}
+			}
+			if((p.getMedia()).toString().equals("Image") && detect(p.getMediaLink()).isEmpty()==false){
+				approved=false;
+				msg+=" The image you're trying to upload is against our community standards. Our system detected: "+
+						detect(p.getMediaLink())+" labels in this image.";
+			}
+			if(approved==false){
+				return (msg);
+			}
+			else{
+				post.setModifyDate(LocalDateTime.now());
+				post.setPostContent(p.getPostContent());
+				post.setMedia(p.getMedia());
+				post.setMediaLink(p.getMediaLink());
+				iPostRepository.save(post);
+				return ("Post updated successfully");
+			}
+		}
+	}
+	
+	
+	@Override
+	public String deletePost(int id) throws Exception {
+		int iduser = currentUser().getIdUser();
+		String roleuser = currentUser().getRole().getRoleType().name();
+		Post p = iPostRepository.findById(id).get();
+		if ((iduser==p.getUser().getIdUser()) || roleuser=="Admin"){
+			iPostRepository.delete(p);
+			return "Post deleted successfully";
+		}
+		else{
+			return "You are not allowed to delete this post";
+		}
 	}
 
-	@Override
-	public Post updatePost(Post p, int id) {
-		Post post = IPostRepository.findById(id).get();
-		LocalDateTime modificationDate = LocalDateTime.now();
-		post.setModifyDate(modificationDate);
-		post.setPostContent(p.getPostContent());
-		post.setMedia(p.getMedia());
-		post.setMediaLink(p.getMediaLink());
 
-		IPostRepository.save(post);
-		return getPostById(id);
-		
+	@Override
+	public List<Post> getMyPosts() throws Exception {
+		return iPostRepository.getPostByUserId(currentUser().getIdUser());
 	}
+	
 
 	@Override
 	public List<Post> getAllPosts() {
-		
 		List<Post>Posts = new ArrayList<Post>();
-		IPostRepository.findAll().forEach(e ->Posts.add(e));
+		iPostRepository.findAll().forEach(e ->Posts.add(e));
 		return Posts;
 	}
 
+	
+	@Override
+	public List<Post> getFollowingPosts() throws Exception {
+		List<User> followings = followRepository.listFollowing(currentUser());
+		List<Post>Posts = new ArrayList<Post>();
+		for(Post p: iPostRepository.findAll()){
+			if (followings.contains(p.getUser())){
+			Posts.add(p);
+		}}
+		return Posts;
+	}
+	
 	@Override
 	public Post getPostById(int id) {
-		return IPostRepository.findById(id).get();  
+		return iPostRepository.findById(id).get();  
 
-	}
-	@Override
-	public int CountPosts() {
-		List <Post> posts=(List<Post>) IPostRepository.findAll();
-		return posts.size();
 	}
 	
 	
 	@Override
 	public List<Post> getPostsByUserId(int id) {
-		return IPostRepository.getPostByUserId(id);
+		return iPostRepository.getPostByUserId(id);
 	}
-	@Override
-	public int CountPostsByUser(int id) {
-		List <Post> posts=(List<Post>) IPostRepository.getPostByUserId(id);
-		return posts.size();
-	}
-
+	
+	
 	@Override
     public List<Post> searchPosts(String pattern){
-        return IPostRepository.findPostsByTextContaining(pattern);
+        return iPostRepository.findPostsByTextContaining(pattern);
     }
 	
-	@Override
-	public List<Post> getPostsCommentedByUser(int id) {
-		return IPostRepository.getPostsCommentedByUser(id);
-	}
-	@Override
-	public List<Post> getPostsLikedByUser(int id) {
-		return IPostRepository.getPostsLikedByUser(id);
-	}
 	
 	@Override
-	public String sharePost(int idP, int idU) {
-		User user=iUserRepository.findById(idU).get();
-		Post post=IPostRepository.findById(idP).get();
+	public String sharePost(int idP) throws Exception {
+		System.out.println("did it even enter here?");
+		Post post=iPostRepository.findById(idP).get();
+		System.out.println("this is the current"+currentUser().getIdUser());
 		Post newp = new Post();
-		newp.setUser(user);
+		newp.setUser(currentUser());
 		newp.setPostContent(post.getPostContent());
 		newp.setMedia(post.getMedia());
 		newp.setMediaLink(post.getMediaLink());
 		newp.setOwner(post.getUser().getIdUser());
-	    LocalDateTime creationDate = LocalDateTime.now();
-		newp.setCreateDate(creationDate);
-		IPostRepository.save(newp);
+		newp.setCreateDate(LocalDateTime.now());
+		iPostRepository.save(newp);
 		return ("post shared successfully");
-		}
-	@Override
-	public boolean isReportExists(int idu, int idp) {
-	 int count =IReportRepository.isReportExists(idu, idp);
-	 if (count==0){
-		return false;
 	}
-	 else {
-		 return true;
-	 }
-	 }
+	
+	
 	@Override
-	public String reportPost(int idP, int idU) {
+	public String reportPost(int idP) throws Exception {
+		//it doesn't need to check if the report exists cause the post can be updated
 		Report r = new Report();
 		ReportPK reportPK= new ReportPK();
 		reportPK.setIdPost(idP);
-		reportPK.setIdUser(idU);
+		reportPK.setIdUser(currentUser().getIdUser());
 		r.setReportPK(reportPK);
-		LocalDateTime creationDate = LocalDateTime.now();
-		r.setReportDate(creationDate);
-		IReportRepository.save(r);
-		return ("post reported successfully");
-		}
+		r.setReportDate(LocalDateTime.now());
+		iReportRepository.save(r);
+		return ("Post reported successfully");
+		
+	}
+	
+	
+	@Override
+	public List<Post> getReportedPosts() {
+		return iPostRepository.getReportedPosts();
+	}	
+	
+	
+	@Override
+	public void approveReportedPost(int idP){
+		iReportRepository.deleteReport(idP);
+	}
+	
+	
+	@Override
+	public int CountPosts() {
+		List <Post> posts=(List<Post>) iPostRepository.findAll();
+		return posts.size();
+	}
+	
+	
+	@Override
+	public int CountPostsByUser(int id) {
+		List <Post> posts=(List<Post>) iPostRepository.getPostByUserId(id);
+		return posts.size();
+	}	
 	
 	
 	@Override
@@ -181,10 +248,8 @@ public class PostServiceImpl implements IPostService{
         AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
 
         DetectModerationLabelsRequest request = new DetectModerationLabelsRequest()
-                .withImage(new Image()
-                        .withBytes(imageBytes))
+                .withImage(new Image().withBytes(imageBytes))
                 .withMinConfidence(60F);
-
 
             DetectModerationLabelsResult result = rekognitionClient.detectModerationLabels(request);
             List<ModerationLabel> labels = result.getModerationLabels();
@@ -202,20 +267,28 @@ public class PostServiceImpl implements IPostService{
             return (forbidden);
            }
 
-        
 
-
-	//admin
 	
+/******************may be useful at some point**********************/	
 	@Override
-	public List<Post> getReportedPosts() {
-		return IPostRepository.getReportedPosts();
+	public List<Post> getPostsCommentedByUser(int id) {
+		return iPostRepository.getPostsCommentedByUser(id);
 	}
 	
 	@Override
-	public void approveReportedPost(int idP){
-		//IReportRepository.deleteByPost(idP);
-		IReportRepository.deleteReport(idP);
+	public List<Post> getPostsLikedByUser(int id) {
+		return iPostRepository.getPostsLikedByUser(id);
 	}
 	
+	@Override
+	public boolean isReportExists(int idu, int idp) {
+	 int count =iReportRepository.isReportExists(idu, idp);
+	 if (count==0){
+		return false;
+	}
+	 else {
+		 return true;
+	 }
+	 }
+
 }

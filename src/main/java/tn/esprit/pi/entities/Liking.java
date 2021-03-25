@@ -2,7 +2,6 @@ package tn.esprit.pi.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,9 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-/*@Table(name= "liking", uniqueConstraints={
-	    @UniqueConstraint(columnNames = {"id_post", "id_user"})
-	})*/
 @Table(name= "liking")
 public class Liking implements Serializable{
 
@@ -41,8 +38,10 @@ public class Liking implements Serializable{
 	private User user;
 	@Column(name= "likeDate")
 	private LocalDateTime likeDate;
-
-	
+	@JsonIgnore
+	@OneToOne(cascade= CascadeType.PERSIST)
+	@JoinColumn(name= "notificationsnw_id")
+	private NotificationSNW notificationsnw;
 	
 	public Liking() {
 		super();
@@ -98,11 +97,23 @@ public class Liking implements Serializable{
 
 
 
-	@Override
-	public String toString() {
-		return "Liking [idLiking=" + idLiking + ", post=" + post + ", user=" + user + ", likeDate=" + likeDate + "]";
+	public NotificationSNW getNotificationsnw() {
+		return notificationsnw;
 	}
 
+
+
+	public void setNotificationsnw(NotificationSNW notificationsnw) {
+		this.notificationsnw = notificationsnw;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Liking [idLiking=" + idLiking + ", post=" + post + ", user=" + user + ", likeDate=" + likeDate
+				+ ", notificationsnw=" + notificationsnw + "]";
+	}
 	
 	
 }

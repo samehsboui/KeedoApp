@@ -60,9 +60,7 @@ public class Post implements Serializable{
 	@JoinColumn(name= "id_user")
 	private User user;
 	
-   // private boolean unhealthy = false;
-	//	  private Integer likeCount = 0;
-	//    private Integer commentCount = 0;
+
 	public Post() {
 		super();
 	}

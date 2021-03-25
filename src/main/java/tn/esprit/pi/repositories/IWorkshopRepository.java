@@ -12,7 +12,7 @@ import tn.esprit.pi.entities.WorkshopCategory;
 @Repository
 public interface IWorkshopRepository  extends CrudRepository<Workshop,Integer >{
 	
-	@Query("SELECT w FROM Workshop w WHERE w.content LIKE %?1% OR w.user.firstName LIKE %?1% order by w.createDate desc")
+	@Query("SELECT w FROM Workshop w WHERE w.content LIKE %?1% OR w.user.login LIKE %?1% order by w.createDate desc")
 	public List<Workshop> findWorkshopsByTextContaining(String text);
 	
 	@Query("SELECT w FROM Workshop w WHERE w.user.id =:id order by w.createDate desc")
@@ -20,8 +20,6 @@ public interface IWorkshopRepository  extends CrudRepository<Workshop,Integer >{
 	
 	@Query("SELECT w FROM Workshop w WHERE w.category =:category order by w.createDate desc")
 	public List<Workshop> getByCategory(@Param("category")WorkshopCategory workshopCategory);
-		
-	@Query("SELECT w FROM Workshop w WHERE w.user.firstName =:name order by w.createDate desc")
-	public List<Workshop> getWorkshopByKindergartenName(@Param("name")String name);
+
 	
 }
