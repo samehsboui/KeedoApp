@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.pi.entities.Book;
 import tn.esprit.pi.entities.EmpruntBook;
 import tn.esprit.pi.entities.User;
+import org.springframework.data.repository.query.Param;
+
 
 @Repository
 public interface EmpruntBookRepository extends JpaRepository<EmpruntBook, Integer>{
@@ -22,8 +24,15 @@ public interface EmpruntBookRepository extends JpaRepository<EmpruntBook, Intege
     @Query("SELECT emprunts FROM EmpruntBook emprunts WHERE emprunts.isRendu = ?1 AND emprunts.finDate < ?2")
     List<EmpruntBook> findEmpruntsExpires(boolean isRendu, Date today);
 
+    //List<EmpruntBook> findEmpruntsByUserFirstName(User user);
+    
+    @Query("SELECT e FROM EmpruntBook e WHERE e.user.firstName =:firstName")
+	public List<EmpruntBook> findEmpruntsByUserFirstName(@Param("firstName")String D);
+    
+    
 
-    List<EmpruntBook> findEmpruntsByUser(User user);
+    @Query("SELECT e FROM EmpruntBook e WHERE e.user.id =:id ") 
+    public List<EmpruntBook> findEmpruntsByUser(@Param("id")int id);
 
     @Query("SELECT emprunts FROM EmpruntBook emprunts WHERE emprunts.isRendu = ?1 ORDER BY emprunts.book.titre")
     List<EmpruntBook> findEmpruntsEncours(boolean isRendu);

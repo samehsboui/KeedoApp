@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,7 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.BookRepository;
 import tn.esprit.pi.repositories.EmpruntBookRepository;
 import tn.esprit.pi.repositories.IUserRepository;
-
-
-
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.EmpruntBookService;
 import tn.esprit.pi.services.UserService;
 import com.twilio.Twilio;
@@ -59,6 +58,12 @@ public class EmpruntController {
 
 	@Autowired
 	private EmpruntBookService empruntBookService;
+	
+	
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
+	}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/showAllEmprunt
 	@PreAuthorize("hasAuthority('Admin')")
@@ -70,14 +75,14 @@ public class EmpruntController {
 	}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/getEmpruntsEncours
-	@PreAuthorize("hasAuthority('Admin')")
-	@GetMapping(value = "/getEmpruntsEncours")
-	public List<EmpruntBook> listEmpruntEncours() {
-		List<EmpruntBook> emprunts = empruntBookRepository.findEmpruntsEncours(false);
-		logger.info("[REST] Request emprunt list is in cours ");
+		@PreAuthorize("hasAuthority('Admin')")
+		@GetMapping(value = "/getEmpruntsEncours")
+		public List<EmpruntBook> listEmpruntEncours() {
+			List<EmpruntBook> emprunts = empruntBookRepository.findEmpruntsEncours(false);
+			logger.info("[REST] Request emprunt list is in cours ");
 
-		return emprunts;
-	}
+			return emprunts;
+		}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/detailsEmprunt/1
 	@PreAuthorize("hasAuthority('Parent') or hasAuthority('Admin')")
@@ -89,34 +94,54 @@ public class EmpruntController {
 		// return empruntBookRepository.findById(id);
 	}
 
-	// http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser/1
-	@PreAuthorize("hasAuthority('Admin')")
-	@RequestMapping(value = "/findEmpruntsByUser/{UserId}")
-	public List<EmpruntBook> findEmpruntsByUser(@PathVariable int userId) {
-		User user = userService.findById(userId);
+	// http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser
+	@PreAuthorize("hasAuthority('Parent')or hasAuthority('Admin')")
+	@RequestMapping(value = "/findEmpruntsByUser")
+	public List<EmpruntBook> findEmpruntsByUser() throws Exception {
+	//	User user = userService.findById(idUser);
 
-		List<EmpruntBook> listeEmprunts = empruntBookRepository.findEmpruntsByUser(user);
+		List<EmpruntBook> listeEmprunts = empruntBookRepository.findEmpruntsByUser(currentUser().getIdUser());
 
-		logger.info("[REST]  list emprunt with  user " + user.getMail());
+		//logger.info("[REST]  list emprunt with  user " + user.getMail());
 
 		return listeEmprunts;
 	}
+	
+	
+	
+	
+	
+	  // http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser/dhekraParent
+	@PreAuthorize("hasAuthority('Admin')")
+	@RequestMapping(value = "/findEmpruntsByUser/{firstName}")
+	public List<EmpruntBook> findEmpruntsByUserFirstName(@PathVariable String firstName) {
+		List <EmpruntBook> empruntBook = userService.findEmpruntsByUserFirstName(firstName);
 
+		//List<EmpruntBook> listeEmprunts = empruntBookRepository.findEmpruntsByUserFirstName(user);
 
+		//logger.info("[REST]  list emprunt with  user " + user.getMail());
 
-           private final static String ACCOUNT_SID = "AC6c88a113ac98865b4e25b8ba4f939311";
-	   private final static String AUTH_ID =         "5133e0f9d4248599b1d9b4e12dfcce7a";
+		return empruntBook;
+	}
+	 
+	
+
+	
+
+       private final static String ACCOUNT_SID = "AC6c88a113ac98865b4e25b8ba4f939311";
+	   private final static String AUTH_ID =  "bf02a9ba2e35bb07695abf33cc1e6ed5";
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/creerEmprunt
 	@PreAuthorize("hasAuthority('Parent')")
 	@PostMapping(value = "/creerEmprunt")
-	public String creerEmprunt(@RequestBody EmpruntCreation creationEmprunt) {
-               Twilio.init(ACCOUNT_SID, AUTH_ID);
+	public String creerEmprunt(@RequestBody EmpruntCreation creationEmprunt) throws Exception {
+    Twilio.init(ACCOUNT_SID, AUTH_ID);
 		System.out.println("dataJSON = " + creationEmprunt);
-		int userId = Integer.parseInt(creationEmprunt.getUserId());
+	 //  int userId = Integer.parseInt(creationEmprunt.getUserId());
 		int bookId = Integer.parseInt(creationEmprunt.getBookId());
-
-		System.out.println("bookId = " + bookId + "userId = " + userId);
+		
+		
+	//	System.out.println("bookId = " + bookId + "userId = " + userId);
 
 		Date dateDebut = new Date();
 		Calendar c = Calendar.getInstance();
@@ -124,8 +149,9 @@ public class EmpruntController {
 		c.add(Calendar.DATE, 28);
 		Date dateFin = c.getTime();
 		System.out.println("date début = " + dateDebut + ", date de fin = " + dateFin);
-
-		User user = userService.findById(userId);
+		
+		User user = new User();
+		//User user = userService.findById(userId);
 		Book book = bookRepository.findById(bookId);
 
 		if (book.getStockDisponible() == 0) {
@@ -144,13 +170,15 @@ public class EmpruntController {
 			nouvelEmprunt.setDebutDate(dateDebut);
 			nouvelEmprunt.setFinDate(dateFin);
 			nouvelEmprunt.setBook(book);
-			nouvelEmprunt.setUser(user);
+			//nouvelEmprunt.setUser(user);
+			nouvelEmprunt.setUser(currentUser());
 
 			empruntBookRepository.save(nouvelEmprunt);
 
                          empruntBookRepository.save(nouvelEmprunt);
-			Message.creator(new PhoneNumber(user.getTelNum()), new PhoneNumber("+14086101434"),
-			  "congratulations you have to borrow your choice:  "+nouvelEmprunt.getUser().getFirstName() + "\n #BOOK = " + nouvelEmprunt.getBook().getTitre()).create();
+			Message.creator(new PhoneNumber(currentUser().getTelNum()), new PhoneNumber("+14086101434"),
+			  "congratulations you have to borrow your choice:  "+
+			  "\n #BOOK = " + nouvelEmprunt.getBook().getTitre()).create();
 
 			// l'emprunt est validé, on sauvegarde le livre en diminuant son
 			// stock de 1
@@ -176,6 +204,7 @@ public class EmpruntController {
 
 		return emprunts;
 	}
+
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/stopperEmprunt/1
 
@@ -208,7 +237,7 @@ public class EmpruntController {
 	}
 
 	
-	// http://localhost:9293/SpringMVC/servlet/emprunt/api/prolongerEmprunt/2
+	// http://localhost:9293/SpringMVC/servlet/emprunt/prolongEmprunt/2
 	@PreAuthorize("hasAuthority('Parent')")
 	@RequestMapping(value = "/prolongEmprunt/{id}", method = RequestMethod.GET)
 	public EmpruntBook prolongerEmprunt(@PathVariable int id) {

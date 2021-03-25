@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.*;
+import tn.esprit.pi.repositories.EmpruntBookRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 
 @Service
@@ -144,11 +145,13 @@ public class UserService implements IUserservice {
 	}
 	
 	
-	
 	//dhekra
+		@Autowired
+		EmpruntBookRepository empruntBookRepository;
+
 		@Override
-		public User findById(int id) {
-			return userRepository.findById(id).get();
+		public User findById(int idUser) {
+			return userRepository.findById(idUser).get();
 		}
 
 		@Override
@@ -162,5 +165,11 @@ public class UserService implements IUserservice {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public List<EmpruntBook> findEmpruntsByUserFirstName(String D) {
+			// TODO Auto-generated method stub
+			return empruntBookRepository.findEmpruntsByUserFirstName(D);
+			}
 	
 }

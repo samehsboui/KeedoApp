@@ -38,9 +38,6 @@ import tn.esprit.pi.services.IRoleservice;
 @RestController
 @RequestMapping("/User/Access")
 public class AuthController {
-	//CURRENt USER
-	public static User CURRENTUSER;
-	
 	@Autowired
 	AuthenticationManager authenticationManager;
 	@Autowired
@@ -73,9 +70,7 @@ public class AuthController {
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 					.collect(Collectors.toList());
-			
-			AuthController.setCURRENTUSER(userDetails.getUser());
-			
+
 			return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), roles.get(0).toString()));
 		}
 		return ResponseEntity.ok("Une erreur est produit verifier vos coordonées");
@@ -173,18 +168,4 @@ public class AuthController {
 			return "operation regected";
 		}
 	}
-
-	public AuthController() {
-		super();
-	}
-
-	public static User getCURRENTUSER() {
-		return CURRENTUSER;
-	}
-
-	public static void setCURRENTUSER(User cURRENTUSER) {
-		CURRENTUSER = cURRENTUSER;
-	}
-	
-	
 }

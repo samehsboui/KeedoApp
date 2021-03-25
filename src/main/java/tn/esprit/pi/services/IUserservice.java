@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import tn.esprit.pi.entities.EmpruntBook;
 import tn.esprit.pi.entities.User;
 @Service
 public interface IUserservice {
@@ -24,11 +25,12 @@ public interface IUserservice {
 	void resetFailedAttempts(String email);
 	void lock(User user);
 	public User findUserByResetToken(String token);
+
 	//dhekra
 	User findById(int id);
-
 	User findBymail(String mail);
-
 	List<User> findAllByOrderByIdAsc();
+	public List<EmpruntBook> findEmpruntsByUserFirstName(String D);
+
 
 }
