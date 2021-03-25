@@ -30,10 +30,9 @@ public class ClaimController {
 	@PreAuthorize("hasAuthority('Parent')" )
 
 	@PostMapping("/Claims/add-claim/{kindergarten}")  
-	public int addClaim(@RequestBody Claim claim,@PathVariable("kindergarten") int kindergarten) throws Exception   
+	public String addClaim(@RequestBody Claim claim,@PathVariable("kindergarten") int kindergarten) throws Exception   
 	{  
-		claimService.addClaim(claim,kindergarten);  
-		return claim.getIdClaim();  
+		return claimService.addClaim(claim,kindergarten);  
 	}  
 	
 	
@@ -85,13 +84,10 @@ public class ClaimController {
 	@PutMapping("/claims/process-claim/{idClaim}")  
 	public String processClaim(@RequestBody Claim claim, @PathVariable("idClaim")int idClaim) throws Exception   
 	{  
-	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		claimService.processClaim(claim, idClaim);
+		return claimService.processClaim(claim, idClaim);
 		
-		if (claim.getStatus()==ClaimStatus.Resolved){
-			claimService.deleteClaim( idClaim);
-		}
-		return "This claim  was successfuly processed by "+((UserDetailsImpl)principal).getUsername();  
+		
+		
 	} 
 		
 	@PreAuthorize("hasAuthority('Admin')" )
@@ -143,7 +139,15 @@ public class ClaimController {
 		
 		 		}
 	
+	@PreAuthorize("hasAuthority('Admin')" )
+
+	@PostMapping("/claims/unblock-subscription/{name}")
+	 @ResponseBody
+	public void unBlockSubscription(@PathVariable String name) {
 	
+		claimService.unBlockSubscription(name);
+		
+		 		}
 	
 	@PreAuthorize("hasAuthority('Admin')" )
 

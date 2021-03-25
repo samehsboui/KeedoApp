@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import java.time.LocalDate;
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -129,6 +129,9 @@ public class User implements Serializable {
 	private Kindergarden kindergarden;
 
 	private boolean isBlocked;
+	
+	private LocalDate blockDate;
+	private LocalDate unBlockDate;
 	private boolean isPrivate;
 	// added by chedi
 	@Column(name = "acc_balance")
@@ -444,6 +447,22 @@ public class User implements Serializable {
 
 	public void setBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
+	}
+
+	public LocalDate getBlockDate() {
+		return blockDate;
+	}
+
+	public void setBlockDate(LocalDate blockDate) {
+		this.blockDate = blockDate;
+	}
+
+	public LocalDate getUnBlockDate() {
+		return unBlockDate;
+	}
+
+	public void setUnBlockDate(LocalDate unBlockDate) {
+		this.unBlockDate = unBlockDate;
 	}
 
 	public boolean isPrivate() {

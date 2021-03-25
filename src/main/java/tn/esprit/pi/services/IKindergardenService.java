@@ -10,7 +10,7 @@ public interface IKindergardenService {
 	Kindergarden addKindergarden(Kindergarden kindergarden, int director);
 	List<Kindergarden> retrieveAllKindergardens();
 	void removeKindergarden(int id);
-	Kindergarden updateKindergarden(Kindergarden kindergarden,int id);
+	String updateKindergarden(Kindergarden kindergarden,int id) throws Exception;
 
 	Kindergarden getKindergardenById(int id);
 	int countKindergardens();

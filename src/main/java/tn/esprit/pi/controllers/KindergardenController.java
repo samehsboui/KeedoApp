@@ -18,6 +18,7 @@ import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
+import tn.esprit.pi.repositories.KindergardenRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.ClaimService;
 import tn.esprit.pi.services.KindergardenService;
@@ -28,6 +29,9 @@ public class KindergardenController {
 	
 	@Autowired
 	KindergardenService kindergardenService;
+	
+	@Autowired
+	KindergardenRepository kindergardenRepo;
 	@Autowired
 	ClaimService claimService;
 
@@ -68,20 +72,13 @@ public class KindergardenController {
 	
 	
 	@PreAuthorize("hasAuthority('KindergardenDirector') or  hasAuthority('Admin')" )
-	//@PreAuthorize("permitAll()" )
+	
 	@PutMapping("/update-kindergarten/{idKindergarten}")  
-	public  String updateKindergarten(@RequestBody  Kindergarden  Kindergarten, @PathVariable("idKindergarten") int idKindergarten) throws Exception   
+	public  String updateKindergarten(@RequestBody  Kindergarden  Kindergarten, @PathVariable("idKindergarten") int idKindergarten) throws Exception    
 	{  
 	
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		//if ( Kindergarten.getDirector().equals(((UserDetailsImpl)principal).getUser()) ) 
-
-		
-			 kindergardenService.updateKindergarden(Kindergarten,idKindergarten);  
-	return "The kindergarden account was successfuly updated by her director ";  //}else{
-			//return "Sorry "+((UserDetailsImpl)principal).getUsername()+", you don't have the permission to modify the content of this kindergarten account because your are not the responsible to it.   ";	}
-	} 
+			 return kindergardenService.updateKindergarden(Kindergarten,idKindergarten);  
+		} 
 	
 	
 	@PreAuthorize("hasAuthority('Admin')" )
@@ -111,7 +108,7 @@ public class KindergardenController {
 		
 	
 		Kindergarden k=kindergardenService.getKindergardenByName(name);
-		if (claimService.CountClaimByKindergarden(k.getName())<=1)
+		if (claimService.CountClaimByKindergarden(k.getName())<=4)
 			return k.getName()+" Is the most Recommended Kindergarten .";
 		else
 			return k.getName()+" Is the Worst Recommended Kindergarten .";

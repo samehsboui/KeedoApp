@@ -6,12 +6,14 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.KindergardenRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.repositories.IUserRepository;
 @Service
 public class KindergardenService implements IKindergardenService{
@@ -52,22 +54,40 @@ public class KindergardenService implements IKindergardenService{
 	}
 
 	@Override
-	public Kindergarden updateKindergarden(Kindergarden kindergarden, int id) {
+	public String updateKindergarden(Kindergarden kindergarden, int id) throws Exception {
 		// TODO Auto-generated method stub
 		
-	
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Kindergarden k=kindergardenRepository.findById(id).get();
-
-		k.setName(kindergarden.getName());
-		k.setCreatedAt(k.getCreatedAt());
-		k.setUpdatedAt(LocalDateTime.now());
-		k.setDirector(k.getDirector());
-		return kindergardenRepository.save(k);
-	}
+	
+		User director=k.getDirector();
+		System.out.println("Director= "+director.getFirstName());
+		System.out.println("cureent= "+((UserDetailsImpl)principal).getUser().getFirstName());
+		//if (((UserDetailsImpl)principal).getUser().equals(director)){
+			if (!((UserDetailsImpl)principal).getUser().isBlocked()){
+				k.setName(kindergarden.getName());
+				k.setCreatedAt(k.getCreatedAt());
+				k.setUpdatedAt(LocalDateTime.now());
+				k.setDirector(k.getDirector());
+				 kindergardenRepository.save(k);  
+				 
+				 return"The kindergarden account was successfuly updated by her director ";}else{
+						return "Sorry "+((UserDetailsImpl)principal).getUser().getFirstName()+", you don't have the permission to modify the profile of your kindergarten account because your are blocked."
+								+ "Please sir contact the administration to relsolve your problems and recover your account.  ";
+				 }
+				
+		}
+		
+		//else{
+		//	return "Sorry "+((UserDetailsImpl)principal).getUser().getFirstName()+", you don't have the permission to modify the content of this kindergarten account because your are not the responsible of it.   ";	}
+	//}
 
 	@Override
 	public Kindergarden getKindergardenById(int id) {
 		// TODO Auto-generated method stub
+		
+	
+	
 		return kindergardenRepository.findById(id).get();
 	}
 

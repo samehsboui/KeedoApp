@@ -12,7 +12,7 @@ import tn.esprit.pi.entities.ClaimStatus;
 
 
 public interface IClaimService {
-	Claim addClaim(Claim c,int kindergarden) throws Exception;
+	String addClaim(Claim c,int kindergarden) throws Exception;
 	List<Claim> retrieveAllclaims();
 	void deleteClaim(int id);
 	
@@ -22,9 +22,10 @@ public interface IClaimService {
 	List<Claim> getClaimByCategory(ClaimCategory cc);
 	List<Claim> getClaimByKindergarden(String k);
 	int CountClaimByKindergarden(String k);
-	Claim processClaim(Claim c, int id);
+	String processClaim(Claim c, int id) throws Exception;
 	int CountSkipedClaimByKindergarden(String name);
 	int CountProcessingClaimByKindergarden(String name);
 	void blockSubscription(String kindergarden);
+	void unBlockSubscription(String kindergarden);
 
 }

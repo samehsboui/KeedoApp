@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 
@@ -47,7 +48,9 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT  u From User u join u.meetings m  WHERE u.role.roleType=:role and  m.id=:meeting  ")
 
 	User findDirector(@Param("role") RoleType role,@Param("meeting") int meeting);
-
+	
+	
+	User findDirectorByKindergarden(Kindergarden  kindergarden);
 }
 
 

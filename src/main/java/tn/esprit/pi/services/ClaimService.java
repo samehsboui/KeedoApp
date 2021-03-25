@@ -1,6 +1,7 @@
 package tn.esprit.pi.services;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,21 +43,25 @@ public class ClaimService implements IClaimService {
 	
 	
 	 private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "3563f93eadf67b4335078edd7ce849c1";
+	   private final static String AUTH_ID = "f707cdde6358b5c632e7ede0afc9284a";
 
 
 	
 	@Override
-	public Claim addClaim(Claim c , int kindergarden) throws Exception {
+	public String addClaim(Claim c , int kindergarden) throws Exception {
 		// TODO Auto-generated method stub
 		
 
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (principal instanceof UserDetailsImpl ) {
+	
 			Kindergarden k=kr.findById(kindergarden).get();
-		
+			User director=k.getDirector();
+
+			
+		if (!director.isBlocked()){
+			
 		
 			c.setUser(((UserDetailsImpl) principal).getUser());
 			c.setCreatedAt(LocalDateTime.now());
@@ -71,9 +76,13 @@ public class ClaimService implements IClaimService {
 			  						+ " complaint as soon as possible otherwise your subscription "
 			  						+ "will be blocked ").create();
 			
-		}
-		
-		return cr.save(c) ;
+			cr.save(c);
+				return "Dear "+((UserDetailsImpl) principal).getUser().getFirstName()+" "+((UserDetailsImpl) principal).getUser().getLastName()+", "
+						+ "your claim was successfuly noted we will contact the director to relsolve your problem with.";}else{
+							return "We are Sorry Dear "+((UserDetailsImpl)principal).getUser().getFirstName()+" "+((UserDetailsImpl)principal).getUser().getLastName()+", this kindergarden is blocked right now so you can't make a claim on it,  ."
+									+ "you can claim it later when it becomes unblocked if you want.\n   "
+									+ "Thank you sir.";
+				}
 	}
 
 	@Override
@@ -86,11 +95,18 @@ public class ClaimService implements IClaimService {
 	}
 	
 	@Override
-	public Claim processClaim(Claim c, int id) {
+	public String processClaim(Claim c, int id) throws Exception {
 		// TODO Auto-generated method stub
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		Claim claim=cr.findById(id).get();
 		Kindergarden k=kr.findById(claim.getKindergarden().getId()).get();
 		
+		User director=k.getDirector();
+		
+		//System.out.println("directtooooooor= "+director.getFirstName());
+		if (!director.isBlocked()){
 		claim.setCategory(claim.getCategory());
 		claim.setDescription(claim.getDescription());
 		claim.setCreatedAt(claim.getCreatedAt());
@@ -103,7 +119,17 @@ public class ClaimService implements IClaimService {
 		
 	
 		
-		return cr.save(claim);
+		cr.save(claim);
+		
+		if (claim.getStatus()==ClaimStatus.Resolved)
+			deleteClaim( id);
+		return "Dear "+((UserDetailsImpl) principal).getUser().getFirstName()+" "+((UserDetailsImpl) principal).getUser().getLastName()+", "
+				+ "your claim process was successfuly recorded .";}else{
+					return "We are Sorry Dear "+((UserDetailsImpl)principal).getUser().getFirstName()+" "+((UserDetailsImpl)principal).getUser().getLastName()+", this kindergarden is blocked right now so you can't make a claim on it,  ."
+							+ "you can't treat this claim right now because you are already blocked, please contact the administration to resolve your problem and "
+							+ " unlock your subscription with us .\n   "
+							+ "Thank you sir.";
+		}
 		
 	}
 	
@@ -199,6 +225,7 @@ public class ClaimService implements IClaimService {
 		if (nb>=4){
 			
 			director.setBlocked(true);
+			director.setBlockDate(LocalDate.now());
 			ur.save(director);
 			}
 
@@ -206,7 +233,29 @@ public class ClaimService implements IClaimService {
 		
 	}
 
+	@Override
+	public void unBlockSubscription(String kindergarden) {
+		// TODO Auto-generated method stub
+	Kindergarden k=kr.findByName(kindergarden);
+	
+	
+	User director=ur.findByidUser(k.getDirector().getIdUser());
 
+		System.out.println("kindergadren= +++++" + k.getName());
+		System.out.println("director= +++++" + director.getFirstName());
+
+		director.setUnBlockDate(LocalDate.now());
+
+		
+			director.setBlocked(false);
+			ur.save(director);
+			Twilio.init(ACCOUNT_SID, AUTH_ID);
+			Message.creator(new PhoneNumber(k.getDirector().getTelNum()), new PhoneNumber("+14435012866"),
+			  "Dear Sir "+k.getDirector().getFirstName()+" "+k.getDirector().getLastName()+", Your subscription with us is unblocked now, please respect our conditions to keep your kindergarden on our platform.").create();
+
+
+		
+	}
 
 
 }
