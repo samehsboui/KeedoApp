@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/servlet/bus/**").permitAll()
 		.antMatchers("/servlet/kid/**").permitAll()
 		.antMatchers("/servlet/chat/**").permitAll()
+		.antMatchers("/servlet/chatSug/**").permitAll()
 		.antMatchers("/servlet/consult/**").permitAll()
 		.antMatchers("/servlet/daycare/**").permitAll()
 		.antMatchers("/servlet/Comment/**").permitAll()

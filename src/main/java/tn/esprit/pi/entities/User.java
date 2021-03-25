@@ -81,19 +81,17 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Bus> bus;
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Answer> answers;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Topic> topics;
-	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "director", fetch = FetchType.EAGER)
 	private Set<Consultation> consultations;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", fetch = FetchType.EAGER)
 	private Set<Consultation> doctorConsultations;
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Chat> chats;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	private Set<ChatSuggestion> ChatSuggestions;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userSend", fetch = FetchType.EAGER)
 	private Set<NotificationMsg> notifSend;
@@ -319,22 +317,6 @@ public class User implements Serializable {
 		this.bus = bus;
 	}
 
-	public Set<Answer> getAnswers() {
-		return answers;
-	}
-
-	public void setAnswers(Set<Answer> answers) {
-		this.answers = answers;
-	}
-
-	public Set<Topic> getTopics() {
-		return topics;
-	}
-
-	public void setTopics(Set<Topic> topics) {
-		this.topics = topics;
-	}
-
 	public Set<Consultation> getConsultations() {
 		return consultations;
 	}
@@ -357,6 +339,14 @@ public class User implements Serializable {
 
 	public void setChats(Set<Chat> chats) {
 		this.chats = chats;
+	}
+
+	public Set<ChatSuggestion> getChatSuggestions() {
+		return ChatSuggestions;
+	}
+
+	public void setChatSuggestions(Set<ChatSuggestion> chatSuggestions) {
+		ChatSuggestions = chatSuggestions;
 	}
 
 	public Set<NotificationMsg> getNotifSend() {
@@ -502,10 +492,10 @@ public class User implements Serializable {
 				+ ", birthdate=" + birthdate + ", address=" + address + ", mail=" + mail + ", login=" + login
 				+ ", password=" + password + ", delegate=" + delegate + ", logo=" + Arrays.toString(logo) + ", status="
 				+ status + ", role=" + role + ", kids=" + kids + ", posts=" + posts + ", workshops=" + workshops
-				+ ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus + ", answers=" + answers
-				+ ", topics=" + topics + ", consultations=" + consultations + ", doctorConsultations="
-				+ doctorConsultations + ", chats=" + chats + ", notifSend=" + notifSend + ", notifReceive="
-				+ notifReceive + ", reports=" + reports + ", valid=" + valid + ", accountNonLocked=" + accountNonLocked
+				+ ", messagesS=" + messagesS + ", messagesR=" + messagesR + ", bus=" + bus + ", consultations="
+				+ consultations + ", doctorConsultations=" + doctorConsultations + ", chats=" + chats
+				+ ", ChatSuggestions=" + ChatSuggestions + ", notifSend=" + notifSend + ", notifReceive=" + notifReceive
+				+ ", reports=" + reports + ", valid=" + valid + ", accountNonLocked=" + accountNonLocked
 				+ ", failedAttempt=" + failedAttempt + ", lockTime=" + lockTime + ", resettoken=" + resettoken
 				+ ", claims=" + claims + ", follower=" + follower + ", following=" + following + ", kindergarden="
 				+ kindergarden + ", isBlocked=" + isBlocked + ", isPrivate=" + isPrivate + ", accBalance=" + accBalance

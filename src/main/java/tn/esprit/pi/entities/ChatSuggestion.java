@@ -11,9 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "ChatKeyWord")
+@Table(name = "ChatSuggestion")
 @Entity
-public class ChatKeyWord implements Serializable {
+public class ChatSuggestion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,22 +21,15 @@ public class ChatKeyWord implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-
-	@Column(name = "word")
-	private String word;
+	@Column(name = "content")
+	private String content;
 
 	@ManyToOne
-	@JoinColumn(name = "id_chat")
-	private Chat chat;
+	@JoinColumn(name = "id_user")
+	private User user;
 
-	public ChatKeyWord() {
+	public ChatSuggestion() {
 		super();
-	}
-
-	public ChatKeyWord(int id, String word) {
-		super();
-		this.id = id;
-		this.word = word;
 	}
 
 	public int getId() {
@@ -47,25 +40,25 @@ public class ChatKeyWord implements Serializable {
 		this.id = id;
 	}
 
-	public String getWord() {
-		return word;
+	public String getContent() {
+		return content;
 	}
 
-	public void setWord(String word) {
-		this.word = word;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public Chat getChat() {
-		return chat;
+	public User getUser() {
+		return user;
 	}
 
-	public void setChat(Chat chat) {
-		this.chat = chat;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
 	public String toString() {
-		return "ChatKeyWord [id=" + id + ", word=" + word + ", chat=" + chat + "]";
+		return "ChatSuggestion [id=" + id + ", content=" + content + ", user=" + user + "]";
 	}
 
 }

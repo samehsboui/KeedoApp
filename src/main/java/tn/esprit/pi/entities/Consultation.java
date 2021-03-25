@@ -14,36 +14,32 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 @Entity
-@Table(name= "Consultation")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@Table(name = "Consultation")
 public class Consultation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int idConsultation;
 	@Temporal(TemporalType.DATE)
-	@Column(name="dateConsultation")
+	@Column(name = "dateConsultation")
 	private Date dateConsultation;
 	@Temporal(TemporalType.TIME)
-	@Column(name="time")
-	private Date  time;
+	@Column(name = "time")
+	private Date time;
 	@ManyToOne
-	@JoinColumn(name="id_director")
+	@JoinColumn(name = "id_director")
 	private User director;
 	@ManyToOne
-	@JoinColumn(name="id_doctor")
+	@JoinColumn(name = "id_doctor")
 	private User doctor;
 	@ManyToOne
-	@JoinColumn(name= "id_kid")
+	@JoinColumn(name = "id_kid")
 	private Kid kid;
-	
+
 	public Consultation() {
 		super();
 	}
@@ -81,7 +77,7 @@ public class Consultation implements Serializable {
 		return time;
 	}
 
-	public void setTime(Date  time) {
+	public void setTime(Date time) {
 		this.time = time;
 	}
 
@@ -114,6 +110,5 @@ public class Consultation implements Serializable {
 		return "Consultation [idConsultation=" + idConsultation + ", dateConsultation=" + dateConsultation + ", time="
 				+ time + ", director=" + director + ", doctor=" + doctor + ", kid=" + kid + "]";
 	}
-
 
 }

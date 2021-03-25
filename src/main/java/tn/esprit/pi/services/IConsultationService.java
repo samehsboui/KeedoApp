@@ -11,7 +11,7 @@ public interface IConsultationService {
 
 	Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idA, int idD);
 
-	void deleteConsultation(int id);
+	String deleteConsultation(int id);
 
 	Consultation updateConsultation(int idC, Consultation consultation);
 

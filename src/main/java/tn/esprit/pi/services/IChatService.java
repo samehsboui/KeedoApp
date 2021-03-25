@@ -23,4 +23,6 @@ public interface IChatService {
 	public String getRespenseBasedOnWord(String word);
 
 	public String connectToChat();
+
+	public List<Chat> getChatsByMostRec();
 }

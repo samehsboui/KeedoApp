@@ -25,4 +25,6 @@ public interface ChatReposiroty extends CrudRepository<Chat, Integer> {
 	@Query("select new Chat(c.id, c.respense) from Chat c")
 	List<Chat> displayAll();
 
+	@Query("select c from Chat c ORDER BY c.nbRequest DESC")
+	List<Chat> getChatsByMostRec();
 }

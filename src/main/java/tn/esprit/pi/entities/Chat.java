@@ -33,17 +33,18 @@ public class Chat implements Serializable {
 	private int id;
 
 	@Column(name = "respense")
-
 	private String respense;
 
+	// @JsonIgnore
 	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "chat", fetch = FetchType.EAGER)
 	@Cascade(CascadeType.REMOVE)
-
 	private List<ChatKeyWord> chatKeyWord;
+
+	@Column(name = "nbRequest")
+	private int nbRequest;
 
 	@ManyToOne
 	@JoinColumn(name = "id_user")
-
 	private User user;
 
 	public Chat() {
@@ -94,9 +95,18 @@ public class Chat implements Serializable {
 		this.chatKeyWord = chatKeyWord;
 	}
 
+	public int getNbRequest() {
+		return nbRequest;
+	}
+
+	public void setNbRequest(int nbRequest) {
+		this.nbRequest = nbRequest;
+	}
+
 	@Override
 	public String toString() {
-		return "Chat [id=" + id + ", respense=" + respense + ", chatKeyWord=" + chatKeyWord + "]";
+		return "Chat [id=" + id + ", respense=" + respense + ", chatKeyWord=" + chatKeyWord + ", nbRequest=" + nbRequest
+				+ ", user=" + user + "]";
 	}
 
 }

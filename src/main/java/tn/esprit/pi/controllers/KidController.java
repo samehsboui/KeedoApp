@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 import tn.esprit.pi.entities.Kid;
-//import static tn.esprit.pi.security.CustomLoginSuccessHandler.idCurrent;
+import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.services.KidService;
 
 @RestController
@@ -23,61 +24,71 @@ public class KidController {
 
 	@Autowired
 	KidService kidService;
-	
+
+	// localhost:8080/SpringMVC/servlet/kid/add
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PostMapping("add")
-	public Kid addKid(@RequestBody Kid kid, @RequestBody int idU) {
-		return kidService.addKid(kid, idU);
+	public Kid addKid(@RequestBody Kid kid) {
+		return kidService.addKid(kid, CURRENTUSER.getIdUser());
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/del/3
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@DeleteMapping("del/{idK}")
-	public void deleteKid(@PathVariable("idK") int id) {
-		kidService.deleteKid(id);
+	public String deleteKid(@PathVariable("idK") int id) {
+		return kidService.deleteKid(id);
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/get/2
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@GetMapping("get/{idK}")
 	public Kid displayKidById(@PathVariable("idK") int id) {
 		return kidService.displayKid(id);
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/getAll
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@GetMapping("getAll")
 	public List<Kid> displayAllKids() {
 		return kidService.displayAllKids();
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/up/2
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PutMapping("up/{idK}")
 	public Kid updateKid(@PathVariable("idK") int id, @RequestBody Kid kid) {
 		return kidService.updateKid(id, kid);
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/Asc
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@GetMapping("Asc")
 	public List<Kid> orderKidsByNameAsc() {
 		return kidService.orderKidsByNameAsc();
 	}
 
+	// localhost:8080/SpringMVC/servlet/kid/Desc
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@GetMapping("Desc")
 	public List<Kid> orderKidsByNameDesc() {
 		return kidService.orderKidsByNameDesc();
 	}
-	
+
+	// localhost:8080/SpringMVC/servlet/kid/daycare/aff/2/1
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PutMapping("daycare/aff/{idK}/{idD}")
-	public Kid affectKidToDaycare(@PathVariable("idK") int idK, @PathVariable("idD") int idD){
+	public Retour<Kid> affectKidToDaycare(@PathVariable("idK") int idK, @PathVariable("idD") int idD) {
 		return kidService.affectKidToDaycare(idK, idD);
 	}
-	
+
+	// localhost:8080/SpringMVC/servlet/kid/daycare/del/2/1
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PutMapping("daycare/del/{idK}/{idD}")
-	public Kid deleteKidFromDaycare(@PathVariable("idK") int idK, @PathVariable("idD") int idD){
+	public Retour<Kid> deleteKidFromDaycare(@PathVariable("idK") int idK, @PathVariable("idD") int idD) {
 		return kidService.deleteKidFromDaycare(idK, idD);
 	}
-	
+
+	// localhost:8080/SpringMVC/servlet/kid/static/nb
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@GetMapping("static/nb")
 	public int nbrKid() {

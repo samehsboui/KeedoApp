@@ -20,62 +20,71 @@ import tn.esprit.pi.services.DaycareService;
 @RestController
 @RequestMapping("daycare/")
 public class DaycareController {
-	
+
 	@Autowired
 	DaycareService daycareService;
-	
+
+	// localhost:8080/SpringMVC/servlet/daycare/add
 	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@PostMapping("add")
 	public Retour<Daycare> addDaycare(@RequestBody Daycare daycare) {
 		return daycareService.addDaycare(daycare);
 	}
-	
-	@PreAuthorize("hasAuthority('DaycareManager')")
+
+	// localhost:8080/SpringMVC/servlet/daycare/del/1
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@DeleteMapping("del/{id}")
 	public void deleteDaycare(@PathVariable int id) {
 		daycareService.deleteDaycare(id);
 	}
-	
-	@PreAuthorize("hasAuthority('DaycareManager')")
+
+	// localhost:8080/SpringMVC/servlet/daycare/update/1
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@PutMapping("update/{id}")
 	public Daycare updateDaycare(@PathVariable int id, @RequestBody Daycare daycare) {
 		return daycareService.updateDaycare(id, daycare);
 	}
-	
-	@PreAuthorize("hasAuthority('DaycareManager')")
+
+	// localhost:8080/SpringMVC/servlet/daycare/get/1
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("get/{id}")
 	public Daycare displayById(@PathVariable int id) {
 		return daycareService.displayById(id);
 	}
 
-	@PreAuthorize("hasAuthority('DaycareManager')")
+	// localhost:8080/SpringMVC/servlet/daycare/getAll
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("getAll")
 	public List<Daycare> displayAll() {
 		return daycareService.displayAll();
 	}
-	
-	@PreAuthorize("hasAuthority('DaycareManager')")
+
+	// localhost:8080/SpringMVC/servlet/daycare/getAll/sat
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("getAll/sat")
 	public List<Daycare> displayDaycareSaturated() {
 		return daycareService.displayDaycareSaturated();
 	}
 
-	@PreAuthorize("hasAuthority('DaycareManager')")
+	// localhost:8080/SpringMVC/servlet/daycare/getAll/Nsat
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("getAll/Nsat")
 	public List<Daycare> displayDaycareNonSaturated() {
 		return daycareService.displayDaycareNonSaturated();
 	}
-	
-	@PreAuthorize("hasAuthority('DaycareManager')")
+
+	// localhost:8080/SpringMVC/servlet/daycare/getAll/date
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("getAll/date")
 	public List<Daycare> displayDaycareByDate() {
 		return daycareService.displayDaycareByDate();
 	}
 
 	// STATIC
+	// localhost:8080/SpringMVC/servlet/daycare/static/revenue/2021
 	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping("static/revenue/{year}")
-	public Double daycareRevenuePerYear(@PathVariable("year") String year){
+	public Double daycareRevenuePerYear(@PathVariable("year") String year) {
 		return daycareService.daycareRevenuePerYear(year);
 	}
 }

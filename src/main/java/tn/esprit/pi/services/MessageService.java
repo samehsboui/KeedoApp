@@ -37,6 +37,15 @@ public class MessageService implements IMessageService {
 		List<User> myFriends = followService.getUserFollowing(id).getUserList();
 		return myFriends;
 	}
+	
+	@Override
+	public List<User> disConnected(int id) {
+		User user = userRepository.findById(id).get();
+		user.setStatus(false);
+		userRepository.save(user);
+		List<User> myFriends = followService.getUserFollowing(id).getUserList();
+		return myFriends;
+	}
 
 	@Override
 	public Retour<Message> sendMessage(int idS, int idR, Message message) {

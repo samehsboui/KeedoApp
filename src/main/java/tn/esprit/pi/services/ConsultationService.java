@@ -81,8 +81,9 @@ public class ConsultationService implements IConsultationService {
 	}
 
 	@Override
-	public void deleteConsultation(int id) {
+	public String deleteConsultation(int id) {
 		consultationRepository.deleteConsultById(id);
+		return "Consultation deleteded successfully";
 	}
 
 	@Override

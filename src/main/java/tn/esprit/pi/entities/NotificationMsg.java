@@ -27,9 +27,14 @@ public class NotificationMsg implements Serializable {
 
 	@Column(name = "content")
 	private String content;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "createdAt")
 	private Date createdAt;
+
+	@Temporal(TemporalType.TIME)
+	@Column(name = "time")
+	private Date time;
 
 	@Column(name = "isRead")
 	private boolean isRead;
@@ -37,6 +42,7 @@ public class NotificationMsg implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "userSend")
 	private User userSend;
+
 	@ManyToOne
 	@JoinColumn(name = "userReceive")
 	private User userReceive;
@@ -70,6 +76,14 @@ public class NotificationMsg implements Serializable {
 		this.createdAt = createdAt;
 	}
 
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
 	public boolean isRead() {
 		return isRead;
 	}
@@ -96,8 +110,8 @@ public class NotificationMsg implements Serializable {
 
 	@Override
 	public String toString() {
-		return "NotificationMsg [id=" + id + ", content=" + content + ", createdAt=" + createdAt + ", isRead=" + isRead
-				+ ", userSend=" + userSend + ", userReceive=" + userReceive + "]";
+		return "NotificationMsg [id=" + id + ", content=" + content + ", createdAt=" + createdAt + ", time=" + time
+				+ ", isRead=" + isRead + ", userSend=" + userSend + ", userReceive=" + userReceive + "]";
 	}
 
 }

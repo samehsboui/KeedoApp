@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Kid")
 public class Kid implements Serializable {
@@ -27,25 +29,35 @@ public class Kid implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idKid;
+
 	@Column(name = "fistName")
 	private String firstName;
+
 	@Column(name = "lastName")
 	private String lastName;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "birthDate")
 	private Date birthDate;
+
 	@Column(name = "gender")
 	private String gender;
+
 	@Column(name = "address")
 	private String address;
+
 	@ManyToOne
 	@JoinColumn(name = "id_user")
 	private User user;
+
 	@ManyToOne
 	@JoinColumn(name = "id_dacare")
 	private Daycare daycare;
+
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kid", fetch = FetchType.EAGER)
 	private Set<Consultation> consultations;
+
 	@ManyToOne
 	@JoinColumn(name = "id_bus")
 	private Bus bus;

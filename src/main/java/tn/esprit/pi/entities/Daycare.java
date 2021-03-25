@@ -16,35 +16,45 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Daycare implements Serializable{
-	
+public class Daycare implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name= "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int idDaycare;
-	@Column(name= "price_M")
+
+	@Column(name = "price_M")
 	private Double price_M;
-	@Column(name= "price_T")
+
+	@Column(name = "price_T")
 	private Double price_T;
+
 	@Transient
 	private long periode;
+
 	@Temporal(TemporalType.DATE)
-	@Column(name= "dateBegin")
+	@Column(name = "dateBegin")
 	private Date dateBegin;
+
 	@Temporal(TemporalType.DATE)
-	@Column(name= "dateEnd")
+	@Column(name = "dateEnd")
 	private Date dateEnd;
-	@Column(name= "capacity")
+
+	@Column(name = "capacity")
 	private int capacity;
-	@Column(name= "nbInscrit")
+
+	@Column(name = "nbInscrit")
 	private int nbInscrit;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy= "daycare", fetch= FetchType.EAGER)
+
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "daycare", fetch = FetchType.EAGER)
 	private Set<Kid> kids;
-	
+
 	public Daycare() {
 		super();
 	}
@@ -56,7 +66,7 @@ public class Daycare implements Serializable{
 	public void setIdDaycare(int idDaycare) {
 		this.idDaycare = idDaycare;
 	}
-	
+
 	public Double getPrice_M() {
 		return price_M;
 	}

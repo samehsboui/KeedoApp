@@ -25,9 +25,13 @@ public class ChatService implements IChatService {
 	IUserRepository userRepository;
 	@Autowired
 	ChatKeyWordRepository chatKeyWordRepository;
+	@Autowired
+	ChatSuggestionService chatSuggestionService;
 
 	// Add chat
+	@Override
 	public Chat addChat(Chat chat, int idU) {
+		System.out.println("IDU=> " + idU);
 		User user = userRepository.findById(idU).get();
 		chat.setUser(user);
 		chatRepository.save(chat);
@@ -35,6 +39,7 @@ public class ChatService implements IChatService {
 	}
 
 	// Add key words to a chat
+	@Override
 	public String addKeyWords(List<ChatKeyWord> keyWords, int idC) {
 		Chat chat = chatRepository.findById(idC);
 		if (keyWords.size() < 4) {
@@ -50,6 +55,7 @@ public class ChatService implements IChatService {
 	}
 
 	// Display all chats
+	@Override
 	public List<Chat> displayAll() {
 		List<Chat> chats = chatRepository.displayAll();
 		for (Chat chat : chats) {
@@ -60,18 +66,21 @@ public class ChatService implements IChatService {
 	}
 
 	// Display words by response
+	@Override
 	public List<ChatKeyWord> diplayByChatId(int idC) {
 		Chat chat = chatRepository.findById(idC);
 		return chatKeyWordRepository.diplayByChatId(chat);
 	}
 
 	// Display chat by id
+	@Override
 	public Chat displayChatById(int idC) {
 		Chat chat = chatRepository.findById(idC);
 		return chat;
 	}
 
 	// Edit chat by id
+	@Override
 	public Chat updateChat(Chat chat, int idC) {
 		Chat c = chatRepository.findById(idC);
 		List<ChatKeyWord> words = c.getChatKeyWord();
@@ -84,6 +93,7 @@ public class ChatService implements IChatService {
 		c.setChatKeyWord(chat.getChatKeyWord());
 
 		List<ChatKeyWord> words2 = c.getChatKeyWord();
+		System.out.println("WORDS=> " + words2);
 		for (ChatKeyWord chatKeyWord : words2) {
 			chatKeyWord.setChat(c);
 
@@ -93,6 +103,7 @@ public class ChatService implements IChatService {
 	}
 
 	// Delete chat and his key words
+	@Override
 	public void deleteChat(int idC) {
 		Chat chat = chatRepository.findById(idC);
 		for (ChatKeyWord word : chat.getChatKeyWord()) {
@@ -102,6 +113,7 @@ public class ChatService implements IChatService {
 	}
 
 	// Find the response
+	@Override
 	public String getRespenseBasedOnWord(String word) {
 		double max = 0.0;
 		int index = 0;
@@ -128,15 +140,25 @@ public class ChatService implements IChatService {
 			}
 			System.out.println("Count nbr: " + (double) (mainWords.size() - mainWordsToFind.size()) / mainWords.size());
 		}
-		if (index == 0 || max < 0.4) {
+		if (index != 0 || max > 0.4) {
 			Chat c = chatRepository.findById(index);
+			c.setNbRequest(c.getNbRequest() + 1);
+			chatRepository.save(c);
 			return c.getRespense();
+
 		} else {
+			chatSuggestionService.addChatSuggestion(word);
 			return "Sorry, here we can't help you, please contact us with mail";
 		}
 	}
 
+	@Override
 	public String connectToChat() {
 		return "Hi, how Can we help you?";
+	}
+
+	@Override
+	public List<Chat> getChatsByMostRec() {
+		return chatRepository.getChatsByMostRec();
 	}
 }

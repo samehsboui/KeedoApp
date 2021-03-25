@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Chat;
 import tn.esprit.pi.entities.ChatKeyWord;
 import tn.esprit.pi.services.ChatService;
+import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 
 @RestController
 @RequestMapping("chat/")
@@ -25,13 +26,15 @@ public class ChatController {
 	ChatService chatService;
 
 	// Add Chat
+	// localhost:8080/SpringMVC/servlet/chat/add
 	@PreAuthorize("hasAuthority('Admin')")
-	@PostMapping("add/{idU}")
-	public Chat addContent(@RequestBody Chat chat, @PathVariable int idU) {
-		return chatService.addChat(chat, idU);
+	@PostMapping("add")
+	public Chat addContent(@RequestBody Chat chat) {
+		return chatService.addChat(chat, CURRENTUSER.getIdUser());
 	}
 
 	// Add key words by chat
+	// localhost:8080/SpringMVC/servlet/chat/addKW/1
 	@PreAuthorize("hasAuthority('Admin')")
 	@PostMapping("addKW/{idC}")
 	public String addKeyWords(@RequestBody List<ChatKeyWord> keyWords, @PathVariable int idC) {
@@ -45,7 +48,8 @@ public class ChatController {
 		chatService.deleteChat(idC);
 	}
 
-	// Display All chats
+	// Display All chats without response
+	// localhost:8080/SpringMVC/servlet/chat/getAll
 	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("getAll")
 	public List<Chat> displayAll() {
@@ -53,13 +57,15 @@ public class ChatController {
 	}
 
 	// Display words by response
+	// localhost:8080/SpringMVC/servlet/chat/displayKeWords/1
 	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("displayKeWords/{idC}")
 	public List<ChatKeyWord> diplayByChatId(@PathVariable int idC) {
 		return chatService.diplayByChatId(idC);
 	}
 
-	// Display chat by id
+	// Display chat by id without keyWords
+	// localhost:8080/SpringMVC/servlet/chat/displayChatId/1
 	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("displayChatId/{idC}")
 	public Chat displayChatById(@PathVariable int idC) {
@@ -67,22 +73,31 @@ public class ChatController {
 	}
 
 	// Edit chat by id
+	// localhost:8080/SpringMVC/servlet/chat/updateC/1
 	@PreAuthorize("hasAuthority('Admin')")
 	@PutMapping("updateC/{idC}")
 	public Chat updateChat(@RequestBody Chat chat, @PathVariable int idC) {
 		return chatService.updateChat(chat, idC);
 	}
 
+	// localhost:8080/SpringMVC/servlet/chat/replayBasedOnWords
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')  ")
 	@GetMapping("replayBasedOnWords")
 	public String getRespenseBasedOnWord(@RequestBody String word) {
 		return chatService.getRespenseBasedOnWord(word.intern());
 	}
 
+	// localhost:8080/SpringMVC/servlet/chat/connectToChat
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')  ")
 	@GetMapping("connectToChat")
 	public String connectToChat() {
 		return chatService.connectToChat();
 	}
 
+	// localhost:8080/SpringMVC/servlet/chat/ChatsByMostRec
+	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')  ")
+	@GetMapping("ChatsByMostRec")
+	public List<Chat> getChatsByMostRec() {
+		return chatService.getChatsByMostRec();
+	}
 }

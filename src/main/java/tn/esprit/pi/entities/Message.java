@@ -18,7 +18,6 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "message")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -27,6 +26,7 @@ public class Message implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int idMessage;
+
 	@Column(name = "content")
 	private String content;
 
@@ -37,6 +37,7 @@ public class Message implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date")
 	private Date date;
+
 	@Temporal(TemporalType.TIME)
 	@Column(name = "time")
 	private Date time;
@@ -44,6 +45,7 @@ public class Message implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_sender")
 	private User sender;
+
 	@ManyToOne
 	@JoinColumn(name = "id_receiver")
 	private User receiver;

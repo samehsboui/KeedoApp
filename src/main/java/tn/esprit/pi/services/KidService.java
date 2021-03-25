@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Daycare;
 import tn.esprit.pi.entities.Kid;
+import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.DaycareRepository;
 import tn.esprit.pi.repositories.KidRepository;
@@ -24,7 +25,7 @@ public class KidService implements IKidService {
 
 	@Override
 	public Kid addKid(Kid kid, int idU) {
-		System.out.println("iddddd=> "+idU);
+		System.out.println("iddddd=> " + idU);
 		User user = userRepository.findById(idU).get();
 		kid.setUser(user);
 		kidRepository.save(kid);
@@ -32,8 +33,9 @@ public class KidService implements IKidService {
 	}
 
 	@Override
-	public void deleteKid(int id) {
+	public String deleteKid(int id) {
 		kidRepository.deleteKidById(id);
+		return "Kid deleted successfully";
 	}
 
 	@Override
@@ -70,29 +72,38 @@ public class KidService implements IKidService {
 	}
 
 	@Override
-	public Kid affectKidToDaycare(int idK, int idD) {
+	public Retour<Kid> affectKidToDaycare(int idK, int idD) {
+		Retour<Kid> rt = new Retour<>();
 		Daycare daycare = daycarRepository.findById(idD).get();
 		Kid kid = kidRepository.findById(idK).get();
 		// Test if kid has already a daycare
 		Daycare d = kid.getDaycare();
 		if (d != null) {
-			d.setNbInscrit(d.getNbInscrit() - 1);
-			daycarRepository.save(d);
-		}
-		if (daycare.getNbInscrit() < daycare.getCapacity()) {
+			if (d.getIdDaycare() == daycare.getIdDaycare()) {
+				rt.setStringValue("Kid already exists");
+			} else {
+				d.setNbInscrit(d.getNbInscrit() - 1);
+				daycarRepository.save(d);
+			}
+
+		} else if (daycare.getNbInscrit() < daycare.getCapacity()) {
 			kid.setDaycare(daycare);
 			daycare.setNbInscrit(daycare.getNbInscrit() + 1);
 			kidRepository.save(kid);
 			daycarRepository.save(daycare);
+			rt.setStringValue("Kid affected successfully");
+			rt.getObjectValue().add(kid);
 		} else {
-			System.out.println("Daycare saturée");
+			rt.setStringValue("Daycare saturated");
 		}
 
-		return kid;
+		return rt;
 	}
 
 	@Override
-	public Kid deleteKidFromDaycare(int idK, int idD) {
+	public Retour<Kid> deleteKidFromDaycare(int idK, int idD) {
+		Retour<Kid> rt = new Retour<>();
+
 		Daycare daycare = daycarRepository.findById(idD).get();
 		Kid kid = kidRepository.findById(idK).get();
 		kid.setDaycare(null);
@@ -100,7 +111,9 @@ public class KidService implements IKidService {
 		kidRepository.save(kid);
 		daycarRepository.save(daycare);
 
-		return kid;
+		rt.setStringValue("Kid deleted from daycare successfully");
+		rt.getObjectValue().add(kid);
+		return rt;
 	}
 
 	@Override

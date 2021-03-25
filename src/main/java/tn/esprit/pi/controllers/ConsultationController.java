@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Consultation;
@@ -19,10 +20,10 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.services.ConsultationService;
-
-//import static tn.esprit.pi.security.CustomLoginSuccessHandler.idCurrent;
+import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 
 @RestController
+@RequestMapping("consult/")
 public class ConsultationController {
 
 	@Autowired
@@ -32,59 +33,75 @@ public class ConsultationController {
 	@Autowired
 	ConsultationRepository consultationRepository;
 
-	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Doctor')")
-	@PostMapping("consult/add/{idK}/{idA}/{idD}")
+	// localhost:8080/SpringMVC/servlet/consult/add/1/4
+	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@PostMapping("add/{idK}/{idD}")
 	public Retour<User> affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK,
-			@PathVariable("idA") int idA, @PathVariable("idD") int idD) {
-		return consultationService.affectConsultationToKid(consultation, idK, idA, idD);
+			@PathVariable("idD") int idD) {
+		return consultationService.affectConsultationToKid(consultation, idK, CURRENTUSER.getIdUser(), idD);
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/del/2
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Doctor')")
-	@DeleteMapping("consult/del/{id}")
-	public void deleteConsultation(@PathVariable int id) {
-		consultationService.deleteConsultation(id);
+	@DeleteMapping("del/{id}")
+	public String deleteConsultation(@PathVariable int id) {
+		return consultationService.deleteConsultation(id);
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/up/2
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Doctor')")
-	@PutMapping("consult/up/{idC}")
+	@PutMapping("up/{idC}")
 	public Consultation updateConsultation(@PathVariable("idC") int idC, @RequestBody Consultation consultation) {
 		return consultationService.updateConsultation(idC, consultation);
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/getAll
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
-	@GetMapping("consult/getAll")
+	@GetMapping("getAll")
 	public List<Consultation> displayAllConsultations() {
 		return consultationService.displayAllConsultations();
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/getAll/ToDay
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
-	@GetMapping("consult/getAll/ToDay")
+	@GetMapping("getAll/ToDay")
 	public List<Consultation> displayConsultationsToDay() {
 		return consultationService.displayConsultationsToDay();
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/kid/getAll/1
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
-	@GetMapping("consult/kid/getAll/{idK}")
+	@GetMapping("kid/getAll/{idK}")
 	public List<Consultation> displayConsultationsByKid(@PathVariable("idK") int idK) {
 		return consultationService.displayConsultationsByKid(idK);
 	}
 
-	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('Doctor')")
-	@GetMapping("consult/doctor/getAll")
-	public List<Consultation> displayConsultationsByDoctor(int idD) {
+	// localhost:8080/SpringMVC/servlet/consult/doctor/getAll
+	@PreAuthorize("hasAuthority('KindergardenDirector')")
+	@GetMapping("doctor/getAll/{idD}")
+	public List<Consultation> displayConsultationsByDoctor(@PathVariable("idD") int idD) {
 		return consultationService.displayConsultationsByDoctor(idD);
+	}
+
+	// localhost:8080/SpringMVC/servlet/consult/doctor/getMy
+	@PreAuthorize("hasAuthority('Doctor')")
+	@GetMapping("doctor/getMy")
+	public List<Consultation> displayMyConsult() {
+		return consultationService.displayConsultationsByDoctor(CURRENTUSER.getIdUser());
 	}
 
 	// STATIC
 
+	// localhost:8080/SpringMVC/servlet/consult/static/doctor
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
-	@GetMapping("consult/static/doctor")
+	@GetMapping("static/doctor")
 	public Map<String, Integer> percentageParticipationByDoctor() {
 		return consultationService.percentageParticipationByDoctor();
 	}
 
+	// localhost:8080/SpringMVC/servlet/consult/static/nbC/12
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
-	@GetMapping("consult/static/nbC/{m}")
+	@GetMapping("static/nbC/{m}")
 	public int getPerMonth(@PathVariable("m") String m) {
 		List<Consultation> consult = consultationRepository.findByMatchMonthAndMatchDay("-" + m + "-");
 		return consult.size();

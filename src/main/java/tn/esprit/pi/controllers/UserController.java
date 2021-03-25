@@ -3,8 +3,6 @@ package tn.esprit.pi.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.services.IUserservice;
-import tn.esprit.pi.storage.UserStorage;
 
 @RestController
 @RequestMapping("/User/Service")

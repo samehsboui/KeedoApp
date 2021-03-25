@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.NotificationMsg;
+import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.repositories.NotificationMsgRepository;
 import tn.esprit.pi.services.NotificationMsgService;
@@ -40,9 +41,10 @@ public class NotificationMsgController {
 		return notifService.findAllByUserReceive(idU);
 	}
 
+	// localhost:8080/SpringMVC/servlet/notifMsg/getById/5
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
 	@GetMapping("getById/{idN}")
-	public NotificationMsg findByNotificationId(@PathVariable("idN") int idN) {
+	public Retour<NotificationMsg> findByNotificationId(@PathVariable("idN") int idN) {
 		return notifService.findByNotificationId(idN);
 
 	}
