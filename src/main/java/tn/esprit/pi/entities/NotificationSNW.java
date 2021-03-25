@@ -7,8 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +21,7 @@ public class NotificationSNW implements Serializable{
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
-	private int id;
+	private int idNotificationsnw;
 	@Column(name= "subject")
 	private String subject;
 	@Column(name= "Date")
@@ -32,25 +31,26 @@ public class NotificationSNW implements Serializable{
 	@Column(name= "receiver")
 	private int receiver;
 	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name= "id_comment")
+	@OneToOne(mappedBy="notificationsnw")
 	private Comment comment;
 	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name= "id_like")
-	private Liking like;
+	@OneToOne(mappedBy="notificationsnw")
+	private Liking liking;
 	
 	public NotificationSNW() {
 		super();
 	}
 
-	public int getId() {
-		return id;
+
+	public int getIdNotificationsnw() {
+		return idNotificationsnw;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+
+	public void setIdNotificationsnw(int idNotificationsnw) {
+		this.idNotificationsnw = idNotificationsnw;
 	}
+
 
 	public String getSubject() {
 		return subject;
@@ -76,13 +76,6 @@ public class NotificationSNW implements Serializable{
 		this.comment = comment;
 	}
 
-	public Liking getLike() {
-		return like;
-	}
-
-	public void setLike(Liking like) {
-		this.like = like;
-	}
 
 	public int getSender() {
 		return sender;
@@ -100,11 +93,25 @@ public class NotificationSNW implements Serializable{
 		this.receiver = receiver;
 	}
 
+	public Liking getLiking() {
+		return liking;
+	}
+
+	public void setLiking(Liking liking) {
+		this.liking = liking;
+	}
+
+
 	@Override
 	public String toString() {
-		return "NotificationSNW [id=" + id + ", subject=" + subject + ", date=" + date + ", sender=" + sender
-				+ ", receiver=" + receiver + ", comment=" + comment + ", like=" + like + "]";
+		return "NotificationSNW [idNotificationsnw=" + idNotificationsnw + ", subject=" + subject + ", date=" + date
+				+ ", sender=" + sender + ", receiver=" + receiver + ", comment=" + comment + ", liking=" + liking + "]";
 	}
+
+
+
+
+
 
 
 

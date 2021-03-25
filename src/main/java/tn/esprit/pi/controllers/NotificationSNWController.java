@@ -13,7 +13,7 @@ import tn.esprit.pi.services.NotificationSNWServiceImpl;
 @RestController
 public class NotificationSNWController {
 	@Autowired  
-	NotificationSNWServiceImpl NotifServiceImpl;
+	NotificationSNWServiceImpl notifServiceImpl;
 	
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-notif/{idN}
@@ -21,7 +21,7 @@ public class NotificationSNWController {
 		@GetMapping("/Notif/get-notif/{idN}")
 		public NotificationSNW getNotif(@PathVariable("idN") int idN)   
 		{  
-			return NotifServiceImpl.getNotifById(idN);  
+			return notifServiceImpl.getNotifById(idN);  
 		}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-all-notif
@@ -29,7 +29,7 @@ public class NotificationSNWController {
 		@GetMapping("/Notif/get-all-notif")
 		public List<NotificationSNW> getAllNotif()   
 		{  
-			return NotifServiceImpl.getAllNotif();  
+			return notifServiceImpl.getAllNotif();  
 		}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-notif-by-user/{idU}
@@ -37,15 +37,25 @@ public class NotificationSNWController {
 		@GetMapping("/Notif/get-notif-by-user/{idU}")
 		public List<NotificationSNW> getNotifByUser(@PathVariable("idU") int idU)   
 		{  
-			return NotifServiceImpl.getNotifByUser(idU);  
+			return notifServiceImpl.getNotifByUser(idU);  
 		}  
 	
 	//URL: http://localhost:9293/SpringMVC/servlet/Notif/delete-notif/{idN}
 	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
 		@DeleteMapping("/Notif/delete-notif/{idN}")  
-		public void deleteNotif(@PathVariable("idN") int idN)   
+		public String deleteNotif(@PathVariable("idN") int idN)   
 		{  
-			//System.out.println("this is the id"+ idN);
-			NotifServiceImpl.deleteNotif(idN);  
+			notifServiceImpl.deleteNotif(idN);
+			return("Notification deleted successfully");
 		} 
+	
+	//URL: http://localhost:9293/SpringMVC/servlet/Notif/get-my-notifs
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+		@GetMapping("/Notif/get-my-notifs")  
+		public List<NotificationSNW> getMyNotifs() throws Exception   
+		{  
+			return notifServiceImpl.getMyNotifs();  
+		}
+	
+	
 }
