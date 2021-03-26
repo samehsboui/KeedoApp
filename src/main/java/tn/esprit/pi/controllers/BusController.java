@@ -19,6 +19,7 @@ import tn.esprit.pi.services.BusService;
 
 
 
+
 @RestController
 @RequestMapping("/bus")
 public class BusController {
@@ -28,15 +29,15 @@ public class BusController {
 	
 	
 	//localhost:9293/SpringMVC/servlet/bus/showBus
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	 @GetMapping("/showBus")
 	    public List<Bus> showNewDrivereForm() {
 	        return busService.getAllBus();
 	    }
 	
 	
-	//localhost:9293/SpringMVC/servlet/bus/saveBus/2/1
-	@PreAuthorize("hasAuthority('Admin')")
+	//localhost:9293/SpringMVC/servlet/bus/saveBus/1/1
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	 @PostMapping("/saveBus/{idDriver}/{idU}")
 		public Bus AffectBusDriver(@RequestBody Bus bus, @PathVariable("idDriver")int idDriver,@PathVariable("idU")int idU)   
 		{  
@@ -45,7 +46,7 @@ public class BusController {
 		}
 	 
 	//localhost:9293/SpringMVC/servlet/bus/deleteBus/1
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@DeleteMapping("/deleteBus/{id}")
 		public void deleteDriver(@PathVariable("id") int id) {
 			busService.deleteBusById(id);
@@ -60,7 +61,7 @@ public class BusController {
 			return bus;  
 		} 
 	//localhost:9293/SpringMVC/servlet/bus/showBusByDriver/dhekra
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@GetMapping("/showBusByDriver/{firstName}")
 		public List<Bus> getBusByDriver(@PathVariable String firstName) {
 			 List<Bus> bus = busService.getBusByDriver(firstName);

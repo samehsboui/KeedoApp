@@ -93,4 +93,14 @@ public class KidController {
 	public int nbrKid() {
 		return kidService.nbrKid();
 	}
+	//dhekra
+	//dhekra
+		//localhost:9293/SpringMVC/servlet/kid/saveBusKid/1
+		@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
+			 @PostMapping("saveBusKid/{idBus}")
+				public Kid AffectBusKid(@RequestBody Kid kid, @PathVariable("idBus")int idBus)   
+				{  
+					 
+					return kidService.affectKidToBus(kid, idBus);
+				}
 }

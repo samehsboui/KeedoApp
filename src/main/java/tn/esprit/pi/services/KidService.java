@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.pi.entities.Bus;
 import tn.esprit.pi.entities.Daycare;
 import tn.esprit.pi.entities.Kid;
 import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.User;
+import tn.esprit.pi.repositories.BusRepository;
 import tn.esprit.pi.repositories.DaycareRepository;
 import tn.esprit.pi.repositories.KidRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
@@ -132,5 +134,18 @@ public class KidService implements IKidService {
 			return user;
 		}
 		return null;
+	}
+	//dhekra
+	@Autowired
+	BusRepository busRepository;
+	@Override
+	public Kid affectKidToBus(Kid kid,int idBus) {
+		// TODO Auto-generated method stub
+		
+		Bus bus =busRepository.findById(idBus).get();
+		kid.setBus(bus);
+		kidRepository.save(kid);
+		
+		return kid;
 	}
 }

@@ -39,6 +39,7 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
 
+
 @RestController
 @RequestMapping("/emprunt")
 public class EmpruntController {
@@ -60,10 +61,7 @@ public class EmpruntController {
 	private EmpruntBookService empruntBookService;
 	
 	
-	public User currentUser() throws Exception{
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return ((UserDetailsImpl) principal).getUser();
-	}
+	
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/showAllEmprunt
 	@PreAuthorize("hasAuthority('Admin')")
@@ -85,7 +83,7 @@ public class EmpruntController {
 		}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/detailsEmprunt/1
-	@PreAuthorize("hasAuthority('Parent') or hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping(value = "/detailsEmprunt/{id}")
 	public EmpruntBook detailEMprunt(@PathVariable int id) {
 
@@ -94,22 +92,6 @@ public class EmpruntController {
 		// return empruntBookRepository.findById(id);
 	}
 
-	// http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser
-	@PreAuthorize("hasAuthority('Parent')or hasAuthority('Admin')")
-	@RequestMapping(value = "/findEmpruntsByUser")
-	public List<EmpruntBook> findEmpruntsByUser() throws Exception {
-	//	User user = userService.findById(idUser);
-
-		List<EmpruntBook> listeEmprunts = empruntBookRepository.findEmpruntsByUser(currentUser().getIdUser());
-
-		//logger.info("[REST]  list emprunt with  user " + user.getMail());
-
-		return listeEmprunts;
-	}
-	
-	
-	
-	
 	
 	  // http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser/dhekraParent
 	@PreAuthorize("hasAuthority('Admin')")
@@ -126,10 +108,13 @@ public class EmpruntController {
 	 
 	
 
-	
+	public User currentUser() throws Exception{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((UserDetailsImpl) principal).getUser();
+	}
 
        private final static String ACCOUNT_SID = "AC6c88a113ac98865b4e25b8ba4f939311";
-	   private final static String AUTH_ID =  "bf02a9ba2e35bb07695abf33cc1e6ed5";
+	   private final static String AUTH_ID =  "f12b1d4cfd4876dee2384a315c62d4f2";
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/creerEmprunt
 	@PreAuthorize("hasAuthority('Parent')")
@@ -206,7 +191,7 @@ public class EmpruntController {
 	}
 
 
-	// http://localhost:9293/SpringMVC/servlet/emprunt/stopperEmprunt/1
+	// http://localhost:9293/SpringMVC/servlet/emprunt/stoppedEmprunt/1
 
 	@PreAuthorize("hasAuthority('Parent')")
 	@RequestMapping(value = "/stoppedEmprunt/{id}")

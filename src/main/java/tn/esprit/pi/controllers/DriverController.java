@@ -21,6 +21,7 @@
 	
 	import tn.esprit.pi.services.DriverService;
 	
+
 	@RestController
 	
 	@RequestMapping("/driver")
@@ -33,14 +34,14 @@
 		
 		
 		//localhost:9293/SpringMVC/servlet/driver/showDriver
-		@PreAuthorize("hasAuthority('Admin')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		 @GetMapping("/showDriver")
 		    public List<Driver>showDriver() {
 		        return driverservice.getAllDriver();
 		    }
 		
 		//localhost:9293/SpringMVC/servlet/driver/saveDriver
-		@PreAuthorize("hasAuthority('Admin')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@PostMapping("/saveDriver")
 		public String saveDriver(@RequestBody Driver driver)   
 			{  
@@ -50,7 +51,7 @@
 		 
 		
 		//localhost:9293/SpringMVC/servlet/driver/deleteDriver/1
-		@PreAuthorize("hasAuthority('Admin')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@RequestMapping(value = "/deleteDriver/{id}", method = RequestMethod.DELETE)
 		     void deleteDriver(@PathVariable int id) {
 	
@@ -59,7 +60,7 @@
 		}
 		
 		//localhost:9293/SpringMVC/servlet/driver/updatedriver/2
-		@PreAuthorize("hasAuthority('Admin')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@PutMapping("/updatedriver/{idDriver}")
 		public Driver updateDriver(@RequestBody Driver driver, @PathVariable("idDriver")int idDriver) {
 	
@@ -67,7 +68,7 @@
 		 
 		}
 		//localhost:9293/SpringMVC/servlet/driver/showbyid/2
-		@PreAuthorize("hasAuthority('Admin')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@GetMapping("/showbyid/{id}")
 	    public Driver showbyid(@PathVariable int id) {
 	        return driverservice.getDriverById(id);

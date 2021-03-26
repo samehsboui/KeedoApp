@@ -30,8 +30,7 @@ public class Book implements Serializable {
 	
 	
 
-
-	    @Id
+	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int id;
 
@@ -47,9 +46,6 @@ public class Book implements Serializable {
 	    @Column(name="lastName_author")
 	    private String auteurPrenom;
 
-	    @Column(name="editeur")
-	    private String editeur;
-
 	    @Column(name="collection")
 	    private String collection;
 
@@ -61,20 +57,17 @@ public class Book implements Serializable {
 
 	    @Column(name="stock_disponible")
 	    private int stockDisponible;
- 
-	//@OneToMany(cascade= CascadeType.ALL, mappedBy= "book", fetch= FetchType.EAGER)
-	//private Set<EmpruntBook>empruntBook;
 
 	
 	  // méthodes d'augmentation et de diminution du stock
 
-    public void emprunterBook(){
-        this.stockDisponible-=1;
-    }
+ public void emprunterBook(){
+     this.stockDisponible-=1;
+ }
 
-    public void restituerBook(){
-        this.stockDisponible+=1;
-    }
+ public void restituerBook(){
+     this.stockDisponible+=1;
+ }
 
 	
 	
@@ -83,7 +76,7 @@ public class Book implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Book(int id, String isbn, String titre, String auteurNom, String auteurPrenom, String editeur,
+	public Book(int id, String isbn, String titre, String auteurNom, String auteurPrenom,
 			String collection, String etiquette, int stockTotal, int stockDisponible, Set<EmpruntBook> empruntBook) {
 		super();
 		this.id = id;
@@ -91,7 +84,6 @@ public class Book implements Serializable {
 		this.titre = titre;
 		this.auteurNom = auteurNom;
 		this.auteurPrenom = auteurPrenom;
-		this.editeur = editeur;
 		this.collection = collection;
 		this.etiquette = etiquette;
 		this.stockTotal = stockTotal;
@@ -141,13 +133,6 @@ public class Book implements Serializable {
 		this.auteurPrenom = auteurPrenom;
 	}
 
-	public String getEditeur() {
-		return editeur;
-	}
-
-	public void setEditeur(String editeur) {
-		this.editeur = editeur;
-	}
 
 	public String getCollection() {
 		return collection;
@@ -181,13 +166,5 @@ public class Book implements Serializable {
 		this.stockDisponible = stockDisponible;
 	}
 
-//	public Set<EmpruntBook> getEmpruntBook() {
-	//	return empruntBook;
-	//}
-
-	//public void setEmpruntBook(Set<EmpruntBook> empruntBook) {
-	//	this.empruntBook = empruntBook;
-	//}
-	
 	
 }

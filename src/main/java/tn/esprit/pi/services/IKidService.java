@@ -26,4 +26,7 @@ public interface IKidService {
 	Retour<Kid> deleteKidFromDaycare(int idK, int idD);
 
 	int nbrKid();
+	
+	//dhekra
+	Kid affectKidToBus(Kid kid , int idBus);
 }

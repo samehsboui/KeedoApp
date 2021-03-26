@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name= "bus")
 public class Bus implements Serializable{
 
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -40,8 +41,7 @@ public class Bus implements Serializable{
 	@Column(name="timeA")
 	@Temporal(TemporalType.TIME)
 	private Date timeA;
-	@Column(name="capacity")
-	private int capacity;
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name= "id_user")
@@ -98,13 +98,7 @@ public class Bus implements Serializable{
 		this.timeA = timeA;
 	}
 
-	public int getCapacity() {
-		return capacity;
-	}
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
 
 	public User getUser() {
 		return user;
@@ -133,7 +127,7 @@ public class Bus implements Serializable{
 	@Override
 	public String toString() {
 		return "Bus [idBus=" + idBus + ", departure=" + departure + ", destination=" + destination + ", timeDep="
-				+ timeDep + ", timeA=" + timeA + ", capacity=" + capacity + ", user=" + user + ", driver=" + driver
+				+ timeDep + ", timeA=" + timeA + ", user=" + user + ", driver=" + driver
 				+ ", kids=" + kids + "]";
 	}
 	
