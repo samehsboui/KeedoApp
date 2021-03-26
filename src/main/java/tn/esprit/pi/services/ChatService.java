@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,15 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ChatKeyWordRepository;
 import tn.esprit.pi.repositories.ChatReposiroty;
 import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
+
+//import com.amazonaws.auth.AWSStaticCredentialsProvider;
+//import com.amazonaws.auth.BasicAWSCredentials;
+//import com.amazonaws.client.builder.AwsClientBuilder;
+//import com.amazonaws.services.translate.AmazonTranslate;
+//import com.amazonaws.services.translate.AmazonTranslateClient;
+//import com.amazonaws.services.translate.model.TranslateTextRequest;
+//import com.amazonaws.services.translate.model.TranslateTextResult;
 
 @Component
 @Service
@@ -30,9 +40,9 @@ public class ChatService implements IChatService {
 
 	// Add chat
 	@Override
-	public Chat addChat(Chat chat, int idU) {
-		System.out.println("IDU=> " + idU);
-		User user = userRepository.findById(idU).get();
+	public Chat addChat(Chat chat) throws Exception {
+		// User user = userRepository.findById(idU).get();
+		User user = getCurrentUser();
 		chat.setUser(user);
 		chatRepository.save(chat);
 		return chat;
@@ -150,6 +160,23 @@ public class ChatService implements IChatService {
 			chatSuggestionService.addChatSuggestion(word);
 			return "Sorry, here we can't help you, please contact us with mail";
 		}
+		// Create credentials using a provider chain. For more information, see
+		// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html
+		/*
+		 * AWSCredentialsProvider awsCreds =
+		 * DefaultAWSCredentialsProviderChain.getInstance();
+		 * 
+		 * AmazonTranslate translate = AmazonTranslateClient.builder()
+		 * .withCredentials(new
+		 * AWSStaticCredentialsProvider(awsCreds.getCredentials()))
+		 * .withRegion(REGION) .build();
+		 * 
+		 * TranslateTextRequest request = new TranslateTextRequest()
+		 * .withText("Hello, world") .withSourceLanguageCode("en")
+		 * .withTargetLanguageCode("es"); TranslateTextResult result =
+		 * translate.translateText(request);
+		 * System.out.println(result.getTranslatedText());
+		 */
 	}
 
 	@Override
@@ -160,5 +187,16 @@ public class ChatService implements IChatService {
 	@Override
 	public List<Chat> getChatsByMostRec() {
 		return chatRepository.getChatsByMostRec();
+	}
+
+	public User getCurrentUser() throws Exception {
+		Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (follower instanceof UserDetailsImpl) {
+			User user = ((UserDetailsImpl) follower).getUser();
+			System.out.println("iD::: " + user.getIdUser());
+			System.out.println("namee::: " + user.getFirstName());
+			return user;
+		}
+		return null;
 	}
 }

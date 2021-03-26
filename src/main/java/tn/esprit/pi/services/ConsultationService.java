@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Consultation;
@@ -16,6 +17,7 @@ import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.KidRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.repositories.IUserRepository;
 
 @Service
@@ -34,14 +36,15 @@ public class ConsultationService implements IConsultationService {
 	}
 
 	@Override
-	public Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idA, int idD) {
+	public Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idD) throws Exception {
+
 		Retour<User> ret = new Retour<User>();
 		if (consultation.getDateConsultation().before(new Date(System.currentTimeMillis()))) {
 			ret.setStringValue("Wrong date!!!");
 		} else {
 			List<User> doctors = new ArrayList<User>();
-
-			User director = userRepository.findById(idA).get();
+			User director = getCurrentUser();
+			// User director = userRepository.findById(idA).get();
 			User doctor = userRepository.findById(idD).get();
 			Kid kid = kidRepository.findById(idK).get();
 
@@ -122,6 +125,13 @@ public class ConsultationService implements IConsultationService {
 	}
 
 	@Override
+	public List<Consultation> displayMyConsult() throws Exception {
+		// User doctor = userRepository.findById(idD).get();
+		User doctor = getCurrentUser();
+		return consultationRepository.findConsultationByDoctor(doctor);
+	}
+
+	@Override
 	public Map<String, Integer> percentageParticipationByDoctor() {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		Double nbConsult = (double) consultationRepository.count();
@@ -145,4 +155,14 @@ public class ConsultationService implements IConsultationService {
 		return consult.size();
 	}
 
+	public User getCurrentUser() throws Exception {
+		Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (follower instanceof UserDetailsImpl) {
+			User user = ((UserDetailsImpl) follower).getUser();
+			System.out.println("iD::: " + user.getIdUser());
+			System.out.println("namee::: " + user.getFirstName());
+			return user;
+		}
+		return null;
+	}
 }

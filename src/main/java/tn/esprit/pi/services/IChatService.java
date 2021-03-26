@@ -6,23 +6,25 @@ import tn.esprit.pi.entities.Chat;
 import tn.esprit.pi.entities.ChatKeyWord;;
 
 public interface IChatService {
-	public Chat addChat(Chat chat, int idU);
 
-	public String addKeyWords(List<ChatKeyWord> keyWords, int idC);
+	Chat addChat(Chat chat) throws Exception;
 
-	public List<Chat> displayAll();
+	String addKeyWords(List<ChatKeyWord> keyWords, int idC);
 
-	public List<ChatKeyWord> diplayByChatId(int idC);
+	List<Chat> displayAll();
 
-	public Chat displayChatById(int idC);
+	List<ChatKeyWord> diplayByChatId(int idC);
 
-	public Chat updateChat(Chat chat, int idC);
+	Chat displayChatById(int idC);
 
-	public void deleteChat(int idC);
+	Chat updateChat(Chat chat, int idC);
 
-	public String getRespenseBasedOnWord(String word);
+	void deleteChat(int idC);
 
-	public String connectToChat();
+	String getRespenseBasedOnWord(String word);
 
-	public List<Chat> getChatsByMostRec();
+	String connectToChat();
+
+	List<Chat> getChatsByMostRec();
+
 }

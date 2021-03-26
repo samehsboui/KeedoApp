@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.pi.entities.Chat;
 import tn.esprit.pi.entities.ChatKeyWord;
 import tn.esprit.pi.services.ChatService;
-import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 
 @RestController
 @RequestMapping("chat/")
@@ -29,8 +28,8 @@ public class ChatController {
 	// localhost:8080/SpringMVC/servlet/chat/add
 	@PreAuthorize("hasAuthority('Admin')")
 	@PostMapping("add")
-	public Chat addContent(@RequestBody Chat chat) {
-		return chatService.addChat(chat, CURRENTUSER.getIdUser());
+	public Chat addContent(@RequestBody Chat chat) throws Exception {
+		return chatService.addChat(chat);
 	}
 
 	// Add key words by chat

@@ -35,10 +35,11 @@ public class NotificationMsgController {
 		return notifService.addNotif(idS, idR, notification);
 	}
 
+	// localhost:8080/SpringMVC/servlet/notifMsg/getAll
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
-	@GetMapping("getAll/{idU}")
-	public List<NotificationMsg> findAllByUserReceive(@PathVariable("idU") int idU) {
-		return notifService.findAllByUserReceive(idU);
+	@GetMapping("getAll")
+	public List<NotificationMsg> findAllByUserReceive() throws Exception {
+		return notifService.findAllByUserReceive();
 	}
 
 	// localhost:8080/SpringMVC/servlet/notifMsg/getById/5

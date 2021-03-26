@@ -3,6 +3,7 @@ package tn.esprit.pi.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Daycare;
@@ -11,6 +12,7 @@ import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.DaycareRepository;
 import tn.esprit.pi.repositories.KidRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.repositories.IUserRepository;
 
 @Service
@@ -24,9 +26,9 @@ public class KidService implements IKidService {
 	DaycareRepository daycarRepository;
 
 	@Override
-	public Kid addKid(Kid kid, int idU) {
-		System.out.println("iddddd=> " + idU);
-		User user = userRepository.findById(idU).get();
+	public Kid addKid(Kid kid) throws Exception {
+		// User user = userRepository.findById(idU).get();
+		User user = getCurrentUser();
 		kid.setUser(user);
 		kidRepository.save(kid);
 		return kid;
@@ -121,4 +123,14 @@ public class KidService implements IKidService {
 		return (int) kidRepository.count();
 	}
 
+	public User getCurrentUser() throws Exception {
+		Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (follower instanceof UserDetailsImpl) {
+			User user = ((UserDetailsImpl) follower).getUser();
+			System.out.println("iD::: " + user.getIdUser());
+			System.out.println("namee::: " + user.getFirstName());
+			return user;
+		}
+		return null;
+	}
 }

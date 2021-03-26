@@ -20,7 +20,6 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ConsultationRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.services.ConsultationService;
-import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 
 @RestController
 @RequestMapping("consult/")
@@ -37,8 +36,8 @@ public class ConsultationController {
 	@PreAuthorize("hasAuthority('KindergardenDirector')")
 	@PostMapping("add/{idK}/{idD}")
 	public Retour<User> affectConsultationToKid(@RequestBody Consultation consultation, @PathVariable("idK") int idK,
-			@PathVariable("idD") int idD) {
-		return consultationService.affectConsultationToKid(consultation, idK, CURRENTUSER.getIdUser(), idD);
+			@PathVariable("idD") int idD) throws Exception {
+		return consultationService.affectConsultationToKid(consultation, idK, idD);
 	}
 
 	// localhost:8080/SpringMVC/servlet/consult/del/2
@@ -86,8 +85,8 @@ public class ConsultationController {
 	// localhost:8080/SpringMVC/servlet/consult/doctor/getMy
 	@PreAuthorize("hasAuthority('Doctor')")
 	@GetMapping("doctor/getMy")
-	public List<Consultation> displayMyConsult() {
-		return consultationService.displayConsultationsByDoctor(CURRENTUSER.getIdUser());
+	public List<Consultation> displayMyConsult() throws Exception {
+		return consultationService.displayMyConsult();
 	}
 
 	// STATIC
@@ -105,5 +104,10 @@ public class ConsultationController {
 	public int getPerMonth(@PathVariable("m") String m) {
 		List<Consultation> consult = consultationRepository.findByMatchMonthAndMatchDay("-" + m + "-");
 		return consult.size();
+	}
+
+	@GetMapping("current")
+	public User getCurrentUser() throws Exception {
+		return consultationService.getCurrentUser();
 	}
 }

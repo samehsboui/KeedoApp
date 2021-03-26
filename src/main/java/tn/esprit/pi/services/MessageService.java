@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Message;
@@ -14,6 +15,7 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FollowRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.repositories.MessageRepository;
+import tn.esprit.pi.security.services.UserDetailsImpl;
 
 @Service
 public class MessageService implements IMessageService {
@@ -30,28 +32,35 @@ public class MessageService implements IMessageService {
 	NotificationMsgService notificationMsgService;
 
 	@Override
-	public List<User> connected(int id) {
-		User user = userRepository.findById(id).get();
+	public Retour<User> connected() throws Exception {
+		Retour<User> rt = new Retour<>();
+		User user = getCurrentUser();
 		user.setStatus(true);
 		userRepository.save(user);
-		List<User> myFriends = followService.getUserFollowing(id).getUserList();
-		return myFriends;
+		List<User> myFriends = followService.getUserFollowing(user.getIdUser()).getUserList();
+		rt.setStringValue("Status: " + user.isStatus());
+		rt.setObjectValue(myFriends);
+		return rt;
 	}
-	
+
 	@Override
-	public List<User> disConnected(int id) {
-		User user = userRepository.findById(id).get();
+	public Retour<User> disConnected() throws Exception {
+		Retour<User> rt = new Retour<>();
+		User user = getCurrentUser();
 		user.setStatus(false);
 		userRepository.save(user);
-		List<User> myFriends = followService.getUserFollowing(id).getUserList();
-		return myFriends;
+		List<User> myFriends = followService.getUserFollowing(user.getIdUser()).getUserList();
+		rt.setStringValue("Status: " + user.isStatus());
+		rt.setObjectValue(myFriends);
+		return rt;
 	}
 
 	@Override
-	public Retour<Message> sendMessage(int idS, int idR, Message message) {
+	public Retour<Message> sendMessage(int idR, Message message) throws Exception {
 		Retour<Message> rt = new Retour<>();
 
-		User sender = userRepository.findById(idS).get();
+		// User sender = userRepository.findById(idS).get();
+		User sender = getCurrentUser();
 		User receiver = userRepository.findById(idR).get();
 
 		Message m = new Message();
@@ -66,7 +75,7 @@ public class MessageService implements IMessageService {
 		messages.addAll(messages2);
 		System.out.println("messages=> " + messages.size());
 		// Delete the oldest message
-		if (messages1.size() >= 100) {
+		if (messages1.size() >= 10) {
 			m = messages1.get(0);
 			messageRepository.deleteMessageById(m.getIdMessage());
 		}
@@ -83,7 +92,7 @@ public class MessageService implements IMessageService {
 			NotificationMsg notificationMsg = new NotificationMsg();
 			notificationMsg
 					.setContent("You get new message from " + sender.getFirstName() + " " + sender.getLastName());
-			notificationMsgService.addNotif(idS, idR, notificationMsg);
+			notificationMsgService.addNotif(sender.getIdUser(), idR, notificationMsg);
 			rt.setStringValue("message sent successfully!!");
 			rt.getObjectValue().add(message);
 		}
@@ -91,10 +100,34 @@ public class MessageService implements IMessageService {
 	}
 
 	@Override
-	public List<Message> checkMessage(int idS, int idR) {
+	public List<Message> checkMessage(int idS) throws Exception {
 		User sender = userRepository.findById(idS).get();
-		User receiver = userRepository.findById(idR).get();
-		return messageRepository.getMessages(sender, receiver);
+		User receiver = getCurrentUser();
+		List<Message> messages = messageRepository.getAllOrderByTime();
+		List<Message> messageShow = new ArrayList<>();
+		for (Message message : messages) {
+			if (message.getSender().getIdUser() == sender.getIdUser()
+					& message.getReceiver().getIdUser() == receiver.getIdUser()) {
+				messageShow.add(message);
+			}
+			if (message.getSender().getIdUser() == receiver.getIdUser()
+					& message.getReceiver().getIdUser() == sender.getIdUser()) {
+				messageShow.add(message);
+			}
+		}
+		System.out.println("messageShow::: " + messageShow.size());
+		return messageShow;
+	}
+
+	public User getCurrentUser() throws Exception {
+		Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (follower instanceof UserDetailsImpl) {
+			User user = ((UserDetailsImpl) follower).getUser();
+			System.out.println("iD::: " + user.getIdUser());
+			System.out.println("namee::: " + user.getFirstName());
+			return user;
+		}
+		return null;
 	}
 
 }

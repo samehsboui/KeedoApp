@@ -7,7 +7,7 @@ import tn.esprit.pi.entities.Retour;
 
 public interface IKidService {
 
-	Kid addKid(Kid kid, int idU);
+	Kid addKid(Kid kid) throws Exception;
 
 	String deleteKid(int id);
 

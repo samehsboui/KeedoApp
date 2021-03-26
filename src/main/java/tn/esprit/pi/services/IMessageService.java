@@ -7,11 +7,12 @@ import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.User;
 
 public interface IMessageService {
-	List<User> connected(int id);
+	Retour<User> connected() throws Exception;
 
-	List<User> disConnected(int id);
+	Retour<User> disConnected() throws Exception;
 
-	Retour<Message> sendMessage(int idS, int idR, Message message);
+	Retour<Message> sendMessage(int idR, Message message) throws Exception;
 
-	List<Message> checkMessage(int idS, int idR);
+	List<Message> checkMessage(int idS) throws Exception;
+
 }

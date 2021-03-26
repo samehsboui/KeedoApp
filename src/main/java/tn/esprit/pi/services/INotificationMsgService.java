@@ -10,7 +10,7 @@ import tn.esprit.pi.entities.Retour;
 public interface INotificationMsgService {
 	public NotificationMsg addNotif(int idS, int idR, NotificationMsg notification);
 
-	public List<NotificationMsg> findAllByUserReceive(int idU);
+	public List<NotificationMsg> findAllByUserReceive() throws Exception;
 
 	public Retour<NotificationMsg> findByNotificationId(@PathVariable("idU") int id);
 }

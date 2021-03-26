@@ -25,7 +25,7 @@ import tn.esprit.pi.entities.Message;
 import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.services.MessageService;
-import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
+//import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 
 @RestController
 @RequestMapping("message/")
@@ -39,25 +39,25 @@ public class MessageController {
 	// localhost:8080/SpringMVC/servlet/message/connect
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
 	@PutMapping("connect")
-	public List<User> connected() {
-		return messageService.connected(CURRENTUSER.getIdUser());
+	public Retour<User> connected() throws Exception {
+		return messageService.connected();
 
 	}
 
 	// localhost:8080/SpringMVC/servlet/message/disConnect
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
 	@PutMapping("disConnect")
-	public List<User> disConnected() {
-		return messageService.disConnected(CURRENTUSER.getIdUser());
+	public Retour<User> disConnected() throws Exception {
+		return messageService.disConnected();
 
 	}
 
 	// localhost:8080/SpringMVC/servlet/message/sendMessage/4
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
 	@PostMapping(value = "sendMessage/{idR}")
-	public Retour<Message> sendMessage(@PathVariable("idR") int idR, @RequestBody Message message) {
+	public Retour<Message> sendMessage(@PathVariable("idR") int idR, @RequestBody Message message) throws Exception {
 
-		return messageService.sendMessage(CURRENTUSER.getIdUser(), idR, message);
+		return messageService.sendMessage(idR, message);
 	}
 
 	// localhost:8080/SpringMVC/servlet/message/sendFile/4
@@ -65,7 +65,7 @@ public class MessageController {
 	@PostMapping(value = "sendFile/{idR}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public Retour<Message> sendFile(@PathVariable("idR") int idR, @RequestPart("image") MultipartFile file)
-			throws IOException {
+			throws Exception {
 
 		Message message = new Message();
 		String fileNameRepo = StringUtils.cleanPath(file.getOriginalFilename());
@@ -81,14 +81,14 @@ public class MessageController {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		return messageService.sendMessage(CURRENTUSER.getIdUser(), idR, message);
+		return messageService.sendMessage(idR, message);
 	}
 
 	// localhost:8080/SpringMVC/servlet/message/checkMsg/3
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent')")
 	@GetMapping("checkMsg/{idS}")
-	public List<Message> checkMessage(@PathVariable("idS") int idS) {
-		return messageService.checkMessage(idS, CURRENTUSER.getIdUser());
+	public List<Message> checkMessage(@PathVariable("idS") int idS) throws Exception {
+		return messageService.checkMessage(idS);
 	}
 
 }

@@ -23,4 +23,7 @@ public interface MessageRepository extends CrudRepository<Message, Integer> {
 	@Modifying
 	@Query("DELETE from Message m where m.idMessage= :id")
 	void deleteMessageById(@Param("id") int id);
+
+	@Query("select m from Message m ORDER BY m.time ASC")
+	List<Message> getAllOrderByTime();
 }

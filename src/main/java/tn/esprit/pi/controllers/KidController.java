@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static tn.esprit.pi.controllers.AuthController.CURRENTUSER;
 import tn.esprit.pi.entities.Kid;
 import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.services.KidService;
@@ -28,8 +27,8 @@ public class KidController {
 	// localhost:8080/SpringMVC/servlet/kid/add
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PostMapping("add")
-	public Kid addKid(@RequestBody Kid kid) {
-		return kidService.addKid(kid, CURRENTUSER.getIdUser());
+	public Kid addKid(@RequestBody Kid kid) throws Exception {
+		return kidService.addKid(kid);
 	}
 
 	// localhost:8080/SpringMVC/servlet/kid/del/3

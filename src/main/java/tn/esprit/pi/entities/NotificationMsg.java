@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "notificationMsg")
@@ -35,6 +36,10 @@ public class NotificationMsg implements Serializable {
 	@Temporal(TemporalType.TIME)
 	@Column(name = "time")
 	private Date time;
+
+	@Temporal(TemporalType.TIME)
+	@Transient
+	private Date timeChecked;
 
 	@Column(name = "isRead")
 	private boolean isRead;
@@ -84,6 +89,14 @@ public class NotificationMsg implements Serializable {
 		this.time = time;
 	}
 
+	public Date getTimeChecked() {
+		return timeChecked;
+	}
+
+	public void setTimeChecked(Date timeChecked) {
+		this.timeChecked = timeChecked;
+	}
+
 	public boolean isRead() {
 		return isRead;
 	}
@@ -111,7 +124,8 @@ public class NotificationMsg implements Serializable {
 	@Override
 	public String toString() {
 		return "NotificationMsg [id=" + id + ", content=" + content + ", createdAt=" + createdAt + ", time=" + time
-				+ ", isRead=" + isRead + ", userSend=" + userSend + ", userReceive=" + userReceive + "]";
+				+ ", timeChecked=" + timeChecked + ", isRead=" + isRead + ", userSend=" + userSend + ", userReceive="
+				+ userReceive + "]";
 	}
 
 }

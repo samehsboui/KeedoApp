@@ -100,7 +100,7 @@ public class User implements Serializable {
 	private Set<NotificationMsg> notifReceive;
 
 	// added by amal
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Report> reports;
 	boolean valid;
 	@Column(name = "accountLocked", columnDefinition = "boolean default false")
@@ -143,15 +143,18 @@ public class User implements Serializable {
 	 * @ManyToMany(cascade= CascadeType.ALL) private Set<Meeting> meetings;
 	 */
 	// New
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<Meeting> meetings;
-
+	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Notification> notifciations;
 	//
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Participation> participations;
-
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Donation> donations;
 

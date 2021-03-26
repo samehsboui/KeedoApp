@@ -9,7 +9,7 @@ import tn.esprit.pi.entities.User;
 
 public interface IConsultationService {
 
-	Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idA, int idD);
+	Retour<User> affectConsultationToKid(Consultation consultation, int idK, int idD) throws Exception;
 
 	String deleteConsultation(int id);
 
@@ -22,6 +22,8 @@ public interface IConsultationService {
 	List<Consultation> displayConsultationsByKid(int idK);
 
 	List<Consultation> displayConsultationsByDoctor(int idD);
+
+	List<Consultation> displayMyConsult() throws Exception;
 
 	Map<String, Integer> percentageParticipationByDoctor();
 
