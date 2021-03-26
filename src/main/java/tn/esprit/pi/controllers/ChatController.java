@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.services.translate.AmazonTranslate;
-import com.amazonaws.services.translate.AmazonTranslateClientBuilder;
-import com.amazonaws.services.translate.model.TranslateTextRequest;
-import com.amazonaws.services.translate.model.TranslateTextResult;
-
 import tn.esprit.pi.entities.Chat;
 import tn.esprit.pi.entities.ChatKeyWord;
 import tn.esprit.pi.services.ChatService;
@@ -86,9 +81,9 @@ public class ChatController {
 
 	// localhost:8080/SpringMVC/servlet/chat/replayBasedOnWords
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')  ")
-	@GetMapping("replayBasedOnWords")
-	public String getRespenseBasedOnWord(@RequestBody String word) {
-		return chatService.getRespenseBasedOnWord(word.intern());
+	@GetMapping("replayBasedOnWords/{idLang}")
+	public String getRespenseBasedOnWord(@RequestBody String word, @PathVariable("idLang") int idLang) {
+		return chatService.getRespenseBasedOnWord(word.intern(), idLang);
 	}
 
 	// localhost:8080/SpringMVC/servlet/chat/connectToChat
@@ -104,11 +99,11 @@ public class ChatController {
 	public List<Chat> getChatsByMostRec() {
 		return chatService.getChatsByMostRec();
 	}
-	
+
 	// localhost:8080/SpringMVC/servlet/chat/translate
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor') or hasAuthority('Parent') or hasAuthority('visitor')  ")
 	@GetMapping("translate")
-	public String translate(String word){
-		return chatService.translate(word);
+	public String translate(@RequestBody String word) {
+		return chatService.translate(word.intern());
 	}
 }

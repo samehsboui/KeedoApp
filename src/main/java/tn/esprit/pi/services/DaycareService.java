@@ -106,6 +106,7 @@ public class DaycareService implements IDaycareService {
 		return daycareRepository.displayDaycareByDate();
 	}
 
+	// STATIC
 	@Override
 	public Double daycareRevenuePerYear(String year) {
 		Double total = 0.0;

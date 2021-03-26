@@ -21,7 +21,7 @@ public interface IChatService {
 
 	void deleteChat(int idC);
 
-	String getRespenseBasedOnWord(String word);
+	String getRespenseBasedOnWord(String word, int idLang);
 
 	String connectToChat();
 

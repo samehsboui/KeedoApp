@@ -15,12 +15,14 @@ import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.ChatKeyWordRepository;
 import tn.esprit.pi.repositories.ChatReposiroty;
 import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.repositories.LanguageRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
 
 import com.amazonaws.services.translate.AmazonTranslate;
 import com.amazonaws.services.translate.AmazonTranslateClientBuilder;
 import com.amazonaws.services.translate.model.TranslateTextRequest;
 import com.amazonaws.services.translate.model.TranslateTextResult;
+
 @Component
 @Service
 public class ChatService implements IChatService {
@@ -29,6 +31,8 @@ public class ChatService implements IChatService {
 	ChatReposiroty chatRepository;
 	@Autowired
 	IUserRepository userRepository;
+	@Autowired
+	LanguageRepository languageRepository;
 	@Autowired
 	ChatKeyWordRepository chatKeyWordRepository;
 	@Autowired
@@ -120,11 +124,17 @@ public class ChatService implements IChatService {
 
 	// Find the response
 	@Override
-	public String getRespenseBasedOnWord(String word) {
+	public String getRespenseBasedOnWord(String word, int idLang) {
 		double max = 0.0;
 		int index = 0;
+		String newWord;
+		if (idLang == 1) {
+			newWord = translate(word);
+		} else {
+			newWord = word;
+		}
 		Set<String> mainWords = new HashSet<>();
-		for (String s : word.split("\\W")) {
+		for (String s : newWord.split("\\W")) {
 			if (s.length() > 1) {
 				mainWords.add(s);
 			}
@@ -150,11 +160,20 @@ public class ChatService implements IChatService {
 			Chat c = chatRepository.findById(index);
 			c.setNbRequest(c.getNbRequest() + 1);
 			chatRepository.save(c);
-			return c.getRespense();
+			if (idLang == 1) {
+				return translate2(c.getRespense());
+			} else {
+				return c.getRespense();
+			}
 
 		} else {
-			chatSuggestionService.addChatSuggestion(word);
-			return "Sorry, here we can't help you, please contact us with mail";
+			chatSuggestionService.addChatSuggestion(newWord);
+			if (idLang == 1) {
+				return "Désolé, ici nous ne pouvons pas vous aider, veuillez nous contacter par e-mail";
+			} else {
+				return "Sorry, here we can't help you, please contact us with mail";
+			}
+
 		}
 
 	}
@@ -179,15 +198,23 @@ public class ChatService implements IChatService {
 		}
 		return null;
 	}
-	
-	///TEST
-	public String translate(String word){
-		  AmazonTranslate translate = AmazonTranslateClientBuilder.defaultClient();		  
-		  TranslateTextRequest request = new TranslateTextRequest()
-		  .withText("Hello, world") .withSourceLanguageCode("en")
-		  .withTargetLanguageCode("es"); TranslateTextResult result =
-		  translate.translateText(request);
-		  System.out.println(result.getTranslatedText());
+
+	/// TEST
+	public String translate(String word) {
+		AmazonTranslate translate = AmazonTranslateClientBuilder.defaultClient();
+		TranslateTextRequest request = new TranslateTextRequest().withText(word).withSourceLanguageCode("fr")
+				.withTargetLanguageCode("en");
+		TranslateTextResult result = translate.translateText(request);
+		System.out.println(result.getTranslatedText());
+		return (result.getTranslatedText());
+	}
+
+	public String translate2(String word) {
+		AmazonTranslate translate = AmazonTranslateClientBuilder.defaultClient();
+		TranslateTextRequest request = new TranslateTextRequest().withText(word).withSourceLanguageCode("en")
+				.withTargetLanguageCode("fr");
+		TranslateTextResult result = translate.translateText(request);
+		System.out.println(result.getTranslatedText());
 		return (result.getTranslatedText());
 	}
 }
