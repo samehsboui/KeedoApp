@@ -98,8 +98,8 @@
 		<!-- amazonaws -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.11.327</version>
+			<artifactId>aws-java-sdk-translate</artifactId>
+			<version>1.11.974</version>
 		</dependency>
 
 		<!-- RabbitMQ Starter Dependency (Not required if you're using the simple 

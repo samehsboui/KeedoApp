@@ -17,14 +17,10 @@ import tn.esprit.pi.repositories.ChatReposiroty;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
 
-//import com.amazonaws.auth.AWSStaticCredentialsProvider;
-//import com.amazonaws.auth.BasicAWSCredentials;
-//import com.amazonaws.client.builder.AwsClientBuilder;
-//import com.amazonaws.services.translate.AmazonTranslate;
-//import com.amazonaws.services.translate.AmazonTranslateClient;
-//import com.amazonaws.services.translate.model.TranslateTextRequest;
-//import com.amazonaws.services.translate.model.TranslateTextResult;
-
+import com.amazonaws.services.translate.AmazonTranslate;
+import com.amazonaws.services.translate.AmazonTranslateClientBuilder;
+import com.amazonaws.services.translate.model.TranslateTextRequest;
+import com.amazonaws.services.translate.model.TranslateTextResult;
 @Component
 @Service
 public class ChatService implements IChatService {
@@ -160,23 +156,7 @@ public class ChatService implements IChatService {
 			chatSuggestionService.addChatSuggestion(word);
 			return "Sorry, here we can't help you, please contact us with mail";
 		}
-		// Create credentials using a provider chain. For more information, see
-		// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html
-		/*
-		 * AWSCredentialsProvider awsCreds =
-		 * DefaultAWSCredentialsProviderChain.getInstance();
-		 * 
-		 * AmazonTranslate translate = AmazonTranslateClient.builder()
-		 * .withCredentials(new
-		 * AWSStaticCredentialsProvider(awsCreds.getCredentials()))
-		 * .withRegion(REGION) .build();
-		 * 
-		 * TranslateTextRequest request = new TranslateTextRequest()
-		 * .withText("Hello, world") .withSourceLanguageCode("en")
-		 * .withTargetLanguageCode("es"); TranslateTextResult result =
-		 * translate.translateText(request);
-		 * System.out.println(result.getTranslatedText());
-		 */
+
 	}
 
 	@Override
@@ -198,5 +178,16 @@ public class ChatService implements IChatService {
 			return user;
 		}
 		return null;
+	}
+	
+	///TEST
+	public String translate(String word){
+		  AmazonTranslate translate = AmazonTranslateClientBuilder.defaultClient();		  
+		  TranslateTextRequest request = new TranslateTextRequest()
+		  .withText("Hello, world") .withSourceLanguageCode("en")
+		  .withTargetLanguageCode("es"); TranslateTextResult result =
+		  translate.translateText(request);
+		  System.out.println(result.getTranslatedText());
+		return (result.getTranslatedText());
 	}
 }
