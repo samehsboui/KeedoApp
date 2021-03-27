@@ -25,7 +25,6 @@ public class UnhealthyWordsServiceImpl implements IUnhealthyWordService {
 
     @Override
     public void addWord(UnhealthyWord u) {
-    	 System.out.println("entered service");
             unhealthyWordRepository.save(u);
     }
 

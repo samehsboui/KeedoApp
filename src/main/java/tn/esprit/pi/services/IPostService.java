@@ -43,4 +43,12 @@ public interface IPostService {
 	public User currentUser() throws Exception;
 
 	public List<Post> getFollowingPosts() throws Exception;
+
+	public Post mostLikedPost() throws Exception;
+
+	public Post mostCommentedPost() throws Exception;
+
+	public List<Post> searchFollowingPosts(String pattern) throws Exception;
+
+	public String detectText(String photo) throws Exception;
 }

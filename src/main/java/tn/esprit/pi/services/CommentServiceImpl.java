@@ -24,13 +24,13 @@ public class CommentServiceImpl implements ICommentService{
 	IPostRepository iPostRepository;
 	
 	@Autowired 
-	private ICommentRepository iCommentRepository;
+	ICommentRepository iCommentRepository;
 	
 	@Autowired 
-	private IUnhealthyWordRepository iUnhealthyWordRepository;
+	IUnhealthyWordRepository iUnhealthyWordRepository;
 	
 	@Autowired 
-	private INotificationSNWRepository iNotificationSNWRepository;
+	INotificationSNWRepository iNotificationSNWRepository;
 	
 	@Override
 	public User currentUser() throws Exception{
@@ -47,13 +47,18 @@ public class CommentServiceImpl implements ICommentService{
 		c.setCreateDate(LocalDateTime.now());
 		//comment text approval
 		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
-			if(c.getCommentContent().contains(uwd.getWord())){
+			if(c.getCommentContent().toLowerCase().contains(uwd.getWord())){
 				return("Sorry, you can't add comments that contain hate speech or bad words on Keedo.");
 			}}
+		if (c.getUser().getIdUser()==c.getPost().getUser().getIdUser()){
+			iCommentRepository.save(c);
+			return ("number of comments on this post: " + CountCommentsByPost(idP));
+		}
+		else{
 		c.setNotificationsnw(addCommentNotif(c));
 		iCommentRepository.save(c);
 		return ("comment notification sent from " +c.getUser().getLogin() +" to " +c.getPost().getUser().getLogin()+ " successfully, number of comments on this post: " + CountCommentsByPost(idP));  						
-	}
+	}}
 
 	@Override	
 	  public NotificationSNW addCommentNotif (Comment c) {
@@ -93,7 +98,7 @@ public class CommentServiceImpl implements ICommentService{
 		comment.setModifyDate(LocalDateTime.now());
 		//comment text approval
 		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
-			if(c.getCommentContent().contains(uwd.getWord())){
+			if(c.getCommentContent().toLowerCase().contains(uwd.getWord())){
 				return("Sorry, you can't comment hate speech or bad words on Keedo.");
 			}}
 		iCommentRepository.save(comment);

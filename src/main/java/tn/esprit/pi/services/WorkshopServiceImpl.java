@@ -24,10 +24,10 @@ public class WorkshopServiceImpl implements IWorkshopService{
 	IWorkshopRepository iWorkshopRepository;
 	
 	@Autowired 
-	private IUnhealthyWordRepository iUnhealthyWordRepository;
+	IUnhealthyWordRepository iUnhealthyWordRepository;
 	
 	@Autowired 
-	private FollowRepository followRepository;
+	FollowRepository followRepository;
 	
 	@Override
 	public User currentUser() throws Exception{
@@ -41,7 +41,7 @@ public class WorkshopServiceImpl implements IWorkshopService{
 		w.setUser(currentUser());
 		w.setCreateDate(LocalDateTime.now());
 		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
-			if(w.getContent().contains(uwd.getWord())){
+			if(w.getContent().toLowerCase().contains(uwd.getWord())){
 				return("Sorry, you can't post a workshop that contains hate speech or bad words on Keedo.");
 			}
 		}
@@ -78,7 +78,7 @@ public class WorkshopServiceImpl implements IWorkshopService{
 		}
 		else{
 		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
-			if(w.getContent().contains(uwd.getWord())){
+			if(w.getContent().toLowerCase().contains(uwd.getWord())){
 				return("Sorry, you can't post a workshop that contains hate speech or bad words on Keedo.");
 			}}
 		workshop.setModifyDate(LocalDateTime.now());

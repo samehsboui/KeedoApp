@@ -14,15 +14,22 @@ import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.DetectModerationLabelsRequest;
 import com.amazonaws.services.rekognition.model.DetectModerationLabelsResult;
+import com.amazonaws.services.rekognition.model.DetectTextRequest;
+import com.amazonaws.services.rekognition.model.DetectTextResult;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.ModerationLabel;
+import com.amazonaws.services.rekognition.model.TextDetection;
 import com.amazonaws.util.IOUtils;
+import tn.esprit.pi.entities.Comment;
+import tn.esprit.pi.entities.Liking;
 import tn.esprit.pi.entities.Post;
 import tn.esprit.pi.entities.Report;
 import tn.esprit.pi.entities.ReportPK;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.entities.UnhealthyWord;
 import tn.esprit.pi.repositories.FollowRepository;
+import tn.esprit.pi.repositories.ICommentRepository;
+import tn.esprit.pi.repositories.ILikingRepository;
 import tn.esprit.pi.repositories.IPostRepository;
 import tn.esprit.pi.repositories.IReportRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
@@ -41,10 +48,16 @@ public class PostServiceImpl implements IPostService{
 	IReportRepository iReportRepository;
 	
 	@Autowired 
-	private IUnhealthyWordRepository iUnhealthyWordRepository;
+	IUnhealthyWordRepository iUnhealthyWordRepository;
 
 	@Autowired 
-	private FollowRepository followRepository;
+	FollowRepository followRepository;
+	
+	@Autowired 
+	ILikingRepository iLikingRepository;
+	
+	@Autowired 
+	ICommentRepository iCommentRepository;
 	
 	@Override
 	public User currentUser() throws Exception{
@@ -61,25 +74,31 @@ public class PostServiceImpl implements IPostService{
 		p.setCreateDate(LocalDateTime.now());
 		for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
 		//text content approval
-			if(p.getPostContent().contains(uwd.getWord())){
+			if(p.getPostContent().toLowerCase().contains(uwd.getWord())){
 				approved=false;
 				msg+="Sorry, you can't post hate speech or bad words on Keedo.";
 			}
-		}
+			//media (of type image) containing text approval
+			if((p.getMedia()).toString().equals("Image") && detectText(p.getMediaLink()).toLowerCase().contains(uwd.getWord())) {
+				approved=false;
+				msg+=" You can't upload images that contains hate speech or bad words on Keedo.";
+			}	
+			}		
 		
-		//media (of type image) approval
+		//media (of type image) label approval
 		if((p.getMedia()).toString().equals("Image") && detect(p.getMediaLink()).isEmpty()==false){
 			approved=false;
 			msg+=" The image you're trying to upload is against our community standards. Our system detected: "+
 					detect(p.getMediaLink())+" labels in this image.";
 		}
+
 		
 		if(approved==false){
 			return (msg);
 		}
 		else{
 			iPostRepository.save(p);
-			return ("post added successfully");
+			return ("post added successfully" +detectText(p.getMediaLink()));
 		}
 	}
 	
@@ -95,10 +114,15 @@ public class PostServiceImpl implements IPostService{
 			return("You are not allowed to update this post");}
 		else{
 			for(UnhealthyWord uwd : iUnhealthyWordRepository.findAll()) {
-				if(p.getPostContent().contains(uwd.getWord())){
+				if(p.getPostContent().toLowerCase().contains(uwd.getWord())){
 					approved=false;
 					msg+="Sorry, you can't post hate speech or bad words on Keedo.";
 				}
+				//media (of type image) containing text approval
+				if((p.getMedia()).toString().equals("Image") && detectText(p.getMediaLink()).toLowerCase().contains(uwd.getWord())) {
+					approved=false;
+					msg+=" You can't upload images that contains hate speech or bad words on Keedo.";
+				}	
 			}
 			if((p.getMedia()).toString().equals("Image") && detect(p.getMediaLink()).isEmpty()==false){
 				approved=false;
@@ -152,6 +176,7 @@ public class PostServiceImpl implements IPostService{
 	@Override
 	public List<Post> getFollowingPosts() throws Exception {
 		List<User> followings = followRepository.listFollowing(currentUser());
+		followings.add(currentUser());
 		List<Post>Posts = new ArrayList<Post>();
 		for(Post p: iPostRepository.findAll()){
 			if (followings.contains(p.getUser())){
@@ -159,6 +184,48 @@ public class PostServiceImpl implements IPostService{
 		}}
 		return Posts;
 	}
+	
+
+	@Override
+	public List<Post> searchFollowingPosts(String pattern) throws Exception {
+		List<User> followings = followRepository.listFollowing(currentUser());
+		List<Post>Posts = new ArrayList<Post>();
+		for(Post p: searchPosts(pattern)){
+			if (followings.contains(p.getUser())){
+			Posts.add(p);
+		}}
+		return Posts;
+	}
+	
+	@Override
+	public Post mostLikedPost() throws Exception {
+		int max=0;
+		Post mostliked= new Post();
+		for(Post p: iPostRepository.findAll()){
+			int nblikes=((List<Liking>) iLikingRepository.getLikesByPostId(p.getIdPost())).size();
+			if (max<nblikes){
+				max=nblikes;
+				mostliked=p;
+			}
+		}
+		return mostliked;
+	}
+	
+	@Override
+	public Post mostCommentedPost() throws Exception {
+		int max=0;
+		Post mostcommented= new Post();
+		for(Post p: iPostRepository.findAll()){
+			int nbcomments=((List<Comment>) iCommentRepository.getCommentsByPostId(p.getIdPost())).size();
+			if (max<nbcomments){
+				max=nbcomments;
+				mostcommented=p;
+			}
+		}
+		return mostcommented;
+	}
+	
+	
 	
 	@Override
 	public Post getPostById(int id) {
@@ -181,9 +248,7 @@ public class PostServiceImpl implements IPostService{
 	
 	@Override
 	public String sharePost(int idP) throws Exception {
-		System.out.println("did it even enter here?");
 		Post post=iPostRepository.findById(idP).get();
-		System.out.println("this is the current"+currentUser().getIdUser());
 		Post newp = new Post();
 		newp.setUser(currentUser());
 		newp.setPostContent(post.getPostContent());
@@ -267,7 +332,38 @@ public class PostServiceImpl implements IPostService{
             return (forbidden);
            }
 
+	@Override
+	public String detectText(String photo) throws Exception {
+		 ByteBuffer imageBytes;
+	        try (InputStream inputStream = new FileInputStream(new File(photo))) {
+	            imageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+	        }
+	        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
+		      
+		      DetectTextRequest request = new DetectTextRequest()
+		              .withImage(new Image().withBytes(imageBytes));
 
+		         DetectTextResult result = rekognitionClient.detectText(request);
+		         List<TextDetection> textDetections = result.getTextDetections();
+		         String detectedtext = "" ; 
+
+		         System.out.println("Detected lines and words for " + photo);
+		         for (TextDetection text: textDetections) {
+		             detectedtext+=text.getDetectedText();
+
+		                 System.out.println("Detected: " + text.getDetectedText());
+		                 System.out.println("Confidence: " + text.getConfidence().toString());
+		                 System.out.println("Id : " + text.getId());
+		                 System.out.println("Parent Id: " + text.getParentId());
+		                 System.out.println("Type: " + text.getType());
+		                 System.out.println();
+		         }
+		            System.out.println("text detected: "+detectedtext);
+
+				return detectedtext;
+
+		   }
+		
 	
 /******************may be useful at some point**********************/	
 	@Override

@@ -11,8 +11,6 @@ public interface IUnhealthyWordService {
 
     public boolean wordExists(String word);
 
-    //void addWord(UnhealthyWord u, String word);
-
     public void deleteWord(String word);
 
     public List<UnhealthyWord> getUnhealthyWordList();

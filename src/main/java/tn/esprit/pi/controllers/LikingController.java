@@ -93,6 +93,13 @@ public class LikingController {
 				public int getpostlikescount(@PathVariable("idP") int idP) {
 					return likingServiceImpl.CountLikingsByPost(idP);
 				}
+		//URL: http://localhost:9293/SpringMVC/servlet/Liking/get-my-likes
+		@PreAuthorize("hasAuthority('Admin') or hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Liking/get-my-likes")  
+			public List<Liking> getMyComments() throws Exception   
+			{  
+				return likingServiceImpl.getMyLikes();  
+			}
 				
 }
 

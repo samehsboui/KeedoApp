@@ -28,4 +28,6 @@ public interface ILikingService {
 	public NotificationSNW addLikeNotif(Liking l);
 
 	public String addLiking(int idP) throws Exception;
+
+	public List<Liking> getMyLikes() throws Exception;
 }

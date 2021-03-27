@@ -93,11 +93,18 @@ public class PostController {
 				return postServiceImpl.getPostById(Postid);  
 			}  		
 		
-		//URL: http://localhost:9293/SpringMVC/servlet/Post/search/?pattern=
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/search-by-admin/?pattern=
 		@PreAuthorize("hasAuthority('Admin')")
-			@GetMapping("/Post/search/")
-			public List<Post> postSearch(@RequestParam("pattern")String pattern){
+			@GetMapping("/Post/search-by-admin/")
+			public List<Post> postSearchByAdmin(@RequestParam("pattern")String pattern){
 				return postServiceImpl.searchPosts(pattern);
+			}
+
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/search/?pattern=
+		@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager') or hasAuthority('Doctor')  or hasAuthority('Parent') ")
+			@GetMapping("/Post/search/")
+			public List<Post> postSearch(@RequestParam("pattern")String pattern) throws Exception{
+				return postServiceImpl.searchFollowingPosts(pattern);
 			}
 		
 		//URL: http://localhost:9293/SpringMVC/servlet/Post/share-post/{idP}
@@ -149,6 +156,21 @@ public class PostController {
 			@GetMapping("/Post/count-user-posts/{idU}")
 			public int getuserpostscount(@PathVariable("idU") int idU) {
 				return postServiceImpl.CountPostsByUser(idU);
+			}
+
+
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/most-liked-post
+		@PreAuthorize("hasAuthority('Admin')")	
+			@GetMapping("/Post/most-liked-post")
+			public Post getMostLikedPost() throws Exception {
+				return postServiceImpl.mostLikedPost();
+			}
+		
+		//URL: http://localhost:9293/SpringMVC/servlet/Post/most-commented-post
+		@PreAuthorize("hasAuthority('Admin')")	
+			@GetMapping("/Post/most-commented-post")
+			public Post getMostCommentedPost() throws Exception {
+				return postServiceImpl.mostCommentedPost();
 			}
 		
 		
