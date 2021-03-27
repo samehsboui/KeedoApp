@@ -1,4 +1,4 @@
-package tn.esprit.pi.controllers;
+﻿package tn.esprit.pi.controllers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -64,7 +64,7 @@ public class EmpruntController {
 	
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/showAllEmprunt
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping(value = "/showAllEmprunt")
 	public List<EmpruntBook> listeEmprunts() {
 		List<EmpruntBook> emprunts = empruntBookRepository.findAll();
@@ -73,7 +73,7 @@ public class EmpruntController {
 	}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/getEmpruntsEncours
-		@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 		@GetMapping(value = "/getEmpruntsEncours")
 		public List<EmpruntBook> listEmpruntEncours() {
 			List<EmpruntBook> emprunts = empruntBookRepository.findEmpruntsEncours(false);
@@ -83,7 +83,7 @@ public class EmpruntController {
 		}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/detailsEmprunt/1
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@GetMapping(value = "/detailsEmprunt/{id}")
 	public EmpruntBook detailEMprunt(@PathVariable int id) {
 
@@ -94,7 +94,7 @@ public class EmpruntController {
 
 	
 	  // http://localhost:9293/SpringMVC/servlet/emprunt/findEmpruntsByUser/dhekraParent
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@RequestMapping(value = "/findEmpruntsByUser/{firstName}")
 	public List<EmpruntBook> findEmpruntsByUserFirstName(@PathVariable String firstName) {
 		List <EmpruntBook> empruntBook = userService.findEmpruntsByUserFirstName(firstName);
@@ -180,7 +180,7 @@ public class EmpruntController {
 	}
 
 	// http://localhost:9293/SpringMVC/servlet/emprunt/listeEmpruntsExpires
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@RequestMapping(value = "/listeEmpruntsExpires", method = RequestMethod.GET)
 	public List<EmpruntBook> empruntsExpires() {
 		Date today = new Date();
@@ -246,7 +246,7 @@ public class EmpruntController {
 
 	}
 
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	// batch qui va nettoyer les emprnts échues :
 	@GetMapping(value = "/cleanEmpruntExpired")
 	public List<EmpruntBook> cleanEmpruntExpired(@RequestHeader("Authorization") String token) {

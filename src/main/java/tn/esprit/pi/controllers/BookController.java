@@ -44,7 +44,7 @@ public class BookController {
 	
 	//http://localhost:9293/SpringMVC/servlet/book/listBook
 	@JsonBackReference("")
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector') ")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector') ")
     @RequestMapping(value="/listBook", method= RequestMethod.GET)
     public List<Book> listBook(){
         List<Book> book = bookRepository.findAll();
@@ -53,7 +53,7 @@ public class BookController {
         return book;
     }
 	//http://localhost:9293/SpringMVC/servlet/book/listDisponibilityBook
-	@PreAuthorize("hasAuthority('Parent') or hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector') ")
+	@PreAuthorize("hasAuthority('Parent') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector') ")
 	@RequestMapping(value="/listDisponibilityBook", method= RequestMethod.GET)
     public List<Book> listDisponibilityBook(){
         List<Book> livres = bookRepository.findBooksByStockDisponibleGreaterThanOrderByTitre(0);
@@ -64,7 +64,7 @@ public class BookController {
 
 	
 	 //http://localhost:9293/SpringMVC/servlet/book/findById/1
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
     @GetMapping(value="/findById/{id}")
     public Book detailLivre(@PathVariable int id){
         return bookRepository.findById(id);
@@ -84,7 +84,7 @@ public class BookController {
 	
 	
 	//http://localhost:9293/SpringMVC/servlet/book/addBook
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
+	@PreAuthorize(" hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
     @PostMapping(value="/addBook")
     public Book addBook(@RequestBody Book book){
         logger.info("[REST] new book : "+ book);
@@ -93,7 +93,7 @@ public class BookController {
     }
 	
 //http://localhost:9293/SpringMVC/servlet/book/deleteBook/1
-	@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
+	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
     @DeleteMapping(value="/deleteBook/{id}")
     void deleteBook(@PathVariable int id){
         Book livreToDetele = bookRepository.findById(id);
@@ -103,7 +103,7 @@ public class BookController {
     }
 
 	 //http://localhost:9293/SpringMVC/servlet/book/static/nbBooks
-		@PreAuthorize("hasAuthority('Admin') or hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
+		@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	    @RequestMapping(value="/static/nbBooks", method= RequestMethod.GET)
 	    public Map<String, Integer> nbBooks(){
 	        Map<String, Integer> resultat = new HashMap<>();
