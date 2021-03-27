@@ -98,7 +98,7 @@ public class PostServiceImpl implements IPostService{
 		}
 		else{
 			iPostRepository.save(p);
-			return ("post added successfully" +detectText(p.getMediaLink()));
+			return ("post added successfully");
 		}
 	}
 	
