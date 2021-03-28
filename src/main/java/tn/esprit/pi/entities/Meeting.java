@@ -67,8 +67,8 @@ public class Meeting implements Serializable{
 	
 	
 	
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="meeting", fetch= FetchType.EAGER)
-	private Set<Feedback> feedbacks;
+	@OneToOne(cascade= CascadeType.ALL, mappedBy="meeting")
+	private Feedback feedback;
 	
 	//@ManyToMany(cascade= CascadeType.ALL, mappedBy="meetings", fetch= FetchType.EAGER)
 	//private Set<User> users;
@@ -88,7 +88,7 @@ public class Meeting implements Serializable{
 
 
 	public Meeting(int idMeeting, LocalDateTime start,Date date, LocalDateTime end, LocalDateTime canceledAt, User canceler,
-			AppointmentStatus status, Date time, String typeMeeting, String description, Set<Feedback> feedbacks,
+			AppointmentStatus status, Date time, String typeMeeting, String description, Feedback feedback,
 			Kindergarden kindergarden, User users) {
 		super();
 		this.idMeeting = idMeeting;
@@ -101,14 +101,14 @@ public class Meeting implements Serializable{
 		this.time = time;
 		this.typeMeeting = typeMeeting;
 		this.description = description;
-		this.feedbacks = feedbacks;
+		this.feedback = feedback;
 		this.kindergarden = kindergarden;
 		this.users = users;
 	}
 
 
 	public Meeting(LocalDateTime start, Date date ,LocalDateTime end, LocalDateTime canceledAt, User canceler,
-			AppointmentStatus status, Date time, String typeMeeting, String description, Set<Feedback> feedbacks,
+			AppointmentStatus status, Date time, String typeMeeting, String description, Feedback feedback,
 			Kindergarden kindergarden, User users) {
 		super();
 		this.start = start;
@@ -120,7 +120,7 @@ public class Meeting implements Serializable{
 		this.date =date;
 		this.typeMeeting = typeMeeting;
 		this.description = description;
-		this.feedbacks = feedbacks;
+		this.feedback = feedback;
 		this.kindergarden = kindergarden;
 		this.users = users;
 	}
@@ -226,13 +226,13 @@ public class Meeting implements Serializable{
 	}
 
 
-	public Set<Feedback> getFeedbacks() {
-		return feedbacks;
+	public Feedback getFeedback() {
+		return feedback;
 	}
 
 
-	public void setFeedbacks(Set<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
+	public void setFeedback(Feedback feedback) {
+		this.feedback = feedback;
 	}
 
 
@@ -268,7 +268,7 @@ public class Meeting implements Serializable{
 	public String toString() {
 		return "Meeting [idMeeting=" + idMeeting + ", start=" + start + ", end=" + end + ", canceledAt=" + canceledAt
 				+ ", canceler=" + canceler + ", status=" + status + ", time=" + time + ", typeMeeting=" + typeMeeting
-				+ ", description=" + description + ", feedbacks=" + feedbacks + ", kindergarden=" + kindergarden
+				+ ", description=" + description + ", feedback=" + feedback + ", kindergarden=" + kindergarden
 				+ ", users=" + users + "]";
 	}
 
