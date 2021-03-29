@@ -51,6 +51,18 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 	
 	
 	User findDirectorByKindergarden(Kindergarden  kindergarden);
+	
+	
+
+	//Chadi
+	@Query("Select k FROM Kindergarden k join User u  on k.id =:idkindergarden where u.role.roleType ='KindergardenDirector'  ")
+	Kindergarden findDirectorKindergerden(@Param("idkindergarden") int idkindergarden );
+
+
+	//Chadi
+	@Query("Select u FROM User u where u.role.roleType =:role and u.id =:idparent")
+	User findParent(@Param("role")RoleType role, @Param("idparent") int idparent );
+	
 }
 
 

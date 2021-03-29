@@ -8,9 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.pi.controllers.AuthController;
+import tn.esprit.pi.controllers.UserController;
 import tn.esprit.pi.entities.Event;
 import tn.esprit.pi.entities.Participation;
 import tn.esprit.pi.entities.ParticipationPK;
+import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.IEventRepository;
 import tn.esprit.pi.repositories.IParticipantRepository;
@@ -32,6 +35,8 @@ public class ParticipationServiceImpl implements IParticipationService{
 public String addParticipation(int iduser, int idevent) {
 
 	Event event = iEventRepository.findById(idevent).get();
+	
+	
 	User user = iUserRepository.findById(iduser).get();
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	Date date = new Date();
@@ -39,6 +44,17 @@ public String addParticipation(int iduser, int idevent) {
 	Participation p = new Participation();
 	ParticipationPK participationPK = new ParticipationPK();
 	List<Participation>participations = (List<Participation>) iParticipationRepository.findAll();
+	
+	
+	Date currentdate = new Date();
+	if(currentdate.getTime() - event.getDate().getTime() >0)
+		return "Event finished you can't participate ";
+	
+	
+	if(user.getRole().equals(RoleType.Admin)) 
+			return "Admin couldn't  participate to any event ";
+
+	
 	for(int i=0 ; i<participations.size();i++) {
 		if(participations.get(i).getEvent().getIdEvenement() == idevent && 
 				participations.get(i).getUser().getIdUser() == iduser)
@@ -107,7 +123,9 @@ return "Event places is full";
 	@Override
 	public List<Participation> myParticipations() {
 		// TODO Auto-generated method stub
-		return null;
+//		 		List<Participation>list = iParticipationRepository.myParticipations(AuthController.USERCONNECTED);
+
+		 		return null;
 	}
 
 }

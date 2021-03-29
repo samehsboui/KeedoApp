@@ -85,7 +85,7 @@ public class Event implements Serializable{
 
 	
 	
-	 @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER )
+	 @OneToOne(cascade = CascadeType.DETACH, fetch=FetchType.EAGER )
 	 Jackpot jackpot;
 	
 	@JsonIgnore
@@ -103,7 +103,9 @@ public class Event implements Serializable{
 	private List<Donation> donation;
 	
 	
-	
+	@JsonIgnore
+	@OneToMany(cascade= CascadeType.ALL, mappedBy= "event")
+	private Set<Evaluation> evaluations;
 
 
 	public Event(int idEvenement, String title, Date date, Date hour, String description, boolean status,

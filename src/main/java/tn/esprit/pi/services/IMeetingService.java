@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.ResponseEntity;
 
 import tn.esprit.pi.entities.Event;
 import tn.esprit.pi.entities.Meeting;
@@ -15,7 +16,7 @@ public interface IMeetingService {
 	
     //void createNewAppointment(int parentId, int kindergardenId, int customerId, LocalDateTime start);
 
-      void createNewAppointment( int parentId, int kindergardenId, int customerId, LocalDateTime start);
+    public ResponseEntity<?> createNewMeeting( int parentId, int kindergardenId, Meeting m);
   	
     public void deleteMeeting(int id);
 	
@@ -36,6 +37,13 @@ public interface IMeetingService {
     List<Meeting> getConfirmedMeetingByParentId(int userId);
 
     List<Meeting> getCanceledMeetingsByParentIdForCurrentMonth(int userId);
+
+
+	String getCancelNotAllowedReason(int parentId, int kindergardenId, int meetingId);
+
+	ResponseEntity<?>  cancelUserAppointmentById(int appointmentId, int userId);
+
+    
 
    
     

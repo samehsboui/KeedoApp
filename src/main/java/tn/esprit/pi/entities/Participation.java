@@ -34,6 +34,7 @@ public class Participation implements Serializable {
 
 	private User user;
 
+	
 	@ManyToOne
 	@JoinColumn(name = "idEvent", referencedColumnName = "id", insertable = false, updatable = false)
 	private Event event;
@@ -95,7 +96,7 @@ public class Participation implements Serializable {
 	@Override
 	public String toString() {
 		return "Participation [participationPK=" + participationPK + ", price=" + price + ", participationDate="
-				+ participationDate + ", user=" + user + ", event=" + event + "]";
+				+ participationDate +  "]";
 	}
 
 	

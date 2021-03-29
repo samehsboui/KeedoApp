@@ -1,7 +1,9 @@
 package tn.esprit.pi.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,50 +27,52 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 @Entity
 @Table(name="meeting")
 public class Meeting implements Serializable{
-	
 	private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name= "id")
 	private int idMeeting;
 	
-	@Column(name = "start")
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-	private LocalDateTime start;
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-	@Column(name = "end")
-	private LocalDateTime end;
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDate startDate;
+
+
+	private LocalTime time;
+    
+	private LocalDateTime createdAt;
+    
 	@Column(name = "canceled_at")
 	private LocalDateTime canceledAt;
+	
+	
 	@OneToOne
 	@JoinColumn(name = "id_canceler")
 	private User canceler;
+	
+	
 	@Column(name = "status")
 	
 	@Enumerated(EnumType.STRING)
 	private AppointmentStatus status;
-	@Temporal(TemporalType.TIME)
-	@Column(name= "time")
-	private Date time;
+	
 	@Column(name= "typeMeeting")
 	private String typeMeeting;
 	@Column(name= "description")
 	private String description;
 
-	private Date date;
 	
 	
 	
 	
 	
-	@OneToOne(cascade= CascadeType.ALL, mappedBy="meeting")
-	private Feedback feedback;
+	@OneToMany(cascade= CascadeType.ALL, mappedBy="meeting", fetch= FetchType.EAGER)
+	private Set<Feedback> feedbacks;
 	
 	//@ManyToMany(cascade= CascadeType.ALL, mappedBy="meetings", fetch= FetchType.EAGER)
 	//private Set<User> users;
@@ -87,45 +91,6 @@ public class Meeting implements Serializable{
 	}
 
 
-	public Meeting(int idMeeting, LocalDateTime start,Date date, LocalDateTime end, LocalDateTime canceledAt, User canceler,
-			AppointmentStatus status, Date time, String typeMeeting, String description, Feedback feedback,
-			Kindergarden kindergarden, User users) {
-		super();
-		this.idMeeting = idMeeting;
-		this.start = start;
-		this.end = end;
-		this.date =date;
-		this.canceledAt = canceledAt;
-		this.canceler = canceler;
-		this.status = status;
-		this.time = time;
-		this.typeMeeting = typeMeeting;
-		this.description = description;
-		this.feedback = feedback;
-		this.kindergarden = kindergarden;
-		this.users = users;
-	}
-
-
-	public Meeting(LocalDateTime start, Date date ,LocalDateTime end, LocalDateTime canceledAt, User canceler,
-			AppointmentStatus status, Date time, String typeMeeting, String description, Feedback feedback,
-			Kindergarden kindergarden, User users) {
-		super();
-		this.start = start;
-		this.end = end;
-		this.canceledAt = canceledAt;
-		this.canceler = canceler;
-		this.status = status;
-		this.time = time;
-		this.date =date;
-		this.typeMeeting = typeMeeting;
-		this.description = description;
-		this.feedback = feedback;
-		this.kindergarden = kindergarden;
-		this.users = users;
-	}
-
-
 	public int getIdMeeting() {
 		return idMeeting;
 	}
@@ -136,33 +101,23 @@ public class Meeting implements Serializable{
 	}
 
 
-	public LocalDateTime getStart() {
-		return start;
+	public LocalDate getStartDate() {
+		return startDate;
 	}
 
 
-	public void setStart(LocalDateTime start) {
-		this.start = start;
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}
 
 
-	public LocalDateTime getEnd() {
-		return end;
+	public LocalTime getTime() {
+		return time;
 	}
 
 
-	public void setEnd(LocalDateTime end) {
-		this.end = end;
-	}
-
-
-	public Date getDate() {
-		return date;
-	}
-
-
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTime(LocalTime time) {
+		this.time = time;
 	}
 
 
@@ -196,16 +151,6 @@ public class Meeting implements Serializable{
 	}
 
 
-	public Date getTime() {
-		return time;
-	}
-
-
-	public void setTime(Date time) {
-		this.time = time;
-	}
-
-
 	public String getTypeMeeting() {
 		return typeMeeting;
 	}
@@ -226,13 +171,13 @@ public class Meeting implements Serializable{
 	}
 
 
-	public Feedback getFeedback() {
-		return feedback;
+	public Set<Feedback> getFeedbacks() {
+		return feedbacks;
 	}
 
 
-	public void setFeedback(Feedback feedback) {
-		this.feedback = feedback;
+	public void setFeedbacks(Set<Feedback> feedbacks) {
+		this.feedbacks = feedbacks;
 	}
 
 
@@ -244,9 +189,6 @@ public class Meeting implements Serializable{
 	public void setKindergarden(Kindergarden kindergarden) {
 		this.kindergarden = kindergarden;
 	}
-
-
-
 
 
 	public User getUsers() {
@@ -264,16 +206,16 @@ public class Meeting implements Serializable{
 	}
 
 
-	@Override
-	public String toString() {
-		return "Meeting [idMeeting=" + idMeeting + ", start=" + start + ", end=" + end + ", canceledAt=" + canceledAt
-				+ ", canceler=" + canceler + ", status=" + status + ", time=" + time + ", typeMeeting=" + typeMeeting
-				+ ", description=" + description + ", feedback=" + feedback + ", kindergarden=" + kindergarden
-				+ ", users=" + users + "]";
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
 
-	
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
 	
 	
 	

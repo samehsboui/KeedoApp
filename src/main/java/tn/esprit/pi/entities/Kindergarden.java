@@ -116,11 +116,12 @@ private static final long serialVersionUID = 1L;
 		this.updatedAt = updatedAt;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Kindergarden [id=" + id + ", name=" + name + ", claims=" + claims + ", director=" + director
 				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
+	*/
 
 	 
 

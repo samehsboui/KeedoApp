@@ -38,6 +38,9 @@ public class Notification implements Serializable{
 	
 	private String status;
 	
+	
+	private String target ;
+	
 	@ManyToOne
 	private User user;
 	@ManyToOne
@@ -118,11 +121,25 @@ public class Notification implements Serializable{
 
 
 
+	public String getTarget() {
+		return target;
+	}
+
+
+
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+
+
+/*
 	@Override
 	public String toString() {
 		return "Notification [idNotif=" + idNotif + ", subject=" + subject + ", description=" + description + ", date="
 				+ date + ", time=" + time + ", status=" + status + ", user=" + user + ", event=" + event + "]";
 	}
 
-
+*/
 }

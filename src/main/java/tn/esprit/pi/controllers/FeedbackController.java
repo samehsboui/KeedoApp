@@ -35,7 +35,7 @@ public class FeedbackController {
 	public String  createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
 	{  
 		feedbackservice.createFeedback(fb,meeting);
-		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
+		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getStartDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
 	}  
 	
 	@PreAuthorize("hasAuthority('Admin')" )
@@ -78,7 +78,7 @@ public class FeedbackController {
 		
 		
 		feedbackservice.removeFeedback(idFeedback); 
-		return "The Feedback Of Meeting Passed On"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
+		return "The Feedback Of Meeting Passed On"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getStartDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
 	}  
 	
 	

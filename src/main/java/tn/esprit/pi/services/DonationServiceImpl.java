@@ -47,6 +47,11 @@ public class DonationServiceImpl implements IDonationService  {
 		//attribut static  dans l'user 
 		Jackpot jackpot = new Jackpot();
 		System.out.println(ev.getJackpot());
+		
+		
+		if(date.getTime() - ev.getDate().getTime() >0)
+			return "Event finished you can't donate  ";
+	
 		if(user.getAccBalance() >=amount) {
 			user.setAccBalance(user.getAccBalance() - amount);
 			Jackpot j = iJackpotRepository.findJackpotEvent(ev.getIdEvenement());

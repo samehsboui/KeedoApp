@@ -133,30 +133,28 @@ public class User implements Serializable {
 	private LocalDate blockDate;
 	private LocalDate unBlockDate;
 	private boolean isPrivate;
-	// added by chedi
-	@Column(name = "acc_balance")
-	private float accBalance;
 
-	/*
-	 * @JsonIgnore
-	 * 
-	 * @ManyToMany(cascade= CascadeType.ALL) private Set<Meeting> meetings;
-	 */
-	// New
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-	private List<Meeting> meetings;
-	
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Notification> notifciations;
-	//
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Participation> participations;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Donation> donations;
+	 /************Start Chadi******/ 
+		
+		@Column(name="acc_balance")
+		private float accBalance;
+		
+		@OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
+		    private List<Meeting> meetings;
+		  
+			@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+			private List<Notification> notifciations;
+			//
+			@OneToMany(cascade= CascadeType.ALL, mappedBy= "user")
+			private Set<Participation> participations;
+			
+			@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+			private List<Donation> donations;
+			
+			@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+			private List<Evaluation>evaluations;	
+
+	 /************End Chadi******/
 
 	public User() {
 		super();
@@ -506,6 +504,22 @@ public class User implements Serializable {
 
 	public void setDonations(List<Donation> donations) {
 		this.donations = donations;
+	}
+
+	public Set<Participation> getParticipations() {
+		return participations;
+	}
+
+	public void setParticipations(Set<Participation> participations) {
+		this.participations = participations;
+	}
+
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	public void setEvaluations(List<Evaluation> evaluations) {
+		this.evaluations = evaluations;
 	}
 
 	@Override

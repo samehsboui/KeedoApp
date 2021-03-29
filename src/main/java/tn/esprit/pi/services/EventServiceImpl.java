@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -65,16 +66,33 @@ public class EventServiceImpl  implements IEventService{
 	@Autowired
 	private IDonationRepository iDonationRepository;
 	
+    private static final long interval_milliSeconds = 60*60*1000; // scheduled to run once every hour
+
 	/**********************************Admin**********************************/
 
 	//creating add method that insert  event into database
 	@Override
 	public void addEvent(Event e) {
 		Jackpot j = new Jackpot();
+		
+		
 		j.setSum(0);
 		e.setJackpot(j);
-		iEventRepository.save(e);
 		iJackPotRepository.save(j);
+		
+		iEventRepository.save(e);
+	
+		Notification n = new Notification();
+		n.setUser(null);
+		n.setDate(new Date());
+		n.setTarget("notify all users");
+		n.setDescription("event added welcome and never forget to join us");
+		n.setStatus("Not seen yet");
+		n.setTime(new Date());
+		n.setEvent(e);
+		n.setSubject("Event added");
+		iNotificationRepository.save(n);
+		
 	}
 
 	//creating deleting method that remove   event by id  from database
@@ -310,8 +328,13 @@ public class EventServiceImpl  implements IEventService{
 		
 		Event ev = iEventRepository.findById(eid).get();
 		User u = new User();
+		
+		
+	
 
 		List<Participation> participationsOfEvent = iParticipantRepository.Participations(ev);
+		
+		
 		System.out.println("hiii==");
 		Notification n = new Notification();
 
@@ -330,8 +353,11 @@ public class EventServiceImpl  implements IEventService{
 			iEventRepository.save(ev);
 			
 
-			//n.setEvent(ev);
+			n.setEvent(ev);
 			n.setUser(u);
+		
+			
+			n.setTarget("Sepecific users");
 			LocalTime localTime = LocalTime.now();
 
 			n.setTime(Time.valueOf(localTime));
@@ -457,7 +483,24 @@ public class EventServiceImpl  implements IEventService{
 		// TODO Auto-generated method stub
 		return iEventRepository.findById(id).get();
 	}
-
+	//Resultat Events List between Two Dates 
+	public String ResultEvent(List<Event> events,int i) {
+		return "Event "+i+""+"Titre: "+events.get(i).getTitle()+
+				""+"--Description: "+events.get(i).getDescription()+
+				""+"--Addresse: "+events.get(i).getAddress()+
+				""+"--CollectAmount: "+events.get(i).getCollAmount()+
+				""+"--Discount: "+events.get(i).getDiscountPercentage()+
+				""+"--PriceTicket: "+events.get(i).getTicketPrice()+
+				""+"--Views: "+events.get(i).getViews()+
+				""+"--NumberOfPlaces: "+events.get(i).getPlacesNbr()+
+				""+"--ParticipantsNbr: "+events.get(i).getParticipantsNbr()+
+				""+"--Category: "+events.get(i).getCategory();
+	}
+	
+	
+	
+	
+	
 	@Override
 	public List<String> getEventTwoDatesBeetween(Date date1, Date date2) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -471,7 +514,7 @@ public class EventServiceImpl  implements IEventService{
 		
 		for(int i = 0 ; i<events.size();i++) {
 			if((events.get(i).getDate().after(date1) &&( events.get(i).getDate().before(date2)))) {
-				//results.add(ResultEvent(events,i));
+				results.add(ResultEvent(events,i));
 			}
 			
 		}
@@ -481,7 +524,22 @@ public class EventServiceImpl  implements IEventService{
 		}
 		return results;
 	}
-	
+	@Scheduled(fixedRate=interval_milliSeconds)
+	@Override
+	public void reintializeJackPotAfterDateEvent(int idevent) {
+		
+		Jackpot jack = iJackPotRepository.findJackpotEvent(idevent);
+		
+		Event event = iEventRepository.findById(idevent).get();
+		Date now = new Date();
+		if(now.getTime() - event.getDate().getTime() >=1) {
+			jack.setSum(0);
+			iJackPotRepository.save(jack);
+		}
+		
+		
+		
+	}
 	
 
 

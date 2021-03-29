@@ -1,14 +1,17 @@
 package tn.esprit.pi.controllers;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Advertisement;
@@ -21,13 +24,16 @@ public class MeetingController {
 	@Autowired
 	IMeetingService iMeetingService;
 	
-	//creating post mapping that post the advertisement detail in the database  
-			@PostMapping("/meetings/add-meeting")  
-			private int addMeeting(@RequestBody Meeting adv)   
-			{  return 0;
-				//return iMeetingService.createNewAppointment(parentId, kindergardenId, customerId, start);(adv);
-			}
-	//creating a delete mapping that deletes a specified advertisement 
+	
+	
+	@PostMapping("/meetings/create-meeting/{parentId}/{kindergardenId}")  
+	@ResponseBody
+	private ResponseEntity<?> addMeeting(@RequestBody Meeting m ,@PathVariable("parentId")int parentId,@PathVariable("kindergardenId")int kindergardenId) throws ParseException   
+	{ 
+		 return iMeetingService.createNewMeeting(parentId, kindergardenId, m);
+
+	}
+
 			@DeleteMapping("/meetings/delete-meeting/{advId}")  
 			private void deleteAdvertisement(@PathVariable("advId") int advId)   
 			{  
