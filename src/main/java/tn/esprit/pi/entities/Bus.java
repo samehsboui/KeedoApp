@@ -41,6 +41,12 @@ public class Bus implements Serializable{
 	@Column(name="timeA")
 	@Temporal(TemporalType.TIME)
 	private Date timeA;
+	@Column(name="capacity")
+	private int capacity;
+	@Column(name="disponible")
+    private int disponible;
+
+	
 	
 	@JsonIgnore
 	@ManyToOne
@@ -124,11 +130,39 @@ public class Bus implements Serializable{
 		this.kids = kids;
 	}
 
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	
+	
+	
+
+
 	@Override
 	public String toString() {
 		return "Bus [idBus=" + idBus + ", departure=" + departure + ", destination=" + destination + ", timeDep="
-				+ timeDep + ", timeA=" + timeA + ", user=" + user + ", driver=" + driver
-				+ ", kids=" + kids + "]";
+				+ timeDep + ", timeA=" + timeA + ", capacity=" + capacity + ", disponible=" + disponible + ", user="
+				+ user + ", driver=" + driver + ", kids=" + kids + "]";
 	}
-	
+
+	public int getDisponible() {
+		return disponible;
+	}
+
+	public void setDisponible(int disponible) {
+		this.disponible = disponible;
+	}
+
+	//methode +1 -1 
+	public void desaffectDispo(){
+		this.disponible-=1;
+	}
+	public void affectDispo(){
+		this.disponible+=1;
+	}
 }

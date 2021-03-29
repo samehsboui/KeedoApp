@@ -28,5 +28,5 @@ public interface IKidService {
 	int nbrKid();
 	
 	//dhekra
-	Kid affectKidToBus(Kid kid , int idBus);
+	String affectKidToBus(Kid kid , int idBus);
 }

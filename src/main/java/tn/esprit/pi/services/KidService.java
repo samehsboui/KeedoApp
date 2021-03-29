@@ -138,14 +138,29 @@ public class KidService implements IKidService {
 	//dhekra
 	@Autowired
 	BusRepository busRepository;
-	@Override
-	public Kid affectKidToBus(Kid kid,int idBus) {
-		// TODO Auto-generated method stub
-		
-		Bus bus =busRepository.findById(idBus).get();
-		kid.setBus(bus);
-		kidRepository.save(kid);
-		
-		return kid;
-	}
+	
+		@Override
+		public String affectKidToBus(Kid kid,int idBus) {
+			// TODO Auto-generated method stub
+			
+			Bus bus =busRepository.findById(idBus).get();
+			
+			
+			if (bus.getDisponible() == 0) {
+			
+				System.out.println(
+						"[REST] Impossible to affect kid to bus");
+				//return null;
+			return (" Impossible to affect kid to bus");
+
+			}
+			else {
+				Kid kids=new Kid();
+				kids.setBus(bus);
+				
+				bus.desaffectDispo();
+				kidRepository.save(kid);
+				return ("congratulations the Kid "+kids.getFirstName()+"is affected to "+kids.getBus().getIdBus());
+			}
+		}
 }

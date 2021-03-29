@@ -16,7 +16,7 @@ import tn.esprit.pi.repositories.IUserRepository;
 @Service
 public class BusService implements IBusService {
 
-	
+
 	@Autowired
 	private BusRepository  busRepository;
 	@Autowired
@@ -58,7 +58,8 @@ public class BusService implements IBusService {
 		Bus b=busRepository.findById(id).get();
 	//	Driver driver =driverRepository.findById(idDriver).get();
 		//User user=userRepository.findById(idU).get();
-		//b.setCapacity(bus.getCapacity());
+		b.setCapacity(bus.getCapacity());
+		b.setDisponible(bus.getDisponible());
 		b.setDeparture(bus.getDeparture());
 		b.setDestination(bus.getDestination());
 		b.setDriver(bus.getDriver());
