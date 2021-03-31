@@ -1,5 +1,6 @@
 package tn.esprit.pi.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,19 @@ public class KidService implements IKidService {
 	DaycareRepository daycarRepository;
 
 	@Override
-	public Kid addKid(Kid kid) throws Exception {
-		// User user = userRepository.findById(idU).get();
+	public Retour<Kid> addKid(Kid kid) throws Exception {
+		Retour<Kid> rt =new Retour<>();
 		User user = getCurrentUser();
-		kid.setUser(user);
-		kidRepository.save(kid);
-		return kid;
+		if(kid.getBirthDate().after(new Date(System.currentTimeMillis()))){
+			rt.setStringValue("Date is wrong!!");
+		}else{
+			kid.setUser(user);
+			kidRepository.save(kid);
+			rt.setStringValue("Kid added successfuly!");
+			rt.getObjectValue().add(kid);
+		}
+		
+		return rt;
 	}
 
 	@Override
@@ -54,15 +62,23 @@ public class KidService implements IKidService {
 	}
 
 	@Override
-	public Kid updateKid(int id, Kid kid) {
+	public Retour<Kid> updateKid(int id, Kid kid) {
+		Retour<Kid> rt =new Retour<>();
 		Kid kido = kidRepository.findById(id).get();
-		kido.setAddress(kid.getAddress());
-		kido.setBirthDate(kid.getBirthDate());
-		kido.setFirstName(kid.getFirstName());
-		kido.setGender(kid.getGender());
-		kido.setLastName(kid.getLastName());
-		kidRepository.save(kido);
-		return kido;
+		if(kid.getBirthDate().after(new Date(System.currentTimeMillis()))){
+			rt.setStringValue("Date is wrong!!");
+		}else{
+			kido.setAddress(kid.getAddress());
+			kido.setBirthDate(kid.getBirthDate());
+			kido.setFirstName(kid.getFirstName());
+			kido.setGender(kid.getGender());
+			kido.setLastName(kid.getLastName());
+			kidRepository.save(kido);
+			rt.setStringValue("Kid updated successfuly!");
+			rt.getObjectValue().add(kid);
+		}
+		
+		return rt;
 	}
 
 	@Override
@@ -86,8 +102,19 @@ public class KidService implements IKidService {
 			if (d.getIdDaycare() == daycare.getIdDaycare()) {
 				rt.setStringValue("Kid already exists");
 			} else {
-				d.setNbInscrit(d.getNbInscrit() - 1);
-				daycarRepository.save(d);
+				if (daycare.getNbInscrit() < daycare.getCapacity()) {
+					kid.setDaycare(null);
+					d.setNbInscrit(d.getNbInscrit() - 1);
+					daycarRepository.save(d);
+					kid.setDaycare(daycare);
+					daycare.setNbInscrit(daycare.getNbInscrit() + 1);
+					kidRepository.save(kid);
+					daycarRepository.save(daycare);
+					rt.setStringValue("Kid affected successfully");
+					rt.getObjectValue().add(kid);
+				} else {
+					rt.setStringValue("Daycare saturated");
+				}
 			}
 
 		} else if (daycare.getNbInscrit() < daycare.getCapacity()) {

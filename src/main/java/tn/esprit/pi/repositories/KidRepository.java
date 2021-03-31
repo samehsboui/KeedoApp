@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tn.esprit.pi.entities.Daycare;
 import tn.esprit.pi.entities.Kid;
 
 @Repository
@@ -28,6 +29,9 @@ public interface KidRepository extends CrudRepository<Kid, Integer> {
 	@Modifying
 	@Query("DELETE from Kid k where k.id= :id")
 	void deleteKidById(@Param("id") int id);
+	
+	@Query("SELECT k FROM Kid k where k.daycare= :daycare")
+	List<Kid> displayKidsByDaycare(@Param("daycare") Daycare daycare);
 	
 	/*@Query(value="SELECT k.birth_date, COUNT(k.birth_date) FROM Kid k GROUP BY k.birth_date ORDER BY COUNT(e.label) DESC", nativeQuery= true)
 	int nbrKidPerAge();*/

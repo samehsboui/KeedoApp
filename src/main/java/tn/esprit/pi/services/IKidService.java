@@ -7,7 +7,7 @@ import tn.esprit.pi.entities.Retour;
 
 public interface IKidService {
 
-	Kid addKid(Kid kid) throws Exception;
+	Retour<Kid> addKid(Kid kid) throws Exception;
 
 	String deleteKid(int id);
 
@@ -15,7 +15,7 @@ public interface IKidService {
 
 	List<Kid> displayAllKids();
 
-	Kid updateKid(int id, Kid kid);
+	Retour<Kid> updateKid(int id, Kid kid);
 
 	List<Kid> orderKidsByNameAsc();
 

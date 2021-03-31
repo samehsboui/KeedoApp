@@ -8,7 +8,7 @@ import tn.esprit.pi.entities.Retour;
 public interface IDaycareService {
 	Retour<Daycare> addDaycare(Daycare daycare);
 
-	void deleteDaycare(int id);
+	String deleteDaycare(int id);
 
 	Daycare updateDaycare(int id, Daycare daycare);
 

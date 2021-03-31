@@ -27,7 +27,7 @@ public class KidController {
 	// localhost:8080/SpringMVC/servlet/kid/add
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PostMapping("add")
-	public Kid addKid(@RequestBody Kid kid) throws Exception {
+	public Retour<Kid> addKid(@RequestBody Kid kid) throws Exception {
 		return kidService.addKid(kid);
 	}
 
@@ -55,7 +55,7 @@ public class KidController {
 	// localhost:8080/SpringMVC/servlet/kid/up/2
 	@PreAuthorize("hasAuthority('KindergardenDirector') or hasAuthority('DaycareManager')")
 	@PutMapping("up/{idK}")
-	public Kid updateKid(@PathVariable("idK") int id, @RequestBody Kid kid) {
+	public Retour<Kid> updateKid(@PathVariable("idK") int id, @RequestBody Kid kid) {
 		return kidService.updateKid(id, kid);
 	}
 

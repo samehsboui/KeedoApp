@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.pi.entities.Daycare;
+import tn.esprit.pi.entities.Kid;
 import tn.esprit.pi.entities.Retour;
 import tn.esprit.pi.repositories.DaycareRepository;
 import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.repositories.KidRepository;
 
 @Service
 public class DaycareService implements IDaycareService {
@@ -17,7 +19,11 @@ public class DaycareService implements IDaycareService {
 	IUserRepository userRepository;
 	@Autowired
 	DaycareRepository daycareRepository;
-
+	@Autowired
+	KidRepository kidRepository;
+	@Autowired
+	KidService kidService;
+	
 	@Override
 	public Retour<Daycare> addDaycare(Daycare daycare) {
 		Retour<Daycare> rt = new Retour<>();
@@ -48,8 +54,15 @@ public class DaycareService implements IDaycareService {
 	}
 
 	@Override
-	public void deleteDaycare(int id) {
-		daycareRepository.deleteById(id);
+	public String deleteDaycare(int id) {
+		Daycare daycare = daycareRepository.findById(id).get();
+		List<Kid> kids= kidRepository.displayKidsByDaycare(daycare);
+		for (Kid kid : kids) {
+			kidService.deleteKidFromDaycare(kid.getIdKid(), id);
+		}
+		daycareRepository.deleteDaycareById(id);
+		
+		return "Daycare deleted successfuly";
 	}
 
 	@Override

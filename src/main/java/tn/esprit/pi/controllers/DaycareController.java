@@ -34,8 +34,8 @@ public class DaycareController {
 	// localhost:8080/SpringMVC/servlet/daycare/del/1
 	@PreAuthorize("hasAuthority('DaycareManager') or hasAuthority('KindergardenDirector')")
 	@DeleteMapping("del/{id}")
-	public void deleteDaycare(@PathVariable int id) {
-		daycareService.deleteDaycare(id);
+	public String deleteDaycare(@PathVariable int id) {
+		return daycareService.deleteDaycare(id);
 	}
 
 	// localhost:8080/SpringMVC/servlet/daycare/update/1
