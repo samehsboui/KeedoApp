@@ -134,11 +134,7 @@ public class EvaluationServiceImpl implements IEvaluationService {
 		
 	}
 	
-	
-	
-	
-	
-	@Override
+		@Override
 	public int countRatingUserByProduct(int idp) {
 		// TODO Auto-generated method stub
 		
@@ -158,6 +154,8 @@ public class EvaluationServiceImpl implements IEvaluationService {
         Map<Integer, Double> sortedNeighbourhoods = new TreeMap<>(valueComparator);
 
         double userAverage = getAverage(userRatings);
+        
+        
 
         for (int user : ratings.keySet()) {
             ArrayList<Integer> matches = new ArrayList<>();
@@ -168,14 +166,14 @@ public class EvaluationServiceImpl implements IEvaluationService {
             }
             double matchRate;
             if (matches.size() > 0) {
-                double numerator = 0, userDenominator = 0, 
+                double numerator = 0, userDenominator = 0, 	
                 		otherUserDenominator = 0;
               
                 
                 for (int productASIN  : matches) {
                     double u = userRatings.get(productASIN) - userAverage;
                     double v = ratings.get(user).get(productASIN) - averageRating.get(user);
-
+                    
                     numerator += u * v;
                     userDenominator += u * u;
                     otherUserDenominator += v * v;
@@ -327,14 +325,18 @@ public class EvaluationServiceImpl implements IEvaluationService {
 
          setAverageRating(averageRating);
 
-         Map<Integer, String> products = new HashMap<>();
+         Map<Integer, String> event = new HashMap<>();
+         Map<Integer, String> evaluations = new HashMap<>();
 
+
+   
          iEventRepository.findAll()
-                 .forEach(event ->
-                         products.put(event.getIdEvenement(), event.getTitle()));
+         .forEach(e ->
+         event.put(e.getIdEvenement(),e.getTitle()));
 
+         
          Map<Integer, Double> neighbourhoods = getNeighbourhoods(myRatesMap.get(userId));
-         Map<Integer, Double> recommendations = getRecommendations(myRatesMap.get(userId), neighbourhoods, products);
+         Map<Integer, Double> recommendations = getRecommendations(myRatesMap.get(userId), neighbourhoods, event);
          ValueComparatorInt valueComparator = new ValueComparatorInt(recommendations);
 
          Map<Integer, Double> sortedRecommendations = new TreeMap<>(valueComparator);
@@ -342,19 +344,25 @@ public class EvaluationServiceImpl implements IEvaluationService {
 
          Iterator<Map.Entry<Integer, Double>> sortedREntries = sortedRecommendations.entrySet().iterator();
          JSONArray recommendedProductsArray = new JSONArray();
-
+         
+         
+         
          int i = 0;
          while (sortedREntries.hasNext() && i < NUM_RECOMMENDATIONS) {
              Map.Entry<Integer, Double> entry = sortedREntries.next();
                   JSONObject recommendedProducts = new JSONObject("{}");
-
-                 recommendedProducts.put("Product Name", products.get(entry.getKey()));
-                 recommendedProducts.put("Rate", entry.getValue());
-                 recommendedProductsArray.put(recommendedProducts);
-                 i++;
+                  	
+                  recommendedProducts.put("Product Name", 	event.get(entry.getKey()));
+                  System.out.println("Evaluations = "+sortedREntries.toString());
+                  System.out.println("RE ="+entry.getKey());
+           
+                      recommendedProducts.put("Rate", entry.getValue());
+  
+                  recommendedProductsArray.put(recommendedProducts);
+                  i++;
 
          }
-         return recommendedProductsArray.toString();
+         return recommendedProductsArray.toString();	
      }
 
 	

@@ -28,6 +28,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -54,7 +55,8 @@ public class Meeting implements Serializable{
 	@OneToOne
 	@JoinColumn(name = "id_canceler")
 	private User canceler;
-	
+    @OneToOne(mappedBy = "requested", cascade = {CascadeType.ALL})
+    private ExchangeRequest exchangeRequest;
 	
 	@Column(name = "status")
 	
@@ -70,16 +72,18 @@ public class Meeting implements Serializable{
 	
 	
 	
-	
+	@JsonIgnore
 	@OneToMany(cascade= CascadeType.ALL, mappedBy="meeting", fetch= FetchType.EAGER)
 	private Set<Feedback> feedbacks;
 	
 	//@ManyToMany(cascade= CascadeType.ALL, mappedBy="meetings", fetch= FetchType.EAGER)
 	//private Set<User> users;
-	
+	@JsonIgnore
+
 	@ManyToOne
     @JoinColumn(name = "id_kindergarden")
     private Kindergarden kindergarden;
+	@JsonIgnore
 
     @ManyToOne
     @JoinColumn(name = "id_parent")

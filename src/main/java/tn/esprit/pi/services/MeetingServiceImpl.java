@@ -115,15 +115,15 @@ public class MeetingServiceImpl  implements IMeetingService{
 	}
 
 	@Override
-	public List<Meeting> getMeetingByParentId(int userId) {
-		List<Meeting>meeting = (List<Meeting>) iMeetingRepository.findAll();
-		List<Meeting>result = new ArrayList<>();
-
-		for(Meeting m : meeting) {
-			if(m.getUsers().getRole().getRoleType().equals(RoleType.Parent)) {
-				result.add(m);
+		public List<Meeting> getMeetingByParentId(int userId) {
+			List<Meeting>meeting = (List<Meeting>) iMeetingRepository.findAll();
+			List<Meeting>result = new ArrayList<>();
+	
+			for(Meeting m : meeting) {
+				if(m.getUsers().getRole().getRoleType().equals(RoleType.Parent)) {
+					result.add(m);
+				}
 			}
-		}
 		return result;
 	}
 
@@ -133,8 +133,11 @@ public class MeetingServiceImpl  implements IMeetingService{
 	}
 
 	@Override
-	public List<Meeting> getMeetingByKindergardenAtDay(int kindergardenId, LocalDate day) {
-		return null;
+	public List<Meeting> getMeetingByKindergardenAtDay(int kindergardenId, String day) {
+		Kindergarden kindergardenMeeting = iMeetingRepository.findKindergarden(kindergardenId);
+		System.out.println("Kinder= "+day);
+		LocalDate l = LocalDate.parse(day);
+        return iMeetingRepository.getMeetingByKindergardenDirectorAtDay(kindergardenMeeting.getId(), l.atStartOfDay(), l.atStartOfDay().plusDays(1));
 	}
 
 	@Override
@@ -214,6 +217,40 @@ public class MeetingServiceImpl  implements IMeetingService{
 		
 		return null;
 	}
+
+	
+	
+	
+	
+	 @Override
+	    public List<Meeting> updateAppointmentsStatusesWithExpiredExchangeRequest() {
+	        
+		 List<Meeting>list = new ArrayList<>();
+		 System.out.println("hiii =="+LocalDate.now().plusDays(1));
+		 iMeetingRepository.findExchangeRequestedWithStartBefore(LocalDate.now().plusDays(1))
+	                .forEach(appointment -> {
+	                    appointment.setStatus(AppointmentStatus.SCHEDULED);
+	                    list.add(appointment);
+	                    iMeetingRepository.save(appointment);
+	                });
+	        return list;
+	    }
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Meeting> getMeetingByKindergardenDirectorAtDay(int providerId, LocalDate day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
+
 }
 	
 	

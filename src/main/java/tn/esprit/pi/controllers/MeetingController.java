@@ -1,9 +1,11 @@
 package tn.esprit.pi.controllers;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +60,11 @@ public class MeetingController {
 				return iMeetingService.getMeetingById(idAd);
 			} 
 	
+			@PutMapping("/meeting/updateAppointmentsStatusesWithExpiredExchangeRequest")  
+			private List<Meeting> updateAppointmentsStatusesWithExpiredExchangeRequest()   
+			{  
+				return iMeetingService.updateAppointmentsStatusesWithExpiredExchangeRequest();
+			} 
 	
 
 }

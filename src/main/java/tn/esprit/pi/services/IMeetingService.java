@@ -30,7 +30,7 @@ public interface IMeetingService {
 
     List<Meeting> getMeetingByKindergardenId(int kindergardenId);
 
-    List<Meeting> getMeetingByKindergardenAtDay(int kindergardenId, LocalDate day);
+    List<Meeting> getMeetingByKindergardenAtDay(int kindergardenId, String day);
 
     List<Meeting> getMeetingByCustomerAtDay(int kindergardenId, LocalDate day);
 
@@ -41,12 +41,10 @@ public interface IMeetingService {
 
 	String getCancelNotAllowedReason(int parentId, int kindergardenId, int meetingId);
 
-	ResponseEntity<?>  cancelUserAppointmentById(int appointmentId, int userId);
+	 ResponseEntity<?>  cancelUserAppointmentById(int appointmentId, int userId);
+	 public List<Meeting> getMeetingByKindergardenDirectorAtDay(int providerId, LocalDate day) ;
 
-    
-
-   
-    
+	List<Meeting> updateAppointmentsStatusesWithExpiredExchangeRequest();
     
     
 	
