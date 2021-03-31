@@ -43,7 +43,7 @@ public class ClaimService implements IClaimService {
 	
 	
 	 private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "f707cdde6358b5c632e7ede0afc9284a";
+	   private final static String AUTH_ID = "7ccec00c6b34e9020cba85e00512b880";
 
 
 	
@@ -121,10 +121,25 @@ public class ClaimService implements IClaimService {
 		
 		cr.save(claim);
 		
-		if (claim.getStatus()==ClaimStatus.Resolved)
+		if (claim.getStatus()==ClaimStatus.Resolved){
 			deleteClaim( id);
+			
+			return "Dear "+((UserDetailsImpl) principal).getUser().getFirstName()+" "+((UserDetailsImpl) principal).getUser().getLastName()+", "
+			+ "thank you for resolving your kindergarden problem  .";
+		}
+			
+		
+		
+		
+		
+		
 		return "Dear "+((UserDetailsImpl) principal).getUser().getFirstName()+" "+((UserDetailsImpl) principal).getUser().getLastName()+", "
-				+ "your claim process was successfuly recorded .";}else{
+				+ "your claim process was successfuly recorded .";
+		
+		
+		
+		
+		}else{
 					return "We are Sorry Dear "+((UserDetailsImpl)principal).getUser().getFirstName()+" "+((UserDetailsImpl)principal).getUser().getLastName()+", this kindergarden is blocked right now so you can't make a claim on it,  ."
 							+ "you can't treat this claim right now because you are already blocked, please contact the administration to resolve your problem and "
 							+ " unlock your subscription with us .\n   "
@@ -174,12 +189,23 @@ public class ClaimService implements IClaimService {
 	@Override
 	public List<Claim> getClaimByCategory(ClaimCategory cc) {
 		// TODO Auto-generated method stub
-		return cr.getClaimByCategory(cc);
+	
+		
+		List<Claim> c=cr.getClaimByCategory(cc);
+	
+return c;
 	}
 
+	
+
+	
+	
+	
 	@Override
 	public List<Claim> getClaimByKindergarden(String k) {
 		// TODO Auto-generated method stub
+		
+		
 		return cr.getClaimByKindergarden(k);
 	}
 
@@ -256,6 +282,22 @@ public class ClaimService implements IClaimService {
 
 		
 	}
+	
+public boolean isClaimCategoryExists(ClaimCategory claimCategory){
+		
+		if(cr.isClaimCategoryExists(claimCategory)==0)
+			return false;
+		else
 
+		return true;
+	}
 
+public boolean isKindergarden(String kindergarden){
+		
+		if(cr.iskindergarden(kindergarden)==0)
+			return false;
+		else
+
+		return true;
+	}
 }

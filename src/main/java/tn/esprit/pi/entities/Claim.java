@@ -137,10 +137,10 @@ public class Claim implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Claim [idClaim=" + idClaim + ", description=" + description + ", category=" + category + ", user="
-				+ user + ", kindergarden=" + kindergarden + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+		return "Claim [idClaim=" + idClaim + ", description=" + description + ", category=" + category + ", kindergarden=" + kindergarden + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ ", status=" + status + ", checkedAt=" + checkedAt + "]";
 	}
+
 
 	
 	

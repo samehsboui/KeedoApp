@@ -78,6 +78,11 @@ public class FollowRequest  implements Serializable{
 
 
 	
+	@Override
+	public String toString() {
+		return "FollowRequest [idFollowRequest=" + idFollowRequest + ", following=" + following + ", follower="
+				+ follower + "]";
+	}
 
 
 

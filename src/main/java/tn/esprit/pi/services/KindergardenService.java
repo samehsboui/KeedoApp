@@ -30,13 +30,21 @@ public class KindergardenService implements IKindergardenService{
 	public Kindergarden addKindergarden(Kindergarden kindergarden, int director) {
 		// TODO Auto-generated method stub
 		User u=ur.findById(director).get();
-		
 		kindergarden.setDirector(u);
 		kindergarden.setCreatedAt(LocalDateTime.now());
-		
 		return kindergardenRepository.save(kindergarden);
+	
 
 	
+	}
+	
+	public boolean isDirectorHasKindergarden(int director){
+		
+		if(kindergardenRepository.isDirectorHasKindergarden(director)==0)
+			return false;
+		else
+
+		return true;
 	}
 
 	@Override
@@ -63,7 +71,7 @@ public class KindergardenService implements IKindergardenService{
 		User director=k.getDirector();
 		System.out.println("Director= "+director.getFirstName());
 		System.out.println("cureent= "+((UserDetailsImpl)principal).getUser().getFirstName());
-		//if (((UserDetailsImpl)principal).getUser().equals(director)){
+	
 			if (!((UserDetailsImpl)principal).getUser().isBlocked()){
 				k.setName(kindergarden.getName());
 				k.setCreatedAt(k.getCreatedAt());
@@ -71,16 +79,15 @@ public class KindergardenService implements IKindergardenService{
 				k.setDirector(k.getDirector());
 				 kindergardenRepository.save(k);  
 				 
-				 return"The kindergarden account was successfuly updated by her director ";}else{
+				 return"The kindergarden account was successfuly updated by  "+((UserDetailsImpl)principal).getUser().getFirstName()+" "+((UserDetailsImpl)principal).getUser().getLastName()+" which is the "
+						 +((UserDetailsImpl)principal).getUser().getRole().getRoleType();}else{
 						return "Sorry "+((UserDetailsImpl)principal).getUser().getFirstName()+", you don't have the permission to modify the profile of your kindergarten account because your are blocked."
 								+ "Please sir contact the administration to relsolve your problems and recover your account.  ";
 				 }
 				
 		}
 		
-		//else{
-		//	return "Sorry "+((UserDetailsImpl)principal).getUser().getFirstName()+", you don't have the permission to modify the content of this kindergarten account because your are not the responsible of it.   ";	}
-	//}
+
 
 	@Override
 	public Kindergarden getKindergardenById(int id) {

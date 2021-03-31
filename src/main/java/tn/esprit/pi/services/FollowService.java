@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 import tn.esprit.pi.entities.Follow;
 import tn.esprit.pi.entities.FollowRequest;
 import tn.esprit.pi.entities.User;
-import tn.esprit.pi.entities.followResponse.FollowListResponse;
-import tn.esprit.pi.entities.followResponse.FollowResponse;
-import tn.esprit.pi.repositories.FollowRepository;
+ import tn.esprit.pi.repositories.FollowRepository;
 import tn.esprit.pi.repositories.FollowRequestRepository;
 import tn.esprit.pi.repositories.IUserRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
@@ -33,15 +35,21 @@ public class FollowService implements IFollowService{
 	@Autowired
 	IUserRepository userRepository;
 	
+	
+	
+	 private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
+	   private final static String AUTH_ID = "7ccec00c6b34e9020cba85e00512b880";
+
 	@Override
-	public FollowResponse followUser(int userId) throws Exception {
+	public String followUser(int userId) throws Exception {
 		
         User following = userRepository.findById(userId).get();
         
         Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (follower instanceof UserDetailsImpl ) {
-        if (following.isPrivate()) {
+	
+		
+        if (following.isPrivate() ) {
             FollowRequest followRequest = new FollowRequest();
 
             followRequest.setFollower(((UserDetailsImpl) follower).getUser());
@@ -49,21 +57,24 @@ public class FollowService implements IFollowService{
 
             followRequestRepository.save(followRequest);
 
-            return new FollowResponse(false);
+            return "Your follow request has been successfuly sent to "+following.getFirstName()+" "+following.getLastName()+". \n "
+            		+ "Please wait until he/she accept your request";
         }
         Follow followObject = new Follow();
         followObject.setFollower(((UserDetailsImpl) follower).getUser());
         followObject.setFollowing(following);
         followRepository.save(followObject);
 
-		}
-        return new FollowResponse(true);
+	
+        return "You are now the follower of "+following.getFirstName()+" "+following.getLastName()+", so you can now consult"
+        		+ " her/his profile and discuss "
+        		;
 	
 	}
 	
 	
 	@Override
-	public FollowResponse isFollowing(int userId) throws Exception {
+	public boolean isFollowing(int userId) throws Exception {
 		
 		 User following = userRepository.getOne(userId);
 	
@@ -72,15 +83,15 @@ public class FollowService implements IFollowService{
   
 	        Optional<Follow> follow = followRepository.findFollowByFollowerAndFollowing(((UserDetailsImpl) follower).getUser().getIdUser(),following.getIdUser());
 	        if (follow.isPresent()) {
-	            return new FollowResponse(true);
+	            return  true ;
 	        }
-	        return new FollowResponse(false);
+	        return  false ;
 	}
 	
 	
 	
 	@Override
-	public FollowListResponse getUserFollowers(int userId) {
+	public List<User> getUserFollowers(int userId) {
 		
 		
 		 User user = userRepository.findById(userId).get();
@@ -94,19 +105,22 @@ public class FollowService implements IFollowService{
 	   
 		
 	        }
-	        return FollowListResponse.mapUserListToUsersSummaries(userList);
+	        return userList;
 	        
 	        
 		
 	
 	}
 	@Override
-	public FollowResponse isUserFollowedByCurrentUser(int currentUser, int userId) {
+	public boolean isUserFollowedByCurrentUser(int currentUser, int userId) {
 		// TODO Auto-generated method stub
-	     return new FollowResponse(false);
+	     return  false ;
 	}
+	
+	
+	
 	@Override
-	public FollowListResponse getUserFollowing(int userId) {
+	public List<User> getUserFollowing(int userId) {
 		
 		
 		 User user = userRepository.findById(userId).get();
@@ -117,35 +131,44 @@ public class FollowService implements IFollowService{
 		      
 
 	            userList.add(userRepository.findById(follow.getFollowing().getIdUser()).get());
-	            
-		  
+	                  
+	
 	        }
-	        return FollowListResponse.mapUserListToUsersSummaries(userList);
-	        
-	    
+			return userList;
+	  
 	}
+
 	@Override
-	public FollowResponse acceptFollow(int followRequestId) {
+	public void acceptFollow(int followRequestId) {
+		
 		 FollowRequest followRequest = followRequestRepository.findById(followRequestId).get();
-	        System.out.println(followRequest);
-	        if (followRequest != null) {
+	
+		 User follower=userRepository.findByidUser(followRequest.getFollower().getIdUser());
+		 User following=userRepository.findByidUser(followRequest.getFollowing().getIdUser());
+		
+	      
 	            Follow followObject = new Follow();
 	            followObject.setFollower(followRequest.getFollower());
 	            followObject.setFollowing(followRequest.getFollowing());
+	            
+	            
 	            followRepository.save(followObject);
 
-
-	          
 	            followRequestRepository.delete(followRequest);
-	            return new FollowResponse(true);
-
+	           /* 
+	            Twilio.init(ACCOUNT_SID, AUTH_ID);
+				Message.creator(new PhoneNumber(follower.getTelNum()), new PhoneNumber("+14435012866"),
+						"Hey "+follower.getFirstName()+" "+follower.getLastName()+
+	            		", You are now the follower of "+following.getFirstName()+" "+following.getLastName()+", So you have the permission now to consult his/her profile and discuss with ").create();
+	     */
 	        }
-	            return new FollowResponse(false);
-	}
+	        
+
+
 	@Override
-	public FollowResponse declineFollow(int followRequestId) {
+	public void declineFollow(int followRequestId) {
 		 followRequestRepository.deleteById(followRequestId);
-	        return new FollowResponse(false);
+	       
 	}
 
 	
@@ -177,6 +200,22 @@ public class FollowService implements IFollowService{
 		return requests;
 			
 	}
+
+
+	@Override
+	public int CountUsserRequests() throws Exception {
+		// TODO Auto-generated method stub
+		 Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+			
+			List<FollowRequest> requests=followRequestRepository.findAllByFollowing(((UserDetailsImpl) principal).getUser());
+		
+		
+		return requests.size();
+	}
+
+
+
 	
 	
 

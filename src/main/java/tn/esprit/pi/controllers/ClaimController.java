@@ -103,20 +103,34 @@ public class ClaimController {
 	@PreAuthorize("hasAuthority('Admin')" )
 
 		@GetMapping("/claims/retrieve-claim-category/{claimcategory}")
-		public List<Claim> getClaimByCategory(@PathVariable ClaimCategory claimcategory) {
-			 List<Claim> claim = claimService.getClaimByCategory(claimcategory);
-			return claim;
-			}
+		public String getClaimByCategory(@PathVariable ClaimCategory claimcategory) {
+if (claimService.isClaimCategoryExists(claimcategory))
+			return claimService.getClaimByCategory(claimcategory).toString();
+else
+	return "We don't found any claim having the category '"+claimcategory+"' .";
+	
+	}
+	
 
 	@PreAuthorize("hasAuthority('Admin')" )
 
 		@GetMapping("/claims/retrieve-claim-kindergarden/{name}")
-		public List<Claim> getClaimByKindergarden(@PathVariable String name) {
+		public String getClaimByKindergarden(@PathVariable String name) {
 		
+		if (claimService.isKindergarden(name)){
+			List<Claim> claim = claimService.getClaimByKindergarden(name);
+			
+			
+			if(!claim.isEmpty())
+				return claim.toString();
+				
+			else
+			return "No Claim found for this kindergarden";
+			
+		}
+		return "Sorry this kindergarden name not found.";
 		
-			 List<Claim> claim = claimService.getClaimByKindergarden(name);
-			return claim;
-			}
+	}
 		
 	
 	@PreAuthorize("hasAuthority('Admin')" )

@@ -22,6 +22,8 @@ public interface FollowRequestRepository extends JpaRepository<FollowRequest,Int
 	    Optional<FollowRequest> findByFollowerAndFollowing(@Param("followerId") int followerId, @Param("followingId") int followingId);
 
 		List<FollowRequest> findAllByFollowing(User user);
+		List<FollowRequest> findAllByFollower(User user);
+		
 
 		//List<FollowRequest> findAllByFollower(User user);
 

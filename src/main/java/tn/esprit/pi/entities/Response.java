@@ -67,7 +67,7 @@ private static final long serialVersionUID = 1L;
 		if (question.getType()==QuestionType.Text){
 			this.response = response;
 
-		}else if(question.getType()==QuestionType.Satifaction){
+		}else if(question.getType()==QuestionType.Satisfaction){
 			this.satisfactionDegree = satisfactionDegree;
 
 		}else

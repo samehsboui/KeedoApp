@@ -1,5 +1,6 @@
 package tn.esprit.pi.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,18 @@ public class KindergardenController {
 
 	public String addKindergarten(@RequestBody Kindergarden kindergarden,@PathVariable("director") int director)   
 	{  
-		kindergardenService.addKindergarden(kindergarden,director);
-		if (kindergarden.getId()>0)
-		return "Kindergaten added successfuly";
-		else
-			return "We found a problem when  adding the kindergarten";
+		
+			if (!kindergardenService.isDirectorHasKindergarden(director)){
+				kindergardenService.addKindergarden(kindergarden,director);
+				return "This Kindergaten was successfuly added.";
+			}
+			else{
+				return "Sorry, This director has already a kindergarden you cannot add another one.";}
+			
 	}  
+	
+	
+	
 	@PreAuthorize("hasAuthority('Admin')" )
 	@GetMapping("/retrieve-all-kindergartens")
 	 @ResponseBody
@@ -58,7 +65,7 @@ public class KindergardenController {
 	}
 	
 	
-	@PreAuthorize("hasAuthority('Parent')" )
+	@PreAuthorize("permitAll()" )
 
 	@GetMapping("/retrieve-kindergarten-details/{idKindergarten}")
 	 @ResponseBody
@@ -95,9 +102,17 @@ public class KindergardenController {
 
 	@GetMapping("/kindergarden/{name}")
 	 @ResponseBody
-	public Kindergarden getKindergartenByName(@PathVariable String name) {
+	public String getKindergartenByName(@PathVariable String name) {
 		 
-			return kindergardenService.getKindergardenByName(name);
+		Kindergarden k=kindergardenService.getKindergardenByName(name);
+		
+		if (k != null)
+			
+				
+			return k.toString();
+		else 
+			
+			return "Sorry we were unable to find this kindergarden ";
 		}
 	
 	
@@ -108,7 +123,7 @@ public class KindergardenController {
 		
 	
 		Kindergarden k=kindergardenService.getKindergardenByName(name);
-		if (claimService.CountClaimByKindergarden(k.getName())<=4)
+		if ( claimService.CountSkipedClaimByKindergarden(name)<4)
 			return k.getName()+" Is the most Recommended Kindergarten .";
 		else
 			return k.getName()+" Is the Worst Recommended Kindergarten .";

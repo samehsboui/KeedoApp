@@ -77,8 +77,15 @@ public class FeedbackService implements IFeedbackService{
 		// TODO Auto-generated method stub
 		
 		Feedback f=feedbackrepository.findById(id).get();
+	System.out.println("hhhhhhhhhhhhhh"+f.getTitle());
+		feedbackrepository.deleteFeedback(f.getIdFeedback());;
+	}
 	
-		feedbackrepository.delete(f);
+	public boolean feedbackexist(int id){
+		if (feedbackrepository.feedbackExists(id)==1)
+			return true;
+		else
+			return false;
 	}
 
 	@Override

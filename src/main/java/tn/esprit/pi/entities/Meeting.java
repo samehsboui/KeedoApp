@@ -220,7 +220,18 @@ public class Meeting implements Serializable{
 	}
 
 
+	@Override
+	public String toString() {
+		return "Meeting [idMeeting=" + idMeeting + ", startDate=" + startDate + ", time=" + time + ", createdAt="
+				+ createdAt + ", canceledAt=" + canceledAt + ", canceler=" + canceler + ", exchangeRequest="
+				+ exchangeRequest + ", status=" + status + ", typeMeeting=" + typeMeeting + ", description="
+				+ description + ", feedbacks=" + feedbacks + ", kindergarden=" + kindergarden + ", users=" + users
+				+ "]";
+	}
+
+
 	
+
 	
 	
 }

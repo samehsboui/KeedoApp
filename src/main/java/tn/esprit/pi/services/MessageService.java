@@ -37,7 +37,7 @@ public class MessageService implements IMessageService {
 		User user = getCurrentUser();
 		user.setStatus(true);
 		userRepository.save(user);
-		List<User> myFriends = followService.getUserFollowing(user.getIdUser()).getUserList();
+		List<User> myFriends = followService.getUserFollowing(user.getIdUser());
 		rt.setStringValue("Status: " + user.isStatus());
 		rt.setObjectValue(myFriends);
 		return rt;
@@ -49,7 +49,7 @@ public class MessageService implements IMessageService {
 		User user = getCurrentUser();
 		user.setStatus(false);
 		userRepository.save(user);
-		List<User> myFriends = followService.getUserFollowing(user.getIdUser()).getUserList();
+		List<User> myFriends = followService.getUserFollowing(user.getIdUser());
 		rt.setStringValue("Status: " + user.isStatus());
 		rt.setObjectValue(myFriends);
 		return rt;

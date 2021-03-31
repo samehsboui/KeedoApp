@@ -78,7 +78,13 @@ public class FeedbackController {
 		
 		
 		feedbackservice.removeFeedback(idFeedback); 
-		return "The Feedback Of Meeting Passed On"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getStartDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
+		if(!feedbackservice.feedbackexist(idFeedback))
+		
+		return "The Feedback Of Meeting Passed On "+feedbackservice.getFeedbackById(idFeedback).getMeeting().getStartDate()+" At :"+feedbackservice.getFeedbackById(idFeedback).getMeeting().getTime()+" Was successfully Removed!";
+		else 
+			
+			return "not removed";
+	
 	}  
 	
 	
