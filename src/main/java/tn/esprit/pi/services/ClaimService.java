@@ -43,7 +43,7 @@ public class ClaimService implements IClaimService {
 	
 	
 	 private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "7ccec00c6b34e9020cba85e00512b880";
+	   private final static String AUTH_ID = "dc0032ee96c7dfb15e90930606627313";
 
 
 	
@@ -248,7 +248,7 @@ return c;
 	User director=ur.findByidUser(k.getDirector().getIdUser());
 		int nb=CountSkipedClaimByKindergarden( k.getName());
 		
-		if (nb>=4){
+		if (nb>=2){
 			
 			director.setBlocked(true);
 			director.setBlockDate(LocalDate.now());
@@ -300,4 +300,17 @@ public boolean isKindergarden(String kindergarden){
 
 		return true;
 	}
+
+public boolean isKindergardenClaimExists(int idkinder){
+	
+	if(cr.isKindergardenClaimExists(idkinder)==0)
+		return false;
+	else
+
+	return true;
+	
+	
+}
+
+
 }

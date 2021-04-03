@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tn.esprit.pi.entities.Feedback;
 import tn.esprit.pi.entities.Kindergarden;
 import tn.esprit.pi.entities.Meeting;
+import tn.esprit.pi.entities.Question;
+import tn.esprit.pi.entities.Response;
 import tn.esprit.pi.entities.RoleType;
 import tn.esprit.pi.entities.User;
 import tn.esprit.pi.repositories.FeedbackRepository;
 import tn.esprit.pi.repositories.IMeetingRepository;
 //import tn.esprit.pi.repositories.MeetingRepository;
 import tn.esprit.pi.repositories.IUserRepository;
+import tn.esprit.pi.repositories.QuestionRepository;
+import tn.esprit.pi.repositories.ResponseRepository;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -34,15 +38,20 @@ public class FeedbackService implements IFeedbackService{
 	@Autowired
 	IUserRepository userrepository;
 	
+	@Autowired
+	QuestionRepository qr;
+	@Autowired
+	ResponseRepository rr;
+	
 	  private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "3563f93eadf67b4335078edd7ce849c1";
+	   private final static String AUTH_ID = "dc0032ee96c7dfb15e90930606627313";
 
 	 
 	
 	
 	@Override
 	public Feedback createFeedback(Feedback fb, int meeting) {
-		//Twilio.init(ACCOUNT_SID, AUTH_ID);
+		Twilio.init(ACCOUNT_SID, AUTH_ID);
 		
 		
 		
@@ -57,8 +66,8 @@ public class FeedbackService implements IFeedbackService{
 		
 		fb.setMeeting(m);
 		fb.setCreatedAt(LocalDateTime.now());
-		//Message.creator(new PhoneNumber(u.getTelNum()), new PhoneNumber("+14435012866"),
-				  // "Please check our application to give you feedback according to the meeting passed on "+m.getDate()+" at "+m.getTime()).create();
+		Message.creator(new PhoneNumber(u.getTelNum()), new PhoneNumber("+14435012866"),
+				   "Please check our application to give you feedback according to the meeting passed on "+m.getStartDate()+" at "+m.getTime()).create();
 		
 		return feedbackrepository.save(fb);
 		
@@ -77,8 +86,13 @@ public class FeedbackService implements IFeedbackService{
 		// TODO Auto-generated method stub
 		
 		Feedback f=feedbackrepository.findById(id).get();
-	System.out.println("hhhhhhhhhhhhhh"+f.getTitle());
-		feedbackrepository.deleteFeedback(f.getIdFeedback());;
+		
+	
+	
+
+		
+	qr.deleteQuestions(id);
+				feedbackrepository.deleteFeedback(f.getIdFeedback());;
 	}
 	
 	public boolean feedbackexist(int id){

@@ -5,7 +5,7 @@ import java.util.List;
 import tn.esprit.pi.entities.Question;
 
 public interface IQuestionService {
-	Question createQuestion(Question fb,int feedback);
+	String createQuestion(Question fb,int feedback);
 	List<Question> getAllQuestions();
 	void removeQuestion(int id);
 	Question getQuestionById(int id);

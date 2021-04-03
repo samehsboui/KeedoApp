@@ -2,7 +2,10 @@ package tn.esprit.pi.repositories;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -36,6 +39,13 @@ public interface ResponseRepository extends JpaRepository<Response,Integer>{
 
 	List<Response> questionResponses(@Param("user") int user,@Param("feedback") int feedback);
 	
+	
+	@Transactional
+	@Modifying
+	@Query("delete from Response r where  r.question.id=:id")
+	void deleteResponse(@Param("id") int id);
+	
+
 
 	
 	

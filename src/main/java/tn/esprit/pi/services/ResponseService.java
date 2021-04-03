@@ -53,8 +53,8 @@ public class ResponseService implements IResponseService{
 	@Override
 	public void removeResponse(int id) {
 		// TODO Auto-generated method stub
-		Response response=responserepository.findById(id).get();
-		responserepository.delete(response);
+		Question q=questionrepository.findById(id).get();
+		responserepository.deleteResponse(q.getId());;
 	}
 
 	@Override

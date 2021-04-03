@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.pi.entities.Claim;
 import tn.esprit.pi.entities.Feedback;
+import tn.esprit.pi.entities.Meeting;
+import tn.esprit.pi.repositories.IMeetingRepository;
 import tn.esprit.pi.security.services.UserDetailsImpl;
 import tn.esprit.pi.services.FeedbackService;
 
@@ -29,14 +31,24 @@ public class FeedbackController {
 	@Autowired
 	private FeedbackService feedbackservice;
 
-
+	@Autowired
+	private IMeetingRepository meetingrepository;
 	@PreAuthorize("hasAuthority('Admin')")
 	@PostMapping("/Feedbacks/new-feedback-of/{meeting}")  
 	public String  createFeedback(@RequestBody Feedback fb,@PathVariable("meeting") int meeting)   
 	{  
-		feedbackservice.createFeedback(fb,meeting);
-		return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getStartDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
-	}  
+		Meeting m=meetingrepository.findMeeting(meeting);
+
+		if (m!=null){
+			feedbackservice.createFeedback(fb,meeting);
+			return "The Feedback Of "+fb.getMeeting().getTypeMeeting()+" Meeting Passed On "+fb.getMeeting().getStartDate()+" At :"+fb.getMeeting().getTime()+" was sucessfully Created!";
+		
+		}
+		else{
+		return "Sorry we can't find the meeting";
+	
+		}
+		}  
 	
 	@PreAuthorize("hasAuthority('Admin')" )
 

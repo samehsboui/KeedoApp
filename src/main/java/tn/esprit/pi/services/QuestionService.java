@@ -19,12 +19,16 @@ public class QuestionService implements IQuestionService{
 	@Autowired
 	FeedbackRepository feedbackrepository;
 	@Override
-	public Question createQuestion(Question question, int feedback) {
+	public String createQuestion(Question question, int feedback) {
 		// TODO Auto-generated method stub
 		
 		Feedback f=feedbackrepository.findById(feedback).get();
-		question.setFeedback(f);
-		return questionrepository.save(question);
+		
+		if (f!=null){
+			question.setFeedback(f);
+			return ""+questionrepository.save(question);
+		}
+		return "Sorry we  don't have this feedback, you should create it first";
 	}
 
 	@Override

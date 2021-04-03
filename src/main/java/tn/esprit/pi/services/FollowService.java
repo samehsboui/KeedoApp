@@ -38,7 +38,7 @@ public class FollowService implements IFollowService{
 	
 	
 	 private final static String ACCOUNT_SID = "ACc623886a49c089d9c967ad2c084e03b3";
-	   private final static String AUTH_ID = "7ccec00c6b34e9020cba85e00512b880";
+	   private final static String AUTH_ID = "dc0032ee96c7dfb15e90930606627313";
 
 	@Override
 	public String followUser(int userId) throws Exception {
@@ -155,12 +155,12 @@ public class FollowService implements IFollowService{
 	            followRepository.save(followObject);
 
 	            followRequestRepository.delete(followRequest);
-	           /* 
+	           
 	            Twilio.init(ACCOUNT_SID, AUTH_ID);
 				Message.creator(new PhoneNumber(follower.getTelNum()), new PhoneNumber("+14435012866"),
 						"Hey "+follower.getFirstName()+" "+follower.getLastName()+
 	            		", You are now the follower of "+following.getFirstName()+" "+following.getLastName()+", So you have the permission now to consult his/her profile and discuss with ").create();
-	     */
+	    
 	        }
 	        
 

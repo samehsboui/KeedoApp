@@ -40,6 +40,11 @@ public interface ClaimRepository extends CrudRepository<Claim,Integer> {
 	public int isClaimCategoryExists(@Param("claimCategory")ClaimCategory claimCategory);
 
 
+	@Query("SELECT count(c) FROM Claim c WHERE c.kindergarden.id=:id")
+
+	public int isKindergardenClaimExists(@Param("id")int idkinder);
+
+
 
 
 }

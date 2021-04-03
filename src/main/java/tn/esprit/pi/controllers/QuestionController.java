@@ -59,10 +59,12 @@ public class QuestionController {
 	 @ResponseBody
 	 
 
-	 public Question getQuestion(@PathVariable("idQuestion") int idQuestion) {
+	 public String getQuestion(@PathVariable("idQuestion") int idQuestion) {
 
-	
-		return questionservice.getQuestionById(idQuestion);
+	if (questionservice.getQuestionById(idQuestion)!=null)
+	 return ""+questionservice.getQuestionById(idQuestion);
+	else
+		return" Sorry we don't have this question";
 	}
 	
 	

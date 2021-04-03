@@ -55,7 +55,7 @@ public class KindergardenController {
 	
 	
 	
-	@PreAuthorize("hasAuthority('Admin')" )
+	@PreAuthorize("permitAll()" )
 	@GetMapping("/retrieve-all-kindergartens")
 	 @ResponseBody
 
@@ -123,12 +123,17 @@ public class KindergardenController {
 		
 	
 		Kindergarden k=kindergardenService.getKindergardenByName(name);
+		
+		if(k!=null){
 		if ( claimService.CountSkipedClaimByKindergarden(name)<4)
 			return k.getName()+" Is the most Recommended Kindergarten .";
 		else
 			return k.getName()+" Is the Worst Recommended Kindergarten .";
 		
-		 
+		}else
+		{
+			return "Sorry we were unable to find this kindergarden ";	
+			}
 		}
 	
 	

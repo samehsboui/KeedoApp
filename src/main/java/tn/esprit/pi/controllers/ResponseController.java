@@ -54,22 +54,10 @@ public class ResponseController {
 	}
 	
 	
-	/*
-	@PreAuthorize("hasAuthority('Parent')")
-	@GetMapping("/Responses/retrieve-all-responses_of-feedback/{feedback}")
-	 @ResponseBody
 
-	 public List<Response> getOwnQuestionResponses(int feedback) throws Exception {
-		
-			
-	 List<Response> list = responseservice.getOwnQuestionResponses(feedback);
-			
-	 return list;
-	
 
-	}
 	
-	*/
+	
 	
 	@PreAuthorize("hasAuthority('Admin')")
 	@GetMapping("/Responses/retrieve-all-responses_of/{user}")
@@ -101,12 +89,12 @@ public class ResponseController {
 	
 	
 	@PreAuthorize("hasAuthority('Admin')")
-	@DeleteMapping("/Responses/delete-response/{idResponse}")  
-	public String RemoveResponse(@PathVariable("idResponse") int idResponse) throws Exception   
+	@DeleteMapping("/Responses/delete-response-of-question/{idquestion}")  
+	public String RemoveResponse(@PathVariable("idquestion") int idquestion) throws Exception   
 	{  
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		responseservice.removeResponse(idResponse);
+		responseservice.removeResponse(idquestion);
 		return "Response was successfuly removed by "+((UserDetailsImpl) principal).getUser().getFirstName();
 	} 
 

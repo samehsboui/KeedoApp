@@ -39,7 +39,6 @@ public class FollowController {
 		
     User following = userRepository.findById(userId).get();
         
-        Object follower = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
 		if (followservice.isFollowing(userId)){
 			return " You are already followed this "+following.getRole().getRoleType()+".";
@@ -85,10 +84,11 @@ public class FollowController {
 	    
 	    @PreAuthorize("permitAll()" )
 	    @PostMapping("/accept-follow-request/{followId}")
-	    public void acceptFollow(@PathVariable(value = "followId") int followRequestId) {
+	    public String acceptFollow(@PathVariable(value = "followId") int followRequestId) {
 	  
 	   
 	         followservice.acceptFollow(followRequestId);
+	         return "the request was accepted";
 	    
 	
        
